@@ -109,9 +109,6 @@
   padding: 0;
   border: 0 none;
 }
-.sidebar ul li ul li {
-
-}
 .sidebar ul li ul li a {
   padding-left: 1.5em;
 }
@@ -166,9 +163,6 @@
 }
 
 /* TASK LIST */
-.task-list {
-
-}
 .task-row, .task-header {
   display: flex;
   flex-wrap: wrap;
@@ -212,6 +206,7 @@
   border-left-color: #5d87c5;
 }
 .task-row .task-deadline big {
+  font-size: 1em;
 }
 .task-row .task-deadline span {
   text-transform: uppercase;
