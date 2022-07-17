@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TaskFreak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/app.css">
+</head>
+<body>
+  
+<nav class="navbar navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand">Pacific Data Hub</a>
+    <form action="index.html" method="get" class="d-none d-lg-flex" role="search">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+      <input type="checkbox" class="d-none" id="chk-status-0" name="status" value="0" autocomplete="off" />
+      <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" />
+      <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" />
+      <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" />
+      <input type="checkbox" class="d-none" id="chk-status-4" name="status" value="4" autocomplete="off" />
+      <input type="checkbox" class="d-none" id="chk-status-5" name="status" value="5" autocomplete="off" />
+      <div class="btn-group btn-group-sm btn-status" role="group" aria-label="Basic checkbox toggle button group">
+        <label class="btn btn-outline-secondary" for="chk-status-0"><i class='bx bxs-parking bx-sm'></i></label>
+        <label class="btn btn-outline-secondary" for="chk-status-1"><i class='bx bxs-analyse bx-sm'></i></label>
+        <label class="btn btn-outline-secondary" for="chk-status-2"><i class='bx bxs-cog bx-sm'></i></label>
+        <label class="btn btn-outline-secondary" for="chk-status-3"><i class='bx bxs-notepad bx-sm'></i></label>
+        <label class="btn btn-outline-secondary" for="chk-status-4"><i class='bx bxs-flag bx-sm'></i></label>
+      </div>
+      <button class="btn-nav text-secondary" type="button"><i class='bx bx-filter-alt'></i></button>
+    </form>
+    <div class="d-flex">
+      <button type="button" class="btn-nav" data-bs-toggle="modal" data-bs-target="#editModal"><i class='bx bxs-plus-square'></i></button>
+      <a href="#!" class="btn-nav"><i class='bx bx-cog'></i></a>
+      <a href="#!" class="hamburger d-block d-lg-none">
+        <span class="line line1"></span>
+        <span class="line line2"></span>
+        <span class="line line3"></span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  {% block sidebar %}
+
+  <nav class="sidebar">
+    <h4>Views</h4>
+    <ul>
+      <li><a href="#" class="active">List</a></li>
+      <li><a href="#">Calendar</a></li>
+      <li><a href="#">Kanban</a></li>
+    </ul>
+    <h4>Projects</h4>
+    <ul>
+      <li><a href="#">All projects</a></li>
+      <li><a href="#">Project 1 is a long title but it works</a></li>
+      <li><a href="#">Project 2</a></li>
+      <li>
+        <a href="#" class="opened">Project 3</a>
+        <ul>
+          <li><a href="#">List 3.1</a></li>
+          <li><a href="#" class="active">List 3.2 is a long title but it still works</a></li>
+          <li><a href="#">List 3.3</a></li>
+          <li><a href="#">List 3.4</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Project 4</a></li>
+      <li><a href="#">Project 5</a></li>
+      <li><a href="#">Project 6</a></li>
+    </ul>
+  </nav>
+
+  {% endblock %}
+
+  <section class="main container-fluid">
+
+    {% with messages = get_flashed_messages(True) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for cat, message in messages %}
+                <li class="{{ cat }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+
+  </section>
+  
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="EditTask" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
+      <form class="modal-content">
+        <div class="modal-header modal-smaller bg-light">
+          <h5 class="modal-title">Edit Task</h5>
+          <div class="float-end">
+            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-my-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" name="title" value="" placeholder="Title" />
+          </div>
+          <div class="row">
+            <div class="col-12 col-lg-9">
+              <div class="row">
+                <div class="col-12 col-lg-6 mb-3">
+                  <select class="form-select" aria-label="Default select example">
+                    <option value="0" selected>- Select Project -</option>
+                    <option value="1">Project #1</option>
+                    <option value="2">Project #2</option>
+                    <option value="3">Project #3</option>
+                  </select>
+                </div>
+                <div class="col-12 col-lg-6 mb-3">
+                  <select class="form-select" aria-label="Default select example">
+                    <option value="0" selected>- Select List -</option>
+                    <option value="1">List #1</option>
+                    <option value="2">List #2</option>
+                    <option value="3">List #3</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <textarea class="form-control" id="task-desc-field" value="" placeholder="Description" rows="10"></textarea>
+              </div>
+            </div>
+            <div class="col-12 col-lg-3">
+              <div class="mb-3">
+                <label class="form-label mb-1 text-muted">Priority</label>
+                <select class="form-select" aria-label="Default select example">
+                  <option value="3">Urgent</option>
+                  <option value="2">High</option>
+                  <option value="1">Medium</option>
+                  <option value="0" selected>Low</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label mb-1 text-muted">Start</label>
+                <div class="input-group date datepicker">
+                  <input type="text" class="form-control" id="date"/>
+                  <span class="input-group-append">
+                    <span class="input-group-text bg-light d-block">
+                      <i class='bx bx-calendar' ></i>
+                    </span>
+                  </span>
+                </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label mb-1 text-muted">Deadline</label>
+                  <div class="input-group date datepicker">
+                    <input type="text" class="form-control" id="date"/>
+                    <span class="input-group-append">
+                      <span class="input-group-text bg-light d-block">
+                        <i class='bx bx-calendar' ></i>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label mb-1 text-muted">Estimated time</label>
+                  <input type="text" name="estimate" class="form-control" placeholder="3d, 2h, 1:30, 30m" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label mb-1 text-muted">Assign to</label>
+                  <div class="dropdown">
+                    <a class="btn btn-outline-dropdown dropdown-toggle d-flex justify-content-between" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span>Users (<span class="dropdown-count">0</span>)</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li>
+                        <div class="dropdown-item">
+                          <input id="sel-user-1" type="checkbox" class="form-check-input" />
+                          <label for="sel-user-1" class="form-check-label">Leo</label>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-item">
+                          <input id="sel-user-2" type="checkbox" class="form-check-input" />
+                          <label for="sel-user-2" class="form-check-label">Phil</label>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-item">
+                          <input id="sel-user-3" type="checkbox" class="form-check-input" />
+                          <label for="sel-user-3" class="form-check-label">Sio</label>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-item">
+                          <input id="sel-user-4" type="checkbox" class="form-check-input" />
+                          <label for="sel-user-4" class="form-check-label">Stan</label>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-item">
+                          <input id="sel-user-5" type="checkbox" class="form-check-input" />
+                          <label for="sel-user-5" class="form-check-label">Thomas</label>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label mb-1 text-muted">Status</label>
+                  <select class="form-select" aria-label="Default select example">
+                    <option value="0" selected>Parked</option>
+                    <option value="1">Assessment</option>
+                    <option value="2">In Progress</option>
+                    <option value="3">Review</option>
+                    <option value="4">Completed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script type="text/javascript" src="static/js/app.js"></script>
+  </body>
+  </html>

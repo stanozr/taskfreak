@@ -218,6 +218,8 @@
 }
 .task-row .task-description a.task-title {
   display: block;
+  flex: 1;
+  padding-right: .5em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -227,10 +229,21 @@
 .task-row .task-description a.task-title:hover {
   color: #111;
 }
-.task-row .task-description div {
+.task-row .task-description .task-comments {
+  flex: 0 0 3em;
+  display: flex;
+  color: #666;
+  padding-top: 0.25em;
+}
+.task-row .task-description .task-comments span {
+  line-height: 0.9;
+  display: inline-block;
+  padding-left: 4px;
+}
+.task-row .task-description .task-project {
   color: #999;
 }
-.task-row .task-description div a {
+.task-row .task-description .task-project a {
   color: #666;
   text-decoration: none;
 }
@@ -241,15 +254,12 @@
   flex: 1 0 auto;
 }
 .task-row .task-users {
+  flex: 0 1 40%;
   padding-top: 0.5em;
-  text-indent: 50px;
-  max-width: 50%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-.task-row .task-users * {
-  text-indent: 0;
+  text-align: right;
 }
 .task-row .task-users a img {
   height: 2em;
@@ -270,20 +280,12 @@
   padding-right: .5em;
 }
 .task-row .task-status {
-  flex: 0 0 45%;
+  flex: 0 0 55%;
+  padding-left: 50px;
 }
 .task-row .task-progress {
   margin-top: 0.75em;
   height: 6px;
-}
-.task-row .task-comments {
-  display: flex;
-  padding-top: 0.25em;
-}
-.task-row .task-comments span {
-  line-height: 0.9;
-  display: inline-block;
-  padding-right: 4px;
 }
 .task-row .task-break {
   flex-basis: 100%;
@@ -296,13 +298,12 @@
     display: none;
   }
   .task-list .task-users {
-    padding-left: 0;
     flex: 0 0 130px;
-    max-width: 8em;
-    text-indent: 0;
+    text-align: left;
   }
   .task-row .task-status {
     flex: 0 0 160px;
+    padding-left: 0;
   }
 }
 @media (min-width: 992px) {
