@@ -1,0 +1,15 @@
+# flask
+.flaskenv
+__pycache__/
+*.pyc
+
+# data
+/_data
+
+# virtual env
+/bin/
+/include/
+/lib
+/lib64
+/share/
+/pyvenv.cfg
