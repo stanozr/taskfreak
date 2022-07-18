@@ -5,22 +5,21 @@
   <form action="index.html" method="get" class="d-none d-lg-flex" role="search">
     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
     <input type="checkbox" class="d-none" id="chk-status-0" name="status" value="0" autocomplete="off" />
-    <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" />
-    <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" />
-    <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" />
+    <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" checked />
+    <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" checked />
+    <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" checked />
     <input type="checkbox" class="d-none" id="chk-status-4" name="status" value="4" autocomplete="off" />
-    <input type="checkbox" class="d-none" id="chk-status-5" name="status" value="5" autocomplete="off" />
     <div class="btn-group btn-group-sm btn-status" role="group" aria-label="Filter by task status">
       <label class="btn btn-outline-secondary" for="chk-status-0" title="Parked"><i class='bx bx-pause bx-sm'></i></label>
-      <label class="btn btn-outline-secondary" for="chk-status-1" title="Assessment"><i class='bx bx-analyse bx-sm'></i></label>
-      <label class="btn btn-outline-secondary" for="chk-status-2" title="In progress"><i class='bx bx-play-circle bx-sm'></i></label>
-      <label class="btn btn-outline-secondary" for="chk-status-3" title="Review"><i class='bx bx-edit-alt bx-sm'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-1" title="Assessment"><i class='bx bx-analyse bx-sm'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-2" title="In progress"><i class='bx bx-play-circle bx-sm'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-3" title="Review"><i class='bx bx-edit-alt bx-sm'></i></label>
       <label class="btn btn-outline-secondary" for="chk-status-4" title="Completed"><i class='bx bx-flag bx-sm'></i></label>
     </div>
     <input type="radio" class="d-none" id="rdo-user-all" autocomplete="off" checked />
     <input type="radio" class="d-none" id="rdo-user-me" autocomplete="off" />
     <div class="btn-group btn-group-sm btn-users ms-2" role="group" aria-label="Filter by user">
-      <label class="btn btn-outline-secondary" for="rdo-user-all"><i class='bx bx-group bx-sm'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="rdo-user-all"><i class='bx bx-group bx-sm'></i></label>
       <label class="btn btn-outline-secondary" for="rdo-user-me"><i class='bx bx-user-circle bx-sm'></i></label>
       <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal"><i class='bx bx-user-plus bx-sm'></i></button>
     </div>
@@ -119,16 +118,16 @@
         </div>
         <div class="mb-3">
           <input type="checkbox" class="d-none" id="chk-status-0" name="status" value="0" autocomplete="off" />
-          <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" />
-          <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" />
-          <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" />
+          <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" checked />
+          <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" checked />
+          <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" checked />
           <input type="checkbox" class="d-none" id="chk-status-4" name="status" value="4" autocomplete="off" />
           <input type="checkbox" class="d-none" id="chk-status-5" name="status" value="5" autocomplete="off" />
           <div class="btn-group btn-group-sm btn-status border" role="group" aria-label="Filter by task status">
             <label class="btn btn-light" for="chk-status-0" title="Parked"><i class='bx bx-pause bx-sm'></i></label>
-            <label class="btn btn-light" for="chk-status-1" title="Assessment"><i class='bx bx-analyse bx-sm'></i></label>
-            <label class="btn btn-light" for="chk-status-2" title="In progress"><i class='bx bx-play-circle bx-sm'></i></label>
-            <label class="btn btn-light" for="chk-status-3" title="Review"><i class='bx bx-edit-alt bx-sm'></i></label>
+            <label class="btn btn-light btn-active" for="chk-status-1" title="Assessment"><i class='bx bx-analyse bx-sm'></i></label>
+            <label class="btn btn-light btn-active" for="chk-status-2" title="In progress"><i class='bx bx-play-circle bx-sm'></i></label>
+            <label class="btn btn-light btn-active" for="chk-status-3" title="Review"><i class='bx bx-edit-alt bx-sm'></i></label>
             <label class="btn btn-light" for="chk-status-4" title="Completed"><i class='bx bx-flag bx-sm'></i></label>
           </div>
         </div>
