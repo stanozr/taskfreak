@@ -13,31 +13,17 @@
 <nav class="navbar navbar-dark bg-dark sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand">Pacific Data Hub</a>
-    <form action="index.html" method="get" class="d-none d-lg-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-      <input type="checkbox" class="d-none" id="chk-status-0" name="status" value="0" autocomplete="off" />
-      <input type="checkbox" class="d-none" id="chk-status-1" name="status" value="1" autocomplete="off" />
-      <input type="checkbox" class="d-none" id="chk-status-2" name="status" value="2" autocomplete="off" />
-      <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" />
-      <input type="checkbox" class="d-none" id="chk-status-4" name="status" value="4" autocomplete="off" />
-      <input type="checkbox" class="d-none" id="chk-status-5" name="status" value="5" autocomplete="off" />
-      <div class="btn-group btn-group-sm btn-status" role="group" aria-label="Basic checkbox toggle button group">
-        <label class="btn btn-outline-secondary" for="chk-status-0"><i class='bx bxs-parking bx-sm'></i></label>
-        <label class="btn btn-outline-secondary" for="chk-status-1"><i class='bx bxs-analyse bx-sm'></i></label>
-        <label class="btn btn-outline-secondary" for="chk-status-2"><i class='bx bxs-cog bx-sm'></i></label>
-        <label class="btn btn-outline-secondary" for="chk-status-3"><i class='bx bxs-notepad bx-sm'></i></label>
-        <label class="btn btn-outline-secondary" for="chk-status-4"><i class='bx bxs-flag bx-sm'></i></label>
-      </div>
-      <button class="btn-nav text-secondary" type="button"><i class='bx bx-filter-alt'></i></button>
-    </form>
+    {% block headerform %}
+    {% endblock %}
     <div class="d-flex">
-      <button type="button" class="btn-nav" data-bs-toggle="modal" data-bs-target="#editModal"><i class='bx bxs-plus-square'></i></button>
+    {% block navbuttons %}
       <a href="#!" class="btn-nav"><i class='bx bx-cog'></i></a>
       <a href="#!" class="hamburger d-block d-lg-none">
         <span class="line line1"></span>
         <span class="line line2"></span>
         <span class="line line3"></span>
       </a>
+    {% endblock %}
     </div>
   </div>
 </nav>

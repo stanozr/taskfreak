@@ -5,6 +5,13 @@ $('document').ready(function(){
   $('.btn-status label').click(function() {
     $(this).toggleClass('btn-active');
   });
+  $('.btn-users label').click(function() {
+    $t = $(this);
+    if (!$t.hasClass('btn-active')) {
+      $t.siblings().removeClass('btn-active');
+      $t.toggleClass('btn-active');
+    }
+  });
   $('.dropdown-item').click(function(e) {
     if (e.target === e.currentTarget) {
       $(this).children('input').click();
