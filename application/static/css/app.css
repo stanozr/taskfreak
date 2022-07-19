@@ -37,7 +37,7 @@
   height: 3px;
   width: 100%;
   border-radius: 1px;
-  background-color: #666;
+  background-color: #888;
   margin-bottom: 5px;
 }
 .hamburger:hover .line {
@@ -210,13 +210,13 @@
   align-self: stretch;
 }
 .task-row .task-deadline.priority-3 {
-  border-left-color: red;
+  border-left-color: #dc3545;
 }
 .task-row .task-deadline.priority-2 {
-  border-left-color: orange;
+  border-left-color: #ffc107;
 }
 .task-row .task-deadline.priority-1 {
-  border-left-color: #5d87c5;
+  border-left-color: #0dcaf0;
 }
 .task-row .task-deadline big {
   font-size: 1em;
