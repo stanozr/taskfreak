@@ -274,10 +274,10 @@
   text-overflow: ellipsis;
   text-align: right;
 }
-.task-row .task-users a img {
+.task-users a img, img.user-thumb {
   height: 2em;
 }
-.task-row .task-users a span {
+.task-users a span {
   display: inline-block;
   height: 2em;
   width: 2em;
@@ -326,4 +326,37 @@
   textarea#task-desc-field {
     height:  440px;
   }
+}
+
+/* TASK VIEW */
+#viewModal hr {
+  border-top-color: #ccc;
+}
+#viewModal .task-users a {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+#viewModal .task-users a img {
+  height: 3em;
+}
+#viewModal .task-users a span {
+  height: 3em;
+  width: 3em;
+  line-height: 2.75;
+}
+#viewModal .task-meta strong {
+  text-transform: uppercase;
+  font-size: .8em;
+  color: #999;
+}
+#viewModal .task-status i {
+  vertical-align: middle;
+}
+#viewModal .task-status span {
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+}
+#viewModal .task-activity strong {
+  font-weight: 500;
 }
