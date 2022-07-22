@@ -20,3 +20,12 @@ def index():
 		title="Pacific Data Hub",
 		now=datetime.datetime.utcnow()
 	)
+
+@app.route("/calendar")
+def calendar():
+	return render_template("task_calendar.html",
+		title="Pacific Data Hub",
+		now=datetime.datetime.utcnow(),
+		js=['calendar.min.js', 'task_calendar.js'],
+		css=['calendar.min.css']
+	)

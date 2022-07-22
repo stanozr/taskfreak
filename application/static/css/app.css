@@ -360,3 +360,9 @@
 #viewModal .task-activity strong {
   font-weight: 500;
 }
+
+/* TASK CALENDAR */
+.task-calendar a{
+  color: #333;
+  text-decoration: none;
+}
