@@ -22,12 +22,22 @@
     {% endblock %}
     <div class="d-flex">
     {% block navbuttons %}
-      <a href="#!" class="btn-nav"><i class='bx bx-cog'></i></a>
       <a href="#!" class="hamburger d-block d-lg-none">
         <span class="line line1"></span>
         <span class="line line2"></span>
         <span class="line line3"></span>
       </a>
+      <div class="dropdown">
+        <a class="btn-nav btn-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="static/img/user_stan.png" class="rounded-circle" />
+          <!-- span class="rounded-circle">PB</span -->
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Account</a></li>
+          <li><a class="dropdown-item" href="#">Preferences</a></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </div>
     {% endblock %}
     </div>
   </div>

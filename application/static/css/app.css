@@ -15,6 +15,23 @@
 .btn-nav i {
   font-size: 1.75em;
 }
+.btn-user img {
+  height: 1.75em;
+}
+.btn-user span {
+  display: inline-block;
+  height: 1.75em;
+  width: 1.75em;
+  color: rgba(0,0,0,.85);
+  background-color: #888;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.65;
+}
+.btn-user.dropdown-toggle::after {
+  display: none;
+}
 .btn-status i, .btn-users i {
   line-height: 1.2;
 }
@@ -28,6 +45,7 @@
   width: 32px;
   z-index: 2;
   padding: 6px 4px 0;
+  margin: 0 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
