@@ -326,6 +326,13 @@
   border-top: 1px dotted #d6d6d6;
   margin-left: 50px;
 }
+.task-row .task-actions {
+  flex: 0 0 20px;
+  padding-top: .15em;
+}
+.task-row .task-actions .dropdown-toggle::after {
+  display: none;
+}
 @media (min-width: 768px) {
   .task-row .task-break {
     display: none;
@@ -334,12 +341,18 @@
     margin-left: 0.4em;
   }
   .task-list .task-users {
-    flex: 0 0 130px;
+    flex: 0 0 156px;
     text-align: left;
+  }
+  .task-row .task-users {
+    flex-basis: 130px;
   }
   .task-row .task-status {
     flex: 0 0 160px;
     padding-left: 0;
+  }
+  .task-row .task-actions {
+    padding-top: 1em;
   }
 }
 @media (min-width: 992px) {
@@ -401,7 +414,7 @@
   vertical-align: top;
   margin-bottom: 24px;
   border-radius: 0.25rem;
-  background-color: #f1f3fa;
+  background-color: #ecf0f9;
 }
 .kanban-list:not(:last-child) {
   margin-right: .5rem;
@@ -409,7 +422,6 @@
 .kanban-header {
   font-size: 1em;
   color: #666;
-  background-color: #f1f3fa;
   padding: 0.5rem 1rem;
   margin: 0 -.5rem .25rem;
   text-overflow: ellipsis;
