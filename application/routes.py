@@ -16,8 +16,13 @@ import datetime
 
 @app.route("/")
 def index():
+	return redirect(url_for('list'))
+
+@app.route("/list")
+def list():
     return render_template("task_list.html",
 		title="Pacific Data Hub",
+		menu="list",
 		now=datetime.datetime.utcnow()
 	)
 
@@ -25,6 +30,7 @@ def index():
 def calendar():
 	return render_template("task_calendar.html",
 		title="Pacific Data Hub",
+		menu="calendar",
 		now=datetime.datetime.utcnow(),
 		js=['calendar.min.js', 'task_calendar.js'],
 		css=['calendar.min.css']

@@ -50,9 +50,9 @@
 <nav class="sidebar">
   <h4>Views</h4>
   <ul>
-    <li><a href="#" class="active">List</a></li>
-    <li><a href="#">Calendar</a></li>
-    <li><a href="#">Kanban</a></li>
+    <li><a href="{{ url_for('list') }}" class="{% if menu=='list' %}active{% endif %}">List</a></li>
+    <li><a href="{{ url_for('calendar') }}" class="{% if menu=='calendar' %}active{% endif %}">Calendar</a></li>
+    <li><a href="#" class="{% if menu=='kanban' %}active{% endif %}">Kanban</a></li>
   </ul>
   <h4>Projects</h4>
   <ul>
