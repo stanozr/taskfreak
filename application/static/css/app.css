@@ -102,6 +102,12 @@
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255,255,255,.15);
 }
+.sidebar h4 a {
+  opacity: 0;
+}
+.sidebar h4:hover a {
+  opacity: 1;
+}
 .sidebar h4 a i {
   font-size: 1.25em;
   color: rgba(255,255,255,.5);
@@ -432,6 +438,11 @@
   display: block;
   white-space: nowrap;
   overflow-x: auto;
+}
+@media (min-width: 992px) {
+  .kanban-board {
+    height: 100%;
+  }
 }
 .kanban-list {
   display: inline-block;
