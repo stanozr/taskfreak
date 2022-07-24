@@ -45,3 +45,18 @@ def kanban():
 		now=datetime.datetime.utcnow(),
 		js=['dragula.min.js', 'task_kanban.js']
 	)
+
+@app.route("/settings/projects")
+def settings_projects():
+	# List of projects, invitations, join and leave projects
+	pass
+
+@app.route("/settings/account")
+def settings_account():
+	# User account settings, i.e. name, email, password
+	pass
+
+@app.route("/settings/preferences")
+def settings_preferences():
+	# User preferences, i.e. default view, notifications
+	pass

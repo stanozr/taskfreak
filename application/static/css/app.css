@@ -102,6 +102,14 @@
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255,255,255,.15);
 }
+.sidebar h4 a i {
+  font-size: 1.25em;
+  color: rgba(255,255,255,.5);
+}
+.sidebar h4 a:hover i {
+  font-size: 1.25em;
+  color: rgba(255,255,255,.75);
+}
 .sidebar ul {
   margin: 0;
   padding: 0;

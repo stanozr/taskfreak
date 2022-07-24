@@ -33,8 +33,9 @@
           <!-- span class="rounded-circle">PB</span -->
         </a>
         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">Account</a></li>
-          <li><a class="dropdown-item" href="#">Preferences</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('settings_projects') }}">Projects &amp; Lists</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('settings_preferences') }}">Preferences</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('settings_account') }}">Account</a></li>
           <li><a class="dropdown-item" href="#">Logout</a></li>
         </ul>
       </div>
