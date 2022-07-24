@@ -395,11 +395,30 @@
 }
 
 /* TASK CALENDAR */
-.task-calendar a{
+.task-calendar a {
   color: #333;
   text-decoration: none;
 }
-
+.task-calendar .fc-daygrid-event.priority-3, .task-calendar .priority-3 .fc-list-event-dot {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.task-calendar .fc-daygrid-event.priority-2, .task-calendar .priority-2 .fc-list-event-dot {
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+.task-calendar .fc-daygrid-event.priority-1, .task-calendar .priority-1 .fc-list-event-dot {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+}
+.task-calendar .fc-daygrid-event.priority-0, .task-calendar .priority-0 .fc-list-event-dot {
+  background-color: #999;
+  border-color: #999;
+}
+.task-calendar .fc-daygrid-event.completed, .task-calendar .completed .fc-list-event-dot {
+  background-color: #198754;
+  border-color: #198754;
+}
 /* TASK KANBAN */
 .kanban-board {
   display: block;

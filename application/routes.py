@@ -23,7 +23,8 @@ def list():
     return render_template("task_list.html",
 		title="Pacific Data Hub",
 		menu="list",
-		now=datetime.datetime.utcnow()
+		now=datetime.datetime.utcnow(),
+		js=['task_list.js']
 	)
 
 @app.route("/calendar")
@@ -42,5 +43,5 @@ def kanban():
 		title="Pacific Data Hub",
 		menu="kanban",
 		now=datetime.datetime.utcnow(),
-		js=['dragula.min.js', 'task_kanban.js'],
+		js=['dragula.min.js', 'task_kanban.js']
 	)
