@@ -11,25 +11,19 @@
     <input type="checkbox" class="d-none" id="chk-status-3" name="status" value="3" autocomplete="off" checked />
     <input type="checkbox" class="d-none" id="chk-status-4" name="status" value="4" autocomplete="off" />
     <div class="btn-group btn-group-sm btn-status" role="group" aria-label="Filter by task status">
-      <label class="btn btn-outline-secondary" for="chk-status-0" title="Parked"><i
-          class='bx bx-pause bx-sm'></i></label>
-      <label class="btn btn-outline-secondary btn-active" for="chk-status-1" title="Assessment"><i
-          class='bx bx-analyse bx-sm'></i></label>
-      <label class="btn btn-outline-secondary btn-active" for="chk-status-2" title="In progress"><i
-          class='bx bx-play-circle bx-sm'></i></label>
-      <label class="btn btn-outline-secondary btn-active" for="chk-status-3" title="Review"><i
-          class='bx bx-edit-alt bx-sm'></i></label>
-      <label class="btn btn-outline-secondary" for="chk-status-4" title="Completed"><i
-          class='bx bx-flag bx-sm'></i></label>
+      <label class="btn btn-outline-secondary" for="chk-status-0" title="Parked"><i class="bi bi-hourglass"></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-1" title="Assessment"><i class='bi bi-lightbulb'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-2" title="In progress"><i class='bi bi-lightning'></i></label>
+      <label class="btn btn-outline-secondary btn-active" for="chk-status-3" title="Review"><i class='bi bi-eyeglasses'></i></label>
+      <label class="btn btn-outline-secondary" for="chk-status-4" title="Completed"><i class='bi bi-flag'></i></label>
     </div>
   </div>
   <input type="radio" class="d-none" id="rdo-user-all" autocomplete="off" checked />
   <input type="radio" class="d-none" id="rdo-user-me" autocomplete="off" />
   <div class="btn-group btn-group-sm btn-users ms-2" role="group" aria-label="Filter by user">
-    <label class="btn btn-outline-secondary btn-active" for="rdo-user-all"><i class='bx bx-group bx-sm'></i></label>
-    <label class="btn btn-outline-secondary" for="rdo-user-me"><i class='bx bx-user-circle bx-sm'></i></label>
-    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal"><i
-        class='bx bx-dots-horizontal bx-sm'></i></button>
+    <label class="btn btn-outline-secondary btn-active" for="rdo-user-all"><i class='bi bi-people'></i></label>
+    <label class="btn btn-outline-secondary" for="rdo-user-me"><i class='bi bi-person'></i></label>
+    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal"><i class="bi bi-three-dots"></i></button>
   </div>
 </form>
 
@@ -37,10 +31,10 @@
 
 {% block navbuttons %}
 <a href="#!" class="btn-nav d-block d-lg-none" data-bs-toggle="modal" data-bs-target="#searchModal">
-  <i class='bx bx-search'></i>
+  <i class="bi bi-search"></i>
 </a>
 <button type="button" class="btn-nav" data-bs-toggle="modal" data-bs-target="#editModal">
-  <i class='bx bxs-plus-square'></i>
+  <i class="bi bi-plus-square-fill"></i>
 </button>
 {{ super() }}
 {% endblock %}
@@ -55,7 +49,7 @@
     <li><a href="{{ url_for('kanban') }}" class="{% if menu=='kanban' %}active{% endif %}">Kanban</a></li>
   </ul>
   <h4>
-    <a href="{{ url_for('settings_projects') }}" class="float-end"><i class="bx bxs-pencil"></i></a>
+    <a href="{{ url_for('settings_projects') }}" class="float-end"><i class="bi bi-pencil-fill"></i></a>
     Projects
   </h4>
   <ul>
@@ -168,7 +162,7 @@
                   Vel orci porta non pulvinar neque laoreet suspendisse interdum. Rhoncus aenean vel elit scelerisque mauris. Turpis cursus in hac habitasse platea dictumst. Pellentesque massa placerat duis ultricies lacus sed turpis tincidunt. Netus et malesuada fames ac turpis. Duis ut diam quam nulla porttitor massa. Dui ut ornare lectus sit. Bibendum neque egestas congue quisque egestas diam in arcu. Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Tellus cras adipiscing enim eu turpis. At erat pellentesque adipiscing commodo. Feugiat in fermentum posuere urna nec.</p>
               </div>
               <hr />
-              <button class="btn btn-link btn-sm float-end" type="button" style="padding-top: 0"><i class="bx bxs-file-plus bx-sm text-muted"></i></button>
+              <button class="btn btn-link btn-sm float-end" type="button" style="padding-top:0;margin-top:-4px"><i class="bi bi-file-earmark-arrow-up-fill bi-2x text-muted"></i></button>
               <h6>Attachments</h6>
               <hr />
               <h6 class="mb-3">Activity</h6>
@@ -203,7 +197,7 @@
               </div>
             </div>
             <div class="task-meta col-12 col-md-4 p-3 bg-light order-1 order-md-2">
-              <button class="btn btn-link float-end" data-bs-target="#editModal" data-bs-toggle="modal"><i class="bx bxs-edit bx-sm text-muted"></i></button>
+              <button class="btn btn-link float-end" data-bs-target="#editModal" data-bs-toggle="modal"><i class="bi bi-pencil-square bi-2x text-muted"></i></button>
               <div class="task-users mb-3">
                 <a href="#!"><img src="static/img/user_stan.png" class="rounded-circle" /></a>
                 <a href="#!"><img src="static/img/user_sio.png" class="rounded-circle" /></a>
@@ -239,7 +233,7 @@
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
               </div>
               <div class="task-status">
-                <i class='bx bx-sm bx-play-circle'></i>
+                <i class="bi bi-lightning-fill"></i>
                 <span>In Progress</span>
               </div>
             </div>
@@ -346,7 +340,7 @@
                 <input type="text" class="form-control" id="date" />
                 <span class="input-group-append">
                   <span class="input-group-text bg-light d-block">
-                    <i class='bx bx-calendar'></i>
+                    <i class="bi bi-calendar-date"></i>
                   </span>
                 </span>
               </div>
@@ -357,7 +351,7 @@
                 <input type="text" class="form-control" id="date" />
                 <span class="input-group-append">
                   <span class="input-group-text bg-light d-block">
-                    <i class='bx bx-calendar'></i>
+                    <i class="bi bi-calendar-date"></i>
                   </span>
                 </span>
               </div>

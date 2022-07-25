@@ -56,6 +56,11 @@ def settings_account():
 	# User account settings, i.e. name, email, password
 	pass
 
+@app.route("/settings/users")
+def settings_users():
+	# User management
+	pass
+
 @app.route("/settings/preferences")
 def settings_preferences():
 	# User preferences, i.e. default view, notifications
