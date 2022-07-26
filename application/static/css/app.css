@@ -1,3 +1,7 @@
+:root {
+  --bs-primary-rgb: 13,110,201;
+}
+
 /* TOP NAV */
 .btn-nav {
   color: #888;
@@ -22,7 +26,7 @@
   display: inline-block;
   height: 1.75em;
   width: 1.75em;
-  color: rgba(0,0,0,.85);
+  color: #ddd;
   background-color: #888;
   font-weight: 500;
   text-decoration: none;
@@ -97,7 +101,7 @@
   color: rgba(255,255,255,.75);
   font-size: .85em;
   font-style: italic;
-  margin: 1em 0.5em 0;
+  margin: 1em 0.5em 0.25em;
   padding: 0.25em;
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255,255,255,.15);
@@ -151,7 +155,24 @@
   padding: 1rem 1rem;
   overflow-y: auto;
 }
-
+.page-title {
+  font-size: 1.25em;
+  background-color: #eff3f6;
+  padding: 0.5em 1.5em;
+  margin: -0.75em -0.8em 1em;
+  font-weight: normal;
+  border-bottom: 1px solid #e3e9ec;
+}
+.btn-action {
+  border: 0 none;
+  opacity: .35;
+}
+.btn-action:hover {
+  opacity: .85;
+}
+.btn-action:hover i.bi-trash {
+  color: #c33;
+}
 .bi-2x {
   font-size: 1.25em;
 }
@@ -500,6 +521,52 @@
 .kanban-item .dropdown-toggle::after {
   display: none;
 }
+
+/* PROJECTS */
+.card-project h5 {
+  font-size: 1em;
+}
+ul.project-lists {
+  padding-left: 0;
+}
+ul.project-lists li {
+  border-bottom: 1px dotted #ccc;
+}
+ul.project-lists li:first-child {
+  border-top: 1px dotted #ccc;
+}
+li.project-lists-item {
+  display: flex;
+}
+li.project-lists-item > * {
+  display: block;
+  flex: 0;
+}
+li.project-lists-item input {
+  flex: 1;
+}
+ul.project-users {
+  padding-left: 0;
+}
+ul.project-users li {
+  display: inline-block;
+  margin-right: .25em;
+  list-style: none;
+}
+ul.project-users li a img {
+  height: 2.5em;
+}
+ul.project-users li a span {
+  height: 2.5em;
+  width: 2.5em;
+  line-height: 2.35;
+}
+ul.project-users li .btn-action i.bi {
+  font-size: 2.25em;
+  line-height: 1;
+}
+
+/* Dragula */
 .gu-mirror {
   position: fixed !important;
   margin: 0 !important;
@@ -521,4 +588,10 @@
   opacity: 0.2;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20);
+}
+.gu-mirror .btn-action {
+  opacity: .1;
+}
+.gu-handle {
+  cursor: move;
 }

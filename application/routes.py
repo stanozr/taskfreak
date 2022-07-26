@@ -49,19 +49,39 @@ def kanban():
 @app.route("/settings/projects")
 def settings_projects():
 	# List of projects, invitations, join and leave projects
-	pass
+	return render_template("settings_projects.html",
+		title="Pacific Data Hub",
+		menu="settings_projects",
+		now=datetime.datetime.utcnow(),
+		js=['dragula.min.js', 'settings_projects.js']
+	)
 
 @app.route("/settings/account")
 def settings_account():
-	# User account settings, i.e. name, email, password
-	pass
-
-@app.route("/settings/users")
-def settings_users():
-	# User management
-	pass
+	# User account settings, i.e. name, email, password, avatar
+	return render_template("settings_account.html",
+		title="Pacific Data Hub",
+		menu="settings_account",
+		now=datetime.datetime.utcnow(),
+		js=['settings_account.js']
+	)
 
 @app.route("/settings/preferences")
 def settings_preferences():
 	# User preferences, i.e. default view, notifications
-	pass
+	return render_template("settings_preferences.html",
+		title="Pacific Data Hub",
+		menu="settings_preferences",
+		now=datetime.datetime.utcnow(),
+		js=['settings_preferences.js']
+	)
+
+@app.route("/settings/users")
+def settings_users():
+	# User management
+	return render_template("settings_users.html",
+		title="Pacific Data Hub",
+		menu="settings_users",
+		now=datetime.datetime.utcnow(),
+		js=['settings_users.js']
+	)

@@ -1,0 +1,15 @@
+{% extends "layout/page.html" %}
+
+{% block sidebar %}
+
+<nav class="sidebar">
+  <h4>Settings</h4>
+  <ul>
+    <li><a href="{{ url_for('settings_projects') }}" class="{% if menu=='settings_projects' %}active{% endif %}"><i class="bi bi-briefcase-fill me-2"></i>Projects &amp; Lists</a></li>
+    <li><a href="{{ url_for('settings_preferences') }}" class="{% if menu=='settings_preferences' %}active{% endif %}"><i class="bi bi-house-heart-fill me-2"></i>Preferences</a></li>
+    <li><a href="{{ url_for('settings_account') }}" class="{% if menu=='settings_account' %}active{% endif %}"><i class="bi bi-person-lines-fill me-2"></i>Account</a></li>
+    <li><a href="{{ url_for('settings_users') }}" class="{% if menu=='settings_users' %}active{% endif %}"><i class="bi bi-people-fill me-2"></i>Users</a></li>
+  </ul>
+</nav>
+
+{% endblock %}
