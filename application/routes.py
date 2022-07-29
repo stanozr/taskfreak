@@ -68,7 +68,7 @@ def settings_account():
 
 @app.route("/settings/preferences")
 def settings_preferences():
-	# User preferences, i.e. default view, notifications
+	# User preferences, i.e. timezone, default view, notifications, outlook sync
 	return render_template("settings_preferences.html",
 		title="Pacific Data Hub",
 		menu="settings_preferences",

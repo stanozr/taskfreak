@@ -12,7 +12,7 @@
             </h5>
             <div class="card-body">
                 <h5>Lists</h5>
-                <ul class="project-lists">
+                <ul class="project-lists project-dragula">
                     <li class="project-lists-item">
                         <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
                         <input type="text" class="form-control form-control-plaintext" value="A first list item" />
@@ -34,20 +34,24 @@
                         <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
                     </li>
                 </ul>
+                <div class="d-flex mb-3" style="margin-top:-.75em">
+                    <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
+                    <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
+                </div>
                 <h5>Admins</h5>
                 <ul class="project-admins project-users">
                     <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
-                    <li><button type="button" class="btn btn-action px-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
                 </ul>
                 <h5>Members</h5>
                 <ul class="project-members project-users">
                     <li class="btn-user"><a href="#!"><img src="/static/img/user_sio.png" class="rounded-circle" /></a></li>
                     <li class="btn-user"><a href="#!"><span class="rounded-circle">PB</span></a></li>
-                    <li><button type="button" class="btn btn-action px-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
                 </ul>
                 <h5>Observers</h5>
                 <ul class="project-observers project-users">
-                    <li><button type="button" class="btn btn-action px-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
                 </ul>
                 <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i class="bi bi-archive pe-1"></i>Archive project</button></div>
             </div>
@@ -83,6 +87,34 @@
                         <li class="btn-user"><a href="#!"><span class="rounded-circle">MB</span></a></li>
                         <li class="btn-user"><a href="#!"><span class="rounded-circle">SP</span></a></li>
                         <li class="btn-user"><a href="#!"><span class="rounded-circle">TT</span></a></li>
+                    </ul>
+                </div>
+              </div>
+        </div>
+
+        <div class="col">
+            <div class="card card-project">
+                <h5 class="card-header py-3">A project with no list</h5>
+                <div class="card-body">
+                    <h5>Lists</h5>
+                    <ul class="project-lists project-dragula">
+                    </ul>
+                    <div class="d-flex mb-3" style="margin-top:-.75em">
+                        <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
+                        <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
+                    </div>
+                    <h5>Admins</h5>
+                    <ul class="project-admins project-users">
+                        <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
+                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+                    </ul>
+                    <h5>Members</h5>
+                    <ul class="project-members project-users">
+                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+                    </ul>
+                    <h5>Observers</h5>
+                    <ul class="project-observers project-users">
+                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
                     </ul>
                 </div>
               </div>

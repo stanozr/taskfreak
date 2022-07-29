@@ -1,7 +1,7 @@
 $('document').ready(function() {
     var drake = dragula({
         isContainer: function (el) {
-            return el.classList.contains('project-lists');
+            return el.classList.contains('project-dragula');
         },
         moves: function (el, container, handle) {
             return handle.classList.contains('gu-handle');

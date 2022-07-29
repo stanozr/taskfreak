@@ -197,19 +197,26 @@
     flex: 1 0 14rem;
   }
   .sidebar li a::before {
-    content: "\00a0";
-    width: 1em;
+    content: "\F234";
+    font-family: "bootstrap-icons";
+    font-size: .8em;
+    margin-right: -5px;
+    padding-top: 3px;
+    padding-left: 5px;
     text-align: right;
     float: right;
+    opacity: 0;
   }
   .sidebar li a.active::before {
-    content: "\203A";
+    content: "\F231";
+    opacity: 1;
   }
   .sidebar li a:not(.active):hover {
     color: rgba(255,255,255,.75);
   }
   .sidebar li a:not(.active):hover::before {
-    content: "\203A";
+    content: "\F234";
+    opacity: 1;
   }
   .main {
     background-color: rgb(250,251,254);
@@ -523,13 +530,30 @@
 }
 
 /* PROJECTS */
+.card-project .project-no-list small {
+  display: block;
+}
 .card-project h5 {
   font-size: 1em;
 }
 ul.project-lists {
+  position: relative;
   padding-left: 0;
+  min-height: 3em;
+}
+ul.project-lists::before {
+  content: "KANBAN BASED ON TASK STATUS";
+  font-weight: 500;
+  position: absolute;
+  padding: .5em 0;
+  color: #999;
+  width: 100%;
+  text-align: center;
+  background-color: #fafbff;
 }
 ul.project-lists li {
+  position: relative;
+  background-color: #fff;
   border-bottom: 1px dotted #ccc;
 }
 ul.project-lists li:first-child {
