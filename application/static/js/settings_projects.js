@@ -10,14 +10,11 @@ $('document').ready(function() {
     });
     $('.action-archive-project').click(function() {
         $card = $(this).closest('form').find('.card-header');
-        console.log($card);
         pid = $card.find("input[name='pid']").val()
         ptt = $card.find("input[name='title']").val()
-        if (confirm("Click OK to archive the following project:\n-> "+ptt)) {
-            alert('Archiving project #'+pid);
-        } else {
-            alert("Cancelled !")
-        }
+        $mod = $('#confirmModal')
+        $mod.find('.modal-body').html('Do you want to archive project <b>'+ptt+'</b> ?');
+        new bootstrap.Modal('#confirmModal').show();
     });
     $('.action-delete-project').click(function() {
         $card = $(this).closest('form').find('.card-header');

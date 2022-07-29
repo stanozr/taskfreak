@@ -167,6 +167,9 @@
   border: 0 none;
   opacity: .35;
 }
+.btn.btn-action:disabled {
+  opacity: .2;
+}
 .btn-action:hover {
   opacity: .85;
 }
