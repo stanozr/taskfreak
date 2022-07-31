@@ -1,0 +1,32 @@
+{% extends "/layout/page.html" %}
+
+{% block content %}
+
+<form action="{{ request.path }}" method="POST" class="p-5" style="max-width:400px; margin: 0 auto">
+
+    <input type="hidden" name="next" value="{{ next }}" />
+
+    <div class="mb-3 row">
+        <label for="name" class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+            <input type="email" name="email" class="form-control" value="" />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label for="name" class="col-sm-3 col-form-label">Password</label>
+        <div class="col-sm-9">
+            <input type="password" name="password" class="form-control" value="" />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <div class="offset-sm-3 col-sm-9">
+            <input type="submit" value="Login" class="btn btn-primary" />
+            <a href="{{ url_for('user.register') }}" class="btn btn-link">Register</a>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

@@ -22,12 +22,20 @@
 .btn-user img {
   height: 1.75em;
 }
+.btn-nav.btn-user {
+  padding: 0 6px;
+}
+.btn-nav.btn-user img {
+  height: 1.9em;
+  background-color: #666;
+  padding: 0.05em;
+}
 .btn-user span {
   display: inline-block;
   height: 1.75em;
   width: 1.75em;
   color: #ddd;
-  background-color: #888;
+  background-color: #475977;
   font-weight: 500;
   text-decoration: none;
   text-align: center;

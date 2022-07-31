@@ -22,6 +22,8 @@
     {% endblock %}
     <div class="d-flex">
     {% block navbuttons %}
+
+    {% if g.user.is_authenticated %}
       <a href="#!" class="hamburger d-block d-lg-none">
         <span class="line line1"></span>
         <span class="line line2"></span>
@@ -29,17 +31,20 @@
       </a>
       <div class="dropdown">
         <a class="btn-nav btn-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="/static/img/user_stan.png" class="rounded-circle" />
-          <!-- span class="rounded-circle">PB</span -->
+          {{ g.user.avatar() | safe }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
           <li><a class="dropdown-item" href="{{ url_for('settings.projects') }}"><i class="bi bi-briefcase-fill me-2"></i>Projects &amp; Lists</a></li>
           <li><a class="dropdown-item" href="{{ url_for('settings.preferences') }}"><i class="bi bi-house-heart-fill me-2"></i>Preferences</a></li>
           <li><a class="dropdown-item" href="{{ url_for('settings.account') }}"><i class="bi bi-person-lines-fill me-2"></i>Account</a></li>
+          {% if g.user.roles > 1 %}
           <li><a class="dropdown-item" href="{{ url_for('settings.users') }}"><i class="bi bi-people-fill me-2"></i>Users</a></li>
-          <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          {% endif %}
+          <li><a class="dropdown-item" href="{{ url_for('user.logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
         </ul>
       </div>
+    {% endif %}
+
     {% endblock %}
     </div>
   </div>

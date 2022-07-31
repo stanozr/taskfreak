@@ -14,5 +14,12 @@ class Config(object):
 
     APP_URL = os.environ.get('APP_URL') or 'http://127.0.0.1:5001'
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////'+os.path.join(os.path.abspath(os.path.dirname(__file__)), CKAN_DATA_FOLDER+'/app.db')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://stan:Stqn56@localhost:5432/taskfreak'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    USER_ROLES = {
+        0: "User",
+        1: "Manager",
+        2: "Administrator",
+        3: "Super Admin"
+    }

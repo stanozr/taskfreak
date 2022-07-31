@@ -1,0 +1,44 @@
+{% extends "/layout/page.html" %}
+
+{% block content %}
+
+<div class="p-5" style="max-width:600px; margin: 0 auto">
+    <h4>Already Have an Account?</h4>
+    <p><a href ="{{url_for('user.login')}}">Login Here</a></p>
+
+    <hr />
+
+    <h4>Create a new account</h4>
+    <form action="{{ request.path }}" method = "POST">
+
+        <div class="mb-3 row">
+            <label for="name" class="col-sm-3 col-form-label">Name</label>
+            <div class="col-sm-9">
+                <input type="text" name="name" class="form-control" value="" />
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="name" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" name="email" class="form-control" value="" />
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="name" class="col-sm-3 col-form-label">Password</label>
+            <div class="col-sm-9">
+                <input type="password" name="password" class="form-control" value="" />
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <div class="offset-sm-3 col-sm-9">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
