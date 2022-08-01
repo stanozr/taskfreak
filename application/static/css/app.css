@@ -82,6 +82,10 @@
   color: #999;
   font-size: 1.75em;
 }
+.btn-my-save {
+  border: 0 none;
+  color: #0d6efd;
+}
 .btn-outline-dropdown {
   border: 1px solid #ccc;
 }
@@ -187,7 +191,34 @@
 .bi-2x {
   font-size: 1.25em;
 }
-
+.table-freak thead tr {
+  background-color: #475977;
+}
+.table-freak thead tr th {
+  color: rgba(255,255,255,.9);
+  font-weight: 500;
+}
+.table-freak thead tr th .btn-link {
+  padding: 0 .75em !important;
+  color: rgba(255,255,255,.8);
+}
+.table-freak thead tr th .btn-link:hover {
+  color: rgba(255,255,255,1);
+}
+.table-freak tbody .btn-link {
+  padding: 0 .5em !important;
+  color: #336699;
+}
+.table-freak tbody .btn-link:hover {
+  color: #1166ee;
+}
+.table-freak tbody .btn-link.btn-delete {
+  padding: 0 .5em !important;
+  color: #bb6969;
+}
+.table-freak tbody .btn-link.btn-delete:hover {
+  color: #cc3333;
+}
 /* RESPONSIVE STUFF */
 
 @media (min-width: 992px) {

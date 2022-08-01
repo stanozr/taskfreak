@@ -1,4 +1,5 @@
 import datetime, requests, hashlib
+from sqlalchemy import true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from application import db
@@ -47,6 +48,12 @@ class UserModel(UserMixin, db.Model):
             for en in arn:
                 srn += en[0].upper()
             return '<span class="rounded-circle">'+srn+'</span>'
+
+    def is_valid(self):
+        if self.email and '@' in self.email and self.name and self.password:
+            return True
+        else:
+            return False
 
     def get_dict(self):
         res = {}

@@ -39,6 +39,17 @@ def before_request():
 	g.user = current_user
 	g.now = datetime.datetime.utcnow()
 
+@app.template_filter()
+def toast_class(ts):
+	if ts == 'error':
+		return 'text-bg-danger'
+	elif ts == 'warning':
+		return 'text-bg-warning'
+	elif ts == 'success':
+		return 'text-bg-success'
+	else:
+		return 'text-bg-info'
+
 @app.route("/")
 def index():
 	if not current_user.is_authenticated:

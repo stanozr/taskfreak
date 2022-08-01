@@ -5,15 +5,15 @@
 <h2 class="page-title">Manage Users</h2>
 
 {% if data %}
-<table class="table table-hover" style="max-width:960px">
+<table class="table table-freak table-striped table-hover" style="max-width:960px">
     <thead>
        <tr>
           <th>Name</th>
           <th class="d-none d-md-table-cell">Email</th>
           <th>Role</th>
-          <th>
-            {% if g.user.roles > 2 %}
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-plus"></i></button>
+          <th style="width:100px">
+            {% if g.user.roles > 1 %}
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
             {% endif %}
           </th>
        </tr>
@@ -30,7 +30,10 @@
             <td>{{ roles[item.roles] }}</td>
             <td>
                 {% if item.id != g.user.id and item.roles < g.user.roles %}
-                <a href="#!" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a href="#!" class="btn btn-link btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                {% endif %}
+                {% if item.id != g.user.id and g.user.roles > 2 %}
+                <a href="#!" class="btn btn-link btn-delete"><i class="bi bi-trash"></i></a>
                 {% endif %}
             </td>
         </tr>
@@ -45,12 +48,13 @@
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel" aria-hidden="true">
   <div class="modal-dialog modal-md modal-fullscreen-md-down modal-dialog-scrollable">
-    <form class="modal-content" autocomplete="off">
+    <form id="user-form" action="/api/users/save" method="POST" class="modal-content" autocomplete="off">
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title" id="editUserLabel">Edit User</h5>
         <div class="float-end">
-          <button type="button" class="btn btn-primary">Save</button>
-          <button type="button" class="btn btn-my-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+          <input type="hidden" name="id" value="" />
+          <button type="submit" class="btn btn-my-save"><i class="bi bi-save"></i></button>
+          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal" aria-label="Close">&times;</button>
         </div>
       </div>
       <div class="modal-body">
@@ -69,20 +73,26 @@
         <div class="row mb-3">
           <label for="ipwd" class="col-sm-3 col-form-label">Password</label>
           <div class="col-sm-9">
-            <input type="password" name="pwssword" class="form-control" id="iPwd" autocomplete="new-password" />
+            <input type="password" name="password" class="form-control" id="iPwd" autocomplete="new-password" />
             <div class="small text-muted">Enter password only to update it</div>
           </div>
         </div>
         <div class="row">
-          <label for="iRole" class="col-sm-3 col-form-label">Role</label>
+          <label for="iRoles" class="col-sm-3 col-form-label">Role</label>
           <div class="col-sm-9">
-            <select id="iRole" name="roles" class="form-select">
-              {% for r in roles %} 
+            <select id="iRoles" name="roles" class="form-select">
+              {% for r in roles %}
+              {% if r < g.user.roles %}
               <option value="{{ r }}">{{ roles[r] }}</option>
+              {% endif %}
               {% endfor %}
             </select>
           </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg me-2"></i>Cancel</button>
       </div>
     </form>
   </div>

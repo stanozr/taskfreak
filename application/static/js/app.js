@@ -53,4 +53,18 @@ $('document').ready(function(){
   })
 
   $('.datepicker').datepicker();
+
+  $('.flash').each(function() {
+    new bootstrap.Toast($(this)).show();
+  });
 });
+
+function toasted(msg, cat) {
+  $lt = $('#live-toast');
+  $lt.addClass(cat).find('.toast-body').text(msg);
+  mt = bootstrap.Toast.getOrCreateInstance($lt);
+  $lt.on('hidden.bs.toast', () => {
+    $lt.removeClass('text-bg-danger text-bg-warning text-bg-success text-bg-info');
+  })
+  mt.show();
+}
