@@ -2,8 +2,7 @@
 
 ### TODO
 
-__Week 1__
-
+🤵 __Week 1__
 * [x] Login/Logout
 * [x] List users
 * [x] Add user
@@ -11,22 +10,20 @@ __Week 1__
 * [ ] Delete user
 * [ ] Update last login
 * [ ] Add timezone field
-* [ ] Edit profile
+* [ ] Edit profile (including URL to avatar)
 * [ ] Edit preferences
-* [ ] Upload thumbnail (80x80, square image)
 
-__Week 2__
-
+💼 __Week 2__
 * [ ] Add/Edit projects
 * [ ] Manage project's lists
 * [ ] Move project's lists
 * [ ] Manage project's users
 * [ ] Archive project
 
-__Week 3__
-
+✅ __Week 3__
 * [ ] Create task
 * [ ] List tasks (list view)
+* [ ] Filter tasks by project and list
 * [ ] Filter tasks by status
 * [ ] Filter tasks by user(s)
 * [ ] View task
@@ -36,19 +33,24 @@ __Week 3__
 * [ ] Comment task
 * [ ] Add time spent
 
-__Week 4__
+📆 __Week 4__
 * [ ] Calendar view
 * [ ] Kanban view
-* [ ] Attachments
+* [ ] Attachments 📎
+* [ ] Upload user thumbnail (80x80, square image)
 
-__Week 5__
+💌 __Week 5__
 * [ ] Email system
 * [ ] Remember password
 * [ ] Send notifications to new users
 * [ ] Send notifications when changing email
 * [ ] Send daily notifications
 
-__Week 6__
+🏆 __Wheek 6__
+* [ ] Docker image
+* [ ] Launch MVP
+
+🔒 __Week 7__
 * [ ] OKTA login
 * [ ] Outlook connection
 * [ ] Sync calendar
