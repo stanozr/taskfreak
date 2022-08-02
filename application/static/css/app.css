@@ -175,6 +175,9 @@
   font-weight: normal;
   border-bottom: 1px solid #e3e9ec;
 }
+.page-title .btn {
+  margin-top: -5px;
+}
 .btn-action {
   border: 0 none;
   opacity: .35;

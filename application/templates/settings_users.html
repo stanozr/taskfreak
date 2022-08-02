@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<h2 class="page-title">Manage Users</h2>
+<h2 class="page-title">
+  {% if g.user.roles > 2 %}
+  <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
+  {% endif %}
+  Manage Users
+</h2>
 
 {% if data %}
 <table class="table table-freak table-striped table-hover">
@@ -11,12 +16,7 @@
           <th>Name</th>
           <th class="d-none d-lg-table-cell">Email</th>
           <th class="d-none d-md-table-cell">Last login</th>
-          <th class="d-none d-sm-table-cell">Role</th>
-          <th style="width:{% if g.user.roles > 3 %}100px{% else %}50px{% endif %}">
-            {% if g.user.roles > 2 %}
-            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
-            {% endif %}
-          </th>
+          <th>Role</th>
        </tr>
     </thead>
     
@@ -29,14 +29,14 @@
             </th>
             <td class="d-none d-lg-table-cell">{{ item.email }}</td>
             <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
-            <td class="d-none d-sm-table-cell">{{ roles[item.roles] }}</td>
             <td>
-                {% if item.id != g.user.id and item.roles < g.user.roles %}
-                <button type="button" class="btn btn-link btn-edit"><i class="bi bi-pencil-fill"></i></button>
-                {% endif %}
-                {% if item.id != g.user.id and g.user.roles > 3 %}
-                <button type="button" class="btn btn-link btn-delete" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
-                {% endif %}
+              {% if item.id != g.user.id and g.user.roles > 3 %}
+              <button type="button" class="btn btn-link btn-delete float-end" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
+              {% endif %}
+              {% if item.id != g.user.id and item.roles < g.user.roles %}
+              <button type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
+              {% endif %}
+              {{ roles[item.roles] }}
             </td>
         </tr>
       {% endfor %}
