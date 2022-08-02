@@ -1,4 +1,4 @@
-import datetime
+import datetime, pytz
 from sqlalchemy import desc
 
 from flask import Blueprint, render_template, jsonify, request, flash
@@ -20,7 +20,6 @@ def projects():
 	return render_template("settings_projects.html",
 		title="Pacific Data Hub",
 		menu="settings_projects",
-		now=datetime.datetime.utcnow(),
 		js=['dragula.min.js', 'settings_projects.js']
 	)
 
@@ -30,7 +29,6 @@ def account():
 	return render_template("settings_account.html",
 		title="Pacific Data Hub",
 		menu="settings_account",
-		now=datetime.datetime.utcnow(),
 		js=['settings_account.js']
 	)
 
@@ -40,7 +38,6 @@ def preferences():
 	return render_template("settings_preferences.html",
 		title="Pacific Data Hub",
 		menu="settings_preferences",
-		now=datetime.datetime.utcnow(),
 		js=['settings_preferences.js']
 	)
 
@@ -48,12 +45,22 @@ def preferences():
 def users():
 	# User management
 	items = UserModel.query.filter(UserModel.roles > 0).order_by(desc(UserModel.roles), UserModel.name).all()
+	tzgroups = {}
+	tzlist = pytz.common_timezones
+	for tz in tzlist:
+		if '/' in tz:
+			tzn = tz.split('/')
+			if tzn[0] not in tzgroups:
+				tzgroups[tzn[0]] = []
+			tzgroups[tzn[0]].append(tzn[1])
+		else:
+			tzgroups[tz] = [ tz ]
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",
 		menu="settings_users",
 		data=items,
 		roles=app.config['USER_ROLES'],
-		now=datetime.datetime.utcnow(),
+		timezones=tzgroups,
 		js=['settings_users.js']
 	)
 
@@ -66,6 +73,8 @@ def api_user_load(id):
 		return jsonify({'error': 'User does not exist'}) 
 	if current_user.roles <= item.roles:
 		return jsonify({'error': 'Action not allowed'})
+	if not item.timezone:
+		item.timezone = 'UTC'
 	return jsonify(item.get_dict())
 
 @settings.route("/api/users/save", methods=['POST'])
@@ -85,6 +94,7 @@ def api_user_save():
 		# only super admin can change email
 		item.email = request.form.get('email','').strip()
 	item.name = request.form.get('name','').strip()
+	item.timezone = request.form.get('timezone','UTC')
 	item.roles = uro
 	pwd = request.form.get('password','').strip()
 	if (pwd):

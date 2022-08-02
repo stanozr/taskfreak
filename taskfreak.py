@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # Create default user if user table is empty
     testuser = UserModel.query.first()
     if not testuser:
-        user = UserModel(email='admin@test.org', name='Super Admin', roles=4)
+        user = UserModel(email='admin@test.org', name='Super Admin', roles=4, timezone='UTC')
         user.set_password('admin')
         db.session.add(user)
         db.session.commit()

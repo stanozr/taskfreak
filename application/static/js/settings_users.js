@@ -1,9 +1,15 @@
 $('document').ready(function() {
     $f = $('#editModal');
+    // brtz = 'UTC'
+    // try {
+    //     brtz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // } catch(e){}
+    // $f.find("select[name='timezone']").val(brtz);
     let frkEditModal = new bootstrap.Modal($f);
     $f.on('hidden.bs.modal', function() {
         $f.find("input[name='email']").removeClass('form-control-plaintext').addClass('form-control').prop('readonly', false);
         $f.find(".modal-content")[0].reset();
+        // $f.find("select[name='timezone']").val(brtz);
     });
     $(".row-user .btn-edit").click(function() {
         $r = $(this).closest('.row-user');
@@ -13,6 +19,7 @@ $('document').ready(function() {
                 $f.find("input[name='id']").val(json.id);
                 $f.find("input[name='name']").val(json.name);
                 $f.find("input[name='email']").val(json.email).removeClass('form-control').addClass('form-control-plaintext').prop('readonly', true);
+                $f.find("select[name='timezone']").val(json.timezone);
                 $f.find("select[name='roles']").val(json.roles);
                 frkEditModal.show();
             })

@@ -12,7 +12,7 @@ class UserModel(UserMixin, db.Model):
     password = db.Column(db.String(128))
     name = db.Column(db.String(128))
     thumbnail = db.Column(db.String(512))
-    timezone = db.Column(db.String(64))
+    timezone = db.Column(db.String(64), default='UTC')
     preferences = db.Column(db.String(64))
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
     update = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)

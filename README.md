@@ -9,7 +9,7 @@
 * [x] Edit user
 * [x] Disable user account
 * [x] Update last login
-* [ ] Add timezone field
+* [x] User timezone support
 * [ ] Edit profile (including URL to avatar)
 * [ ] Edit preferences
 

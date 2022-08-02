@@ -5,13 +5,14 @@
 <h2 class="page-title">Manage Users</h2>
 
 {% if data %}
-<table class="table table-freak table-striped table-hover" style="max-width:960px">
+<table class="table table-freak table-striped table-hover">
     <thead>
        <tr>
           <th>Name</th>
-          <th class="d-none d-md-table-cell">Email</th>
-          <th>Role</th>
-          <th style="width:100px">
+          <th class="d-none d-lg-table-cell">Email</th>
+          <th class="d-none d-md-table-cell">Last login</th>
+          <th class="d-none d-sm-table-cell">Role</th>
+          <th style="width:{% if g.user.roles > 3 %}100px{% else %}50px{% endif %}">
             {% if g.user.roles > 2 %}
             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
             {% endif %}
@@ -26,8 +27,9 @@
                 <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
                 <span class="user-name">{{ item.name }}</span>
             </th>
-            <td class="d-none d-md-table-cell">{{ item.email }}</td>
-            <td>{{ roles[item.roles] }}</td>
+            <td class="d-none d-lg-table-cell">{{ item.email }}</td>
+            <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
+            <td class="d-none d-sm-table-cell">{{ roles[item.roles] }}</td>
             <td>
                 {% if item.id != g.user.id and item.roles < g.user.roles %}
                 <button type="button" class="btn btn-link btn-edit"><i class="bi bi-pencil-fill"></i></button>
@@ -45,8 +47,6 @@
 {% endblock %}
 
 {% block modals %}
-
-{{ super() }}
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel" aria-hidden="true">
   <div class="modal-dialog modal-md modal-fullscreen-md-down modal-dialog-scrollable">
@@ -77,6 +77,24 @@
           <div class="col-sm-9">
             <input type="password" name="password" class="form-control" id="iPwd" autocomplete="new-password" />
             <div class="small text-muted">Enter password only to update it</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="iTz" class="col-sm-3 col-form-label">Timezone</label>
+          <div class="col-sm-9">
+            <select id="iTz" name="timezone" class="form-select">
+            {% for tzg in timezones %}
+              {% if timezones[tzg]|length > 1 %}
+              <optgroup label="{{ tzg }}">
+                {% for tz in timezones[tzg] %}
+                <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == g.user.timezone %} selected{% endif %}>{{ tz }}</option>
+                {% endfor %}
+              </optgroup>
+              {% else %}
+              <option value="{{ tzg }}">{{ tzg }}</option>
+              {% endif %}
+            {% endfor %}
+            </select>
           </div>
         </div>
         <div class="row">

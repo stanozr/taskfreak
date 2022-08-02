@@ -2,10 +2,7 @@ from flask import Flask, g, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 
-import datetime
-
-# from datetime import datetime, timedelta
-# import time
+import datetime, pytz, time
 
 # import json
 
@@ -48,7 +45,41 @@ def toast_class(ts):
 	elif ts == 'success':
 		return 'text-bg-success'
 	else:
-		return 'text-bg-info'
+		return 'text-bg-secondary'
+
+@app.template_filter()
+def timestamp_to_date(ts):
+    dt = datetime.datetime.fromtimestamp(ts)
+    return dt.strftime('%d/%m/%Y %H:%M')
+
+@app.template_filter()
+def user_time(date):
+	if not date:
+		return ''
+	try:
+		tz = pytz.timezone(current_user.timezone)
+		loc = tz.fromutc(date)
+		return loc.strftime('%d/%m/%Y %H:%M')
+	except:
+		return date.strftime('%d/%m/%Y %H:%M')
+
+@app.template_filter()
+def elapsed_time(ts):
+    diff = str(datetime.timedelta(seconds=round(time.time() - ts)))
+    if "day" in diff:
+        ard = diff.split(',')
+        return ard[0]
+    else:
+        art = diff.split(':')
+        sec = int(art[2])
+        mns = int(art[1])
+        hrs = int(art[0])
+        if (hrs > 0):
+            return f"{hrs}h"
+        elif (mns > 0):
+            return f"{mns}m"
+        else:
+            return f"{sec}s"
 
 @app.route("/")
 def index():

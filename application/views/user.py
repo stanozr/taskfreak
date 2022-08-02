@@ -26,7 +26,7 @@ def login():
 				user.lastlogin = datetime.datetime.utcnow()
 				db.session.commit()
 				login_user(user)
-				flash('You are now logged in', 'success')
+				flash('You are now logged in')
 				if (next_url):
 					return redirect(next_url)
 				else:
@@ -66,5 +66,6 @@ def register():
 
 @user.route('/logout')
 def logout():
-    logout_user()
-    return redirect(url_for('index'))
+	logout_user()
+	flash('You are now logged out')
+	return redirect(url_for('index'))
