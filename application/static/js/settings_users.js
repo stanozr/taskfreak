@@ -7,15 +7,18 @@ $('document').ready(function() {
     // $f.find("select[name='timezone']").val(brtz);
     let frkEditModal = new bootstrap.Modal($f);
     $f.on('hidden.bs.modal', function() {
-        $f.find("input[name='email']").removeClass('form-control-plaintext').addClass('form-control').prop('readonly', false);
-        $f.find(".modal-content")[0].reset();
-        // $f.find("select[name='timezone']").val(brtz);
+        if ($f.find("input[name='id']").val()) {
+            $f.find("input[name='email']").removeClass('form-control-plaintext').addClass('form-control').prop('readonly', false);
+            $f.find(".modal-content")[0].reset();
+            // $f.find("select[name='timezone']").val(brtz);
+        }
     });
     $(".row-user .btn-edit").click(function() {
         $r = $(this).closest('.row-user');
         uid = $r.data('id');
         $.getJSON( "/api/users/load/"+uid )
             .done(function( json ) {
+                $f.find(".modal-content")[0].reset();
                 $f.find("input[name='id']").val(json.id);
                 $f.find("input[name='name']").val(json.name);
                 $f.find("input[name='email']").val(json.email).removeClass('form-control').addClass('form-control-plaintext').prop('readonly', true);
