@@ -12,7 +12,7 @@
           <th class="d-none d-md-table-cell">Email</th>
           <th>Role</th>
           <th style="width:100px">
-            {% if g.user.roles > 1 %}
+            {% if g.user.roles > 2 %}
             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
             {% endif %}
           </th>
@@ -24,16 +24,16 @@
         <tr class="row-user align-middle" data-id="{{ item.id }}">
             <th>
                 <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
-                {{ item.name }}
+                <span class="user-name">{{ item.name }}</span>
             </th>
             <td class="d-none d-md-table-cell">{{ item.email }}</td>
             <td>{{ roles[item.roles] }}</td>
             <td>
                 {% if item.id != g.user.id and item.roles < g.user.roles %}
-                <a href="#!" class="btn btn-link btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                <button type="button" class="btn btn-link btn-edit"><i class="bi bi-pencil-fill"></i></button>
                 {% endif %}
-                {% if item.id != g.user.id and g.user.roles > 2 %}
-                <a href="#!" class="btn btn-link btn-delete"><i class="bi bi-trash"></i></a>
+                {% if item.id != g.user.id and g.user.roles > 3 %}
+                <button type="button" class="btn btn-link btn-delete" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
                 {% endif %}
             </td>
         </tr>
@@ -45,6 +45,8 @@
 {% endblock %}
 
 {% block modals %}
+
+{{ super() }}
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel" aria-hidden="true">
   <div class="modal-dialog modal-md modal-fullscreen-md-down modal-dialog-scrollable">

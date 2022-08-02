@@ -50,16 +50,43 @@ $('document').ready(function(){
       }
     });
     $p.find('.dropdown-count').text(t);
-  })
+  });
 
   $('.datepicker').datepicker();
 
   $('.flash').each(function() {
     new bootstrap.Toast($(this)).show();
   });
+
+  confirmModal = new bootstrap.Modal('#confirmModal');
+
+  $( "#confirmModal form" ).submit(function( event ) {
+    $t = $(this);
+    $.ajax({
+        method: $t.attr('method'),
+        url: $t.attr('action'),
+        data: $t.serialize()
+    }).done(function (data) {
+        if (data.error) {
+            tfk_toasted(data.error, 'text-bg-danger');
+        } else {
+          confirmModal.hide();
+          location.reload();
+        }
+    });
+    event.preventDefault();
+  });
+
 });
 
-function toasted(msg, cat) {
+function tfk_confirm(msg, action) {
+  $mod = $('#confirmModal');
+  $mod.find('.modal-body').html(msg);
+  $mod.find('form').attr('action', action);
+  confirmModal.show();
+}
+
+function tfk_toasted(msg, cat) {
   $lt = $('#live-toast');
   $lt.addClass(cat).find('.toast-body').text(msg);
   mt = bootstrap.Toast.getOrCreateInstance($lt);

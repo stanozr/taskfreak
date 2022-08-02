@@ -20,12 +20,17 @@ def login():
 		email = flask_request.form['email']
 		user = UserModel.query.filter_by(email = email).first()
 		if user is not None and user.check_password(flask_request.form['password']):
-			login_user(user)
-			flash('You are now logged in', 'success')
-			if (next_url):
-				return redirect(next_url)
+			if (not user.roles):
+				flash('Your account is disabled', 'error')
 			else:
-				return redirect(url_for('index'))
+				user.lastlogin = datetime.datetime.utcnow()
+				db.session.commit()
+				login_user(user)
+				flash('You are now logged in', 'success')
+				if (next_url):
+					return redirect(next_url)
+				else:
+					return redirect(url_for('index'))
 		else:
 			flash('Wrong email address or password', 'error')
      
@@ -46,8 +51,9 @@ def register():
  
         if UserModel.query.filter_by(email=email).first():
             return ('Email already Present')
-             
-        user = UserModel(email=email, name=username, roles=0)
+	
+		# -TODO- register with role = 0 and send confirmation email to move to 1
+        user = UserModel(email=email, name=username, roles=1)
         user.set_password(password)
         user.check_gravatar(True)
         db.session.add(user)

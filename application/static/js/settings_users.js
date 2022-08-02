@@ -21,6 +21,10 @@ $('document').ready(function() {
                 console.log( "Request Failed: " + err );
             });
     });
+    $(".row-user .btn-delete").click(function() {
+        uname = $(this).closest('.row-user').find('.user-name').text();
+        tfk_confirm('Please confirm removing user <b>'+uname+'</b><br /><span class="text-danger">This will disable the user, all data will remain.</span>', $(this).data('action'));
+    });
     $( "#user-form" ).submit(function( event ) {
         $t = $(this);
         $.ajax({
@@ -29,7 +33,7 @@ $('document').ready(function() {
             data: $t.serialize()
         }).done(function (data) {
             if (data.error) {
-                toasted(data.error, 'text-bg-danger');
+                tfk_toasted(data.error, 'text-bg-danger');
             } else {
                 frkEditModal.hide();
                 location.reload();

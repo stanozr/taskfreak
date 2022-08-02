@@ -18,8 +18,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     USER_ROLES = {
-        0: "User",
-        1: "Manager",
-        2: "Administrator",
-        3: "Super Admin"
+        1: "User",
+        2: "Manager",
+        3: "Administrator",
+        4: "Super Admin"
     }

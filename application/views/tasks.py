@@ -1,9 +1,14 @@
 from flask import Blueprint, render_template
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 import datetime
 
 tasks = Blueprint('tasks', __name__)
+
+@tasks.before_request
+@login_required
+def login_required_for_all_request():    
+    pass  
 
 @tasks.route("/list")
 def list():

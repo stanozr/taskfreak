@@ -12,9 +12,7 @@ $('document').ready(function() {
         $card = $(this).closest('form').find('.card-header');
         pid = $card.find("input[name='pid']").val()
         ptt = $card.find("input[name='title']").val()
-        $mod = $('#confirmModal')
-        $mod.find('.modal-body').html('Do you want to archive project <b>'+ptt+'</b> ?');
-        new bootstrap.Modal('#confirmModal').show();
+        tfk_confirm('Do you want to archive project <b>'+ptt+'</b> ?');
     });
     $('.action-delete-project').click(function() {
         $card = $(this).closest('form').find('.card-header');

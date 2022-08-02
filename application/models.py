@@ -17,7 +17,7 @@ class UserModel(UserMixin, db.Model):
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
     update = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
     lastlogin = db.Column(db.DateTime)
-    roles = db.Column(db.Integer) # 0 = user, 1 = manager, 2 = admin, 3 = super admin
+    roles = db.Column(db.Integer) # 0 = disabled, 1 = user, 2 = manager, 3 = admin, 4 = super admin
 
     def set_password(self,password):
         self.password = generate_password_hash(password)

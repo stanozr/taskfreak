@@ -9,6 +9,10 @@ from application.models import *
 
 settings = Blueprint('settings', __name__)
 
+@settings.before_request
+@login_required
+def login_required_for_all_request():    
+    pass  
 
 @settings.route("/settings/projects")
 def projects():
@@ -43,7 +47,7 @@ def preferences():
 @settings.route("/settings/users")
 def users():
 	# User management
-	items = UserModel.query.order_by(desc(UserModel.roles), UserModel.name).all()
+	items = UserModel.query.filter(UserModel.roles > 0).order_by(desc(UserModel.roles), UserModel.name).all()
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",
 		menu="settings_users",
@@ -54,9 +58,8 @@ def users():
 	)
 
 @settings.route("/api/users/load/<id>")
-@login_required
 def api_user_load(id):
-	if current_user.roles < 1:
+	if current_user.roles < 2:
 		return jsonify({'error': 'Action not allowed'})
 	item = UserModel.query.filter_by(id=id).first()
 	if not item:
@@ -66,11 +69,10 @@ def api_user_load(id):
 	return jsonify(item.get_dict())
 
 @settings.route("/api/users/save", methods=['POST'])
-@login_required
 def api_user_save():
 	uid = int(request.form['id']) if request.form.get('id') else False
 	uro = int(request.form['roles']) if request.form.get('roles') else 0
-	if current_user.roles < 1 or (uid and uid == current_user.id) or (uro > current_user.roles):
+	if current_user.roles < 2 or (uid and uid == current_user.id) or (uro > current_user.roles):
 		return jsonify({'error': 'Action not allowed'})
 	# set user
 	item = UserModel()
@@ -78,7 +80,7 @@ def api_user_save():
 		item = UserModel.query.filter_by(id=uid).first()
 		if not item:
 			return jsonify({'error': 'User does not exist'})
-	if not uid or current_user.roles > 2:
+	if not uid or current_user.roles > 3:
 		# set email only for new users
 		# only super admin can change email
 		item.email = request.form.get('email','').strip()
@@ -98,17 +100,22 @@ def api_user_save():
 	return jsonify({'success': msg})
 		
 
-@settings.route("/api/users/delete/<int:id>")
-@login_required
+@settings.route("/api/users/delete/<int:id>", methods=['POST'])
 def api_user_delete(id):
-	if current_user.roles < 2:
+	# id = int(request.form['id']) if request.form.get('id') else False
+	if not id:
+		return jsonify({'error': 'User not specified'})
+	if current_user.roles < 3:
 		return jsonify({'error': 'Insufficient permissions #2'})
 	item = UserModel.query.get(id)
 	if item:
-		db.session.delete(item)
+		# delete if no task, no comment, nothing
+		# db.session.delete(item)
+		# else disable it
+		item.roles = 0
 		db.session.commit()
-		flash('user deleted', 'success')
-		return jsonify({'success': 'User deleted'})
+		flash('User account has been disabled', 'success')
+		return jsonify({'success': 'User disabled'})
 	else: 
 		return jsonify({'error': 'User does not exist'})
     # return redirect(url_for('adminUser'))

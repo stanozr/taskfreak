@@ -1,14 +1,14 @@
 # TaskFreak
 
-### TODO
+### Development Roadmap
 
 🤵 __Week 1__
 * [x] Login/Logout
 * [x] List users
 * [x] Add user
 * [x] Edit user
-* [ ] Delete user
-* [ ] Update last login
+* [x] Disable user account
+* [x] Update last login
 * [ ] Add timezone field
 * [ ] Edit profile (including URL to avatar)
 * [ ] Edit preferences
@@ -19,6 +19,7 @@
 * [ ] Move project's lists
 * [ ] Manage project's users
 * [ ] Archive project
+* [ ] Join projects
 
 ✅ __Week 3__
 * [ ] Create task
@@ -54,3 +55,5 @@
 * [ ] OKTA login
 * [ ] Outlook connection
 * [ ] Sync calendar
+* [ ] Truly delete accounts (if no data associated)
+* [ ] Re-enable disabled accounts
