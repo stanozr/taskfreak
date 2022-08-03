@@ -11,6 +11,7 @@ $('document').ready(function() {
                 tfk_toasted(data.error, 'text-bg-danger');
             } else {
                 tfk_toasted(data.success, 'text-bg-success');
+                $('#user-avatar, .btn-nav.btn-user').html(data.avatar);
             }
         });
         event.preventDefault();

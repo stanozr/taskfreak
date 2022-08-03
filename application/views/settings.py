@@ -94,7 +94,7 @@ def api_user_save():
 		
 	item.name = request.form.get('name','').strip()
 	item.timezone = request.form.get('timezone','UTC')
-	if not uid or current_user.roles > 3:
+	if not uid or (uid != current_user.id and current_user.roles > 3):
 		# set email only for new users
 		# only super admin can change email (for now)
 		item.email = request.form.get('email','').strip()
@@ -117,7 +117,10 @@ def api_user_save():
 	db.session.commit()
 	msg = "User {}".format('Updated' if uid else 'Created')
 	flash(msg, 'success')
-	return jsonify({'success': msg})
+	return jsonify({
+		'success': msg, 
+		'avatar': item.avatar()
+	})
 		
 
 @settings.route("/api/users/delete/<int:id>", methods=['POST'])

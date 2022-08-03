@@ -231,6 +231,9 @@
 .table-freak tbody .btn-link.btn-delete:hover {
   color: #cc3333;
 }
+hr {
+  border-top-color: #ccc;
+}
 /* RESPONSIVE STUFF */
 
 @media (min-width: 992px) {
@@ -459,9 +462,6 @@
 }
 
 /* TASK VIEW */
-#viewModal hr {
-  border-top-color: #ccc;
-}
 #viewModal .task-users a {
   display: inline-block;
   margin-bottom: 5px;

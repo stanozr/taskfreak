@@ -4,13 +4,29 @@
 
     <h2 class="page-title">My Account</h2>
     <form id="account-form" action="{{ url_for('settings.api_user_save') }}" method="POST" style="max-width:600px">
+        <input type="hidden" name="id" value="{{ data.id }}" />
         <div class="row mb-3">
-            <div class="col-12 col-sm-9 offset-sm-3">
-                <input type="hidden" name="id" value="{{ data.id }}" /> 
-                <div class="btn-user btn-user-lg">{{ data.avatar() | safe }}</div>
+            <div class="col-12 col-sm-9 offset-sm-3 d-flex align-items-end"> 
+                <div id="user-avatar" class="btn-user btn-user-lg pe-3">{{ data.avatar() | safe }}</div>
+                <div class="small pb-2">
+                    <table>
+                        <tr>
+                            <td class="pe-3 text-muted">Created on:</td>
+                            <td>{{ data.creation | user_time }}</td>
+                        </tr>
+                        <!-- tr>
+                            <td class="pe-3 text-muted">Last update:</td>
+                            <td>{{ data.update | user_time }}</td>
+                        </tr -->
+                        <tr>
+                            <td class="pe-3 text-muted">Last login:</td>
+                            <td>{{ data.lastlogin | user_time }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-5">
             <label for="iThumb" class="col-sm-3 col-form-label">Profile image</label>
             <div class="col-sm-9">
                 <input type="text" name="thumbnail" class="form-control" id="iThumb" value="{{ data.thumbnail or '' }}" />
