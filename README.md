@@ -10,7 +10,7 @@
 * [x] Disable user account
 * [x] Update last login
 * [x] User timezone support
-* [ ] Edit profile (including URL to avatar)
+* [x] Edit profile (including URL to avatar)
 * [ ] Edit preferences
 
 💼 __Week 2__

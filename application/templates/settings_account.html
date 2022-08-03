@@ -3,8 +3,62 @@
 {% block content %}
 
     <h2 class="page-title">My Account</h2>
-    <p class="">
-        Manage name, email, password, avatar
-    </p>
+    <form id="account-form" action="{{ url_for('settings.api_user_save') }}" method="POST" style="max-width:600px">
+        <div class="row mb-3">
+            <div class="col-12 col-sm-9 offset-sm-3">
+                <input type="hidden" name="id" value="{{ data.id }}" /> 
+                <div class="btn-user btn-user-lg">{{ data.avatar() | safe }}</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="iThumb" class="col-sm-3 col-form-label">Profile image</label>
+            <div class="col-sm-9">
+                <input type="text" name="thumbnail" class="form-control" id="iThumb" value="{{ data.thumbnail or '' }}" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="iName" class="col-sm-3 col-form-label">Name</label>
+            <div class="col-sm-9">
+                <input type="text" name="name" class="form-control" id="iName" value="{{ data.name }}" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="iEmail" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+                <div class="p-2">{{ data.email }}</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="ipwd" class="col-sm-3 col-form-label">Password</label>
+            <div class="col-sm-9">
+                <input type="password" name="password" class="form-control" id="iPwd" autocomplete="new-password" />
+                <div class="small text-muted">Enter password only if you want to update it</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="iTz" class="col-sm-3 col-form-label">Timezone</label>
+            <div class="col-sm-9">
+                <select id="iTz" name="timezone" class="form-select">
+                {% for tzg in timezones %}
+                {% if timezones[tzg]|length > 1 %}
+                <optgroup label="{{ tzg }}">
+                    {% for tz in timezones[tzg] %}
+                    <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == g.user.timezone %} selected{% endif %}>{{ tz }}</option>
+                    {% endfor %}
+                </optgroup>
+                {% else %}
+                <option value="{{ tzg }}">{{ tzg }}</option>
+                {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-sm-9 offset-sm-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
+            </div>
+        </div>
+
+    </form>
 
 {% endblock %}

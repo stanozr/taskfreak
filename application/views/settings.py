@@ -6,6 +6,7 @@ from flask_login import login_required, current_user
 
 from application import app
 from application.models import *
+from application.utils import utils
 
 settings = Blueprint('settings', __name__)
 
@@ -26,9 +27,12 @@ def projects():
 @settings.route("/settings/account")
 def account():
 	# User account settings, i.e. name, email, password, avatar
+	# item = UserModel.query.get(current_uset)
 	return render_template("settings_account.html",
 		title="Pacific Data Hub",
 		menu="settings_account",
+		data=current_user,
+		timezones=utils.get_timezones(),
 		js=['settings_account.js']
 	)
 
@@ -45,22 +49,12 @@ def preferences():
 def users():
 	# User management
 	items = UserModel.query.filter(UserModel.roles > 0).order_by(desc(UserModel.roles), UserModel.name).all()
-	tzgroups = {}
-	tzlist = pytz.common_timezones
-	for tz in tzlist:
-		if '/' in tz:
-			tzn = tz.split('/')
-			if tzn[0] not in tzgroups:
-				tzgroups[tzn[0]] = []
-			tzgroups[tzn[0]].append(tzn[1])
-		else:
-			tzgroups[tz] = [ tz ]
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",
 		menu="settings_users",
 		data=items,
 		roles=app.config['USER_ROLES'],
-		timezones=tzgroups,
+		timezones=utils.get_timezones(),
 		js=['settings_users.js']
 	)
 
@@ -81,7 +75,8 @@ def api_user_load(id):
 def api_user_save():
 	uid = int(request.form['id']) if request.form.get('id') else False
 	uro = int(request.form['roles']) if request.form.get('roles') else 0
-	if current_user.roles < 2 or (uid and uid == current_user.id) or (uro > current_user.roles):
+	if (uid != current_user.id and uro > current_user.roles):
+		# trying to raise user to a higher level than ourself
 		return jsonify({'error': 'Action not allowed'})
 	# set user
 	item = UserModel()
@@ -89,16 +84,31 @@ def api_user_save():
 		item = UserModel.query.filter_by(id=uid).first()
 		if not item:
 			return jsonify({'error': 'User does not exist'})
-	if not uid or current_user.roles > 3:
-		# set email only for new users
-		# only super admin can change email
-		item.email = request.form.get('email','').strip()
+		elif uid != current_user.id:
+			if current_user.roles < 3:
+				return jsonify({'error': 'You must be admin to edit users'})
+			if current_user.roles <= item.roles:
+				return jsonify({'error': 'Can not edit user with a higher role'})
+	elif current_user.roles < 3:
+		return jsonify({'error': 'You must be admin to create users'})
+		
 	item.name = request.form.get('name','').strip()
 	item.timezone = request.form.get('timezone','UTC')
-	item.roles = uro
+	if not uid or current_user.roles > 3:
+		# set email only for new users
+		# only super admin can change email (for now)
+		item.email = request.form.get('email','').strip()
+	if (uid and uid == current_user.id):
+		# user is updating itself
+		item.thumbnail = request.form.get('thumbnail', '')
+	else:
+		# admin is updating another user
+		item.roles = uro
+	# check if password is getting updated
 	pwd = request.form.get('password','').strip()
 	if (pwd):
 		# set password only when creating or updating it
+		# -TODO- check if the password is secure enough (within set_password method)
 		item.set_password(pwd)
 	if not item.is_valid():
 		return jsonify({'error': 'Missing or invalid fields'})
