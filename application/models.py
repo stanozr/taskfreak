@@ -40,14 +40,15 @@ class UserModel(UserMixin, db.Model):
             return False
 
     def avatar(self):
+        srn = ''
+        arn = self.name.split(' ')[0:2]
+        for en in arn:
+            srn += en[0].upper()
         if self.thumbnail:
-            return '<img src="'+self.thumbnail+'" class="rounded-circle" />'
+            # return '<img src="'+self.thumbnail+'" class="rounded-circle" />'
+            return '<span class="avatar-img rounded-circle" style="background-image:url({})">{}</span>'.format(self.thumbnail, srn)
         else:
-            srn = ''
-            arn = self.name.split(' ')[0:2]
-            for en in arn:
-                srn += en[0].upper()
-            return '<span class="rounded-circle">'+srn+'</span>'
+            return '<span class="avatar-srn rounded-circle">{}</span>'.format(srn)
 
     def is_valid(self):
         if self.email and '@' in self.email and self.name and self.password:

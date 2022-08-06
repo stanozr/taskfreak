@@ -19,20 +19,6 @@
 .btn-nav i {
   font-size: 1.5em; /* 1.75 for box icons */
 }
-.btn-user img {
-  height: 1.75em;
-}
-.btn-user.btn-user-lg img {
-  height: 6em;
-}
-.btn-nav.btn-user {
-  padding: 0 6px;
-}
-.btn-nav.btn-user img {
-  height: 1.9em;
-  background-color: #666;
-  padding: 0.05em;
-}
 .btn-user span {
   display: inline-block;
   height: 1.75em;
@@ -44,11 +30,24 @@
   text-align: center;
   line-height: 1.65;
 }
+.btn-user span.avatar-img {
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+}
 .btn-user.btn-user-lg span {
   height: 3em;
   width: 3em;
   line-height: 3;
   font-size: 2em;
+}
+.btn-nav.btn-user {
+  padding: 0 6px;
+}
+.btn-nav.btn-user span.avatar-img {
+  width: 1.95em;
+  height: 1.95em;
+  border: 0.05em solid #555;
 }
 .btn-user.dropdown-toggle::after {
   display: none;
