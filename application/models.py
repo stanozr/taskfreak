@@ -1,5 +1,4 @@
 import datetime, requests, hashlib
-from sqlalchemy import true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from application import db

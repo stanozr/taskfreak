@@ -5,6 +5,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 
 from application import app
 from application.models import *
+from application.utils import utils
 
 user = Blueprint('user', __name__)
 
@@ -23,8 +24,7 @@ def login():
 			if (not user.roles):
 				flash('Your account is disabled', 'error')
 			else:
-				user.lastlogin = datetime.datetime.utcnow()
-				db.session.commit()
+				utils.set_last_login(user.id)
 				login_user(user)
 				flash('You are now logged in')
 				if (next_url):
