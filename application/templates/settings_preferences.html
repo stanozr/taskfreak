@@ -2,7 +2,45 @@
 
 {% block content %}
 
-    <h2 class="page-title">Preferences</h2>
-    <p>timezone, default view, notifications, outlook sync</p>
+<h2 class="page-title">Preferences</h2>
+<form id="preferences-form" action="{{ url_for('settings.api_preferences_save') }}" method="POST" style="max-width:600px">
+    <div class="row mb-3">
+        <label for="iView" class="col-sm-3 col-form-label">Default view</label>
+        <div class="col-sm-9 pt-2">
+            {% set def = data['default_view'] or 'list' %}
+            {% for opt in options['default_views'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="default_view" id="iView{{ opt }}" value="{{ opt }}"
+                {% if opt == def %}checked{% endif %} />
+                <label class="form-check-label" for="iView{{ opt }}">{{ options['default_views'][opt] }}</label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="iNotifs" class="col-sm-3 col-form-label">Notifications</label>
+        <div class="col-sm-9 pt-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="notif_instant" value="1" id="iNotif1"
+                {% if data['notif_instant'] or false %}checked{% endif %} />
+                <label class="form-check-label" for="iNotif1">
+                  Get instant notifications
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="notif_daily" value="1" id="iNotif2"
+                {% if  data['notif_daily'] or false %}checked{% endif %} />
+                <label class="form-check-label" for="iNotif2">
+                  Get daily summary
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12 col-sm-9 offset-sm-3">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
+        </div>
+    </div>
+</form>
 
 {% endblock %}

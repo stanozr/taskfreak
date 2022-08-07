@@ -11,7 +11,7 @@
 * [x] Update last login
 * [x] User timezone support
 * [x] Edit profile (including URL to avatar)
-* [ ] Edit preferences
+* [x] Edit preferences
 
 💼 __Week 2__
 * [ ] Add/Edit projects

@@ -24,7 +24,7 @@ class utils:
             'users', 
             sqa.MetaData(),
             sqa.Column('id', sqa.Integer, primary_key = True), 
-            sqa.Column('lastlogin', sqa.DateTime), 
+            sqa.Column('lastlogin', sqa.DateTime)
         )
         with db.engine.begin() as conn:
             update = sqa.update(users).where(users.c.id==id).values(lastlogin=datetime.datetime.utcnow())

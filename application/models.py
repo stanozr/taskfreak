@@ -1,4 +1,4 @@
-import datetime, requests, hashlib
+import datetime, json, requests, hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from application import db
@@ -12,16 +12,33 @@ class UserModel(UserMixin, db.Model):
     name = db.Column(db.String(128))
     thumbnail = db.Column(db.String(512))
     timezone = db.Column(db.String(64), default='UTC')
-    preferences = db.Column(db.String(64))
+    preferences = db.Column(db.Text)
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
     update = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
     lastlogin = db.Column(db.DateTime)
     roles = db.Column(db.Integer) # 0 = disabled, 1 = user, 2 = manager, 3 = admin, 4 = super admin
 
-    def set_password(self,password):
+    def get_preferences(self):
+        prefs = {}
+        try:
+            if self.preferences:
+                prefs = json.loads(self.preferences)
+        except:
+            pass
+        return prefs
+    
+    def get_preference(self, key, default=None):
+        return self.get_preferences().get(key, default)
+        
+    def set_preference(self, key, value):
+        prefs = self.get_preferences()
+        prefs[key] = value
+        self.preferences = json.dumps(prefs)
+
+    def set_password(self, password):
         self.password = generate_password_hash(password)
      
-    def check_password(self,password):
+    def check_password(self, password):
         return check_password_hash(self.password, password)
 
     def check_gravatar(self, set=False):

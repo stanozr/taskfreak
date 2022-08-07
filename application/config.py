@@ -17,6 +17,12 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'postgresql://stan:Stqn56@localhost:5432/taskfreak'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    TASK_VIEWS = {
+        'list': 'List',
+        'calendar': 'Calendar',
+        'kanban': 'Kanban'
+    }
+
     USER_ROLES = {
         1: "User",
         2: "Manager",

@@ -39,11 +39,31 @@ def account():
 @settings.route("/settings/preferences")
 def preferences():
 	# User preferences, i.e. timezone, default view, notifications, outlook sync
+	opts = {
+		'default_views': app.config['TASK_VIEWS']
+	}
 	return render_template("settings_preferences.html",
 		title="Pacific Data Hub",
 		menu="settings_preferences",
+		data=current_user.get_preferences(),
+		options = opts,
 		js=['settings_preferences.js']
 	)
+
+@settings.route("/api/preferences/save", methods=['POST'])
+def api_preferences_save():
+	uid = int(request.form['id']) if request.form.get('id') else current_user.id
+	if uid != current_user.id and current_user.roles < 3:
+		return jsonify({'error': 'You must be admin to edit users'})
+	item = UserModel.query.filter_by(id=uid).first()
+	if not item:
+		return jsonify({'error': 'User does not exist'})
+	item.set_preference('default_view', request.form.get('default_view', 'list'))
+	item.set_preference('notif_instant', request.form.get('notif_instant', False))
+	item.set_preference('notif_daily', request.form.get('notif_daily', False))
+	db.session.commit()
+	msg = "User preferences saved"
+	return jsonify({'success': msg})
 
 @settings.route("/settings/users")
 def users():
@@ -121,7 +141,7 @@ def api_user_save():
 		'success': msg, 
 		'avatar': item.avatar()
 	})
-		
+
 
 @settings.route("/api/users/delete/<int:id>", methods=['POST'])
 def api_user_delete(id):

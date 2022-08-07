@@ -86,5 +86,5 @@ def index():
 	if not current_user.is_authenticated:
 		return redirect(url_for('user.login'))
 	else:
-		# -TODO- check preferenced view
-		return redirect(url_for('tasks.list'))
+		dview = current_user.get_preference('default_view', 'list')
+		return redirect(url_for('tasks.'+dview))
