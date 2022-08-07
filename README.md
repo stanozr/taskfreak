@@ -45,6 +45,7 @@
 * [ ] Remember password
 * [ ] Send notifications to new users
 * [ ] Send notifications when changing email
+* [ ] Send instant notifications (when watching?)
 * [ ] Send daily notifications
 
 🏆 __Wheek 6__
