@@ -17,6 +17,8 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'postgresql://stan:Stqn56@localhost:5432/taskfreak'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    ASSETS_CDN = os.environ.get('ASSETS_CDN') or False
+
     TASK_VIEWS = {
         'list': 'List',
         'calendar': 'Calendar',

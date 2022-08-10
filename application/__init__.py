@@ -33,20 +33,30 @@ def load_user(id):
 
 @app.before_request
 def before_request():
-	g.css = [
-		# 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css',
-		url_for('static', filename='css/bootstrap.min.css'),
-		# 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css',
-		# 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css',
-	]
-	g.jscript = [
-		# 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js',
-		# 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js',
-		# 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js',
-		url_for('static', filename='js/jquery.min.js'),
-		url_for('static', filename='js/bootstrap.bundle.min.js'),
-		url_for('static', filename='js/app.js')
-	]
+	if app.config.get('ASSETS_CDN', False):
+		g.css = [
+			'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css',
+			'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css',
+			'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css',
+		]
+		g.jscript = [
+			'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js',
+			'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js',
+			url_for('static', filename='js/app.js')
+		]
+	else:
+		g.css = [
+			url_for('static', filename='css/bootstrap.min.css'),
+			url_for('static', filename='css/bootstrap-datepicker.min.css'),
+			url_for('static', filename='css/bootstrap-icons.css'),
+		]
+		g.jscript = [
+			url_for('static', filename='js/jquery.min.js'),
+			url_for('static', filename='js/bootstrap.bundle.min.js'),
+			url_for('static', filename='js/bootstrap-datepicker.min.js'),
+			url_for('static', filename='js/app.js')
+		]
 	g.now = datetime.datetime.utcnow()
 
 @app.template_filter()
