@@ -516,8 +516,12 @@ hr {
   border-color: #198754;
 }
 /* TASK KANBAN */
+section.page-kanban {
+  padding: 0 !important;
+}
 .kanban-board {
   display: block;
+  padding: .75rem;
   white-space: nowrap;
   overflow-x: auto;
 }
