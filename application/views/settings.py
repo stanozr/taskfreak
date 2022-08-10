@@ -69,7 +69,10 @@ def api_preferences_save():
 @settings.route("/settings/users")
 def users():
 	# User management
-	items = UserModel.query.filter(UserModel.roles > 0).order_by(desc(UserModel.roles), UserModel.name).all()
+	qry = UserModel.query
+	if (current_user.roles < 4):
+		qry = qry.filter(UserModel.roles > 0)
+	items = qry.order_by(desc(UserModel.roles), UserModel.name).all()
 	g.jscript.append(url_for('static', filename='js/settings_users.js'))
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",

@@ -52,8 +52,6 @@ $('document').ready(function(){
     $p.find('.dropdown-count').text(t);
   });
 
-  $('.datepicker').datepicker();
-
   $('.flash').each(function() {
     new bootstrap.Toast($(this)).show();
   });
@@ -76,6 +74,8 @@ $('document').ready(function(){
     });
     event.preventDefault();
   });
+
+  $('.datepicker').datepicker();
 
 });
 

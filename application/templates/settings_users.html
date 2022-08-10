@@ -22,22 +22,22 @@
     
     <tbody>
       {% for item in data %}
-        <tr class="row-user align-middle" data-id="{{ item.id }}">
-            <th>
-                <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
-                <span class="user-name">{{ item.name }}</span>
-            </th>
-            <td class="d-none d-lg-table-cell">{{ item.email }}</td>
-            <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
-            <td>
-              {% if item.id != current_user.id and current_user.roles > 3 %}
-              <button type="button" class="btn btn-link btn-delete float-end" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
-              {% endif %}
-              {% if item.id != current_user.id and current_user.roles > 2 and item.roles < current_user.roles %}
-              <button type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
-              {% endif %}
-              {{ roles[item.roles] }}
-            </td>
+        <tr class="row-user align-middle{% if not item.roles %} opacity-50{% endif %}" data-id="{{ item.id }}">
+          <th>
+              <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
+              <span class="user-name">{{ item.name }}</span>
+          </th>
+          <td class="d-none d-lg-table-cell">{{ item.email }}</td>
+          <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
+          <td>
+            {% if item.id != current_user.id and current_user.roles > 3 and item.roles < current_user.roles and item.roles > 0 %}
+            <button type="button" class="btn btn-link btn-delete float-end" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
+            {% endif %}
+            {% if item.id != current_user.id and current_user.roles > 2 and item.roles < current_user.roles %}
+            <button type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
+            {% endif %}
+            {{ roles[item.roles] }}
+          </td>
         </tr>
       {% endfor %}
     </tbody>
