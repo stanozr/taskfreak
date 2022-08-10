@@ -1,7 +1,7 @@
 import datetime, pytz
 from sqlalchemy import desc
 
-from flask import Blueprint, render_template, jsonify, request, flash
+from flask import Blueprint, render_template, jsonify, request, url_for, flash, g
 from flask_login import login_required, current_user
 
 from application import app
@@ -18,22 +18,23 @@ def login_required_for_all_request():
 @settings.route("/settings/projects")
 def projects():
 	# List of projects, invitations, join and leave projects
+	g.jscript.append(url_for('static', filename='js/dragula.min.js'))
+	g.jscript.append(url_for('static', filename='js/settings_projects.js'))
 	return render_template("settings_projects.html",
 		title="Pacific Data Hub",
-		menu="settings_projects",
-		js=['dragula.min.js', 'settings_projects.js']
+		menu="settings_projects"
 	)
 
 @settings.route("/settings/account")
 def account():
 	# User account settings, i.e. name, email, password, avatar
 	# item = UserModel.query.get(current_uset)
+	g.jscript.append(url_for('static', filename='js/settings_account.js'))
 	return render_template("settings_account.html",
 		title="Pacific Data Hub",
 		menu="settings_account",
 		data=current_user,
-		timezones=utils.get_timezones(),
-		js=['settings_account.js']
+		timezones=utils.get_timezones()
 	)
 
 @settings.route("/settings/preferences")
@@ -42,12 +43,12 @@ def preferences():
 	opts = {
 		'default_views': app.config['TASK_VIEWS']
 	}
+	g.jscript.append(url_for('static', filename='js/settings_preferences.js'))
 	return render_template("settings_preferences.html",
 		title="Pacific Data Hub",
 		menu="settings_preferences",
 		data=current_user.get_preferences(),
-		options = opts,
-		js=['settings_preferences.js']
+		options = opts
 	)
 
 @settings.route("/api/preferences/save", methods=['POST'])
@@ -69,13 +70,13 @@ def api_preferences_save():
 def users():
 	# User management
 	items = UserModel.query.filter(UserModel.roles > 0).order_by(desc(UserModel.roles), UserModel.name).all()
+	g.jscript.append(url_for('static', filename='js/settings_users.js'))
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",
 		menu="settings_users",
 		data=items,
 		roles=app.config['USER_ROLES'],
-		timezones=utils.get_timezones(),
-		js=['settings_users.js']
+		timezones=utils.get_timezones()
 	)
 
 @settings.route("/api/users/load/<id>")

@@ -59,7 +59,7 @@
                 {% if timezones[tzg]|length > 1 %}
                 <optgroup label="{{ tzg }}">
                     {% for tz in timezones[tzg] %}
-                    <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == g.user.timezone %} selected{% endif %}>{{ tz }}</option>
+                    <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == current_user.timezone %} selected{% endif %}>{{ tz }}</option>
                     {% endfor %}
                 </optgroup>
                 {% else %}

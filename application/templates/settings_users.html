@@ -3,7 +3,7 @@
 {% block content %}
 
 <h2 class="page-title">
-  {% if g.user.roles > 2 %}
+  {% if current_user.roles > 2 %}
   <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
   {% endif %}
   Manage Users
@@ -30,10 +30,10 @@
             <td class="d-none d-lg-table-cell">{{ item.email }}</td>
             <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
             <td>
-              {% if item.id != g.user.id and g.user.roles > 3 %}
+              {% if item.id != current_user.id and current_user.roles > 3 %}
               <button type="button" class="btn btn-link btn-delete float-end" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
               {% endif %}
-              {% if item.id != g.user.id and g.user.roles > 2 and item.roles < g.user.roles %}
+              {% if item.id != current_user.id and current_user.roles > 2 and item.roles < current_user.roles %}
               <button type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
               {% endif %}
               {{ roles[item.roles] }}
@@ -87,7 +87,7 @@
               {% if timezones[tzg]|length > 1 %}
               <optgroup label="{{ tzg }}">
                 {% for tz in timezones[tzg] %}
-                <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == g.user.timezone %} selected{% endif %}>{{ tz }}</option>
+                <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == current_user.timezone %} selected{% endif %}>{{ tz }}</option>
                 {% endfor %}
               </optgroup>
               {% else %}
@@ -102,7 +102,7 @@
           <div class="col-sm-9">
             <select id="iRoles" name="roles" class="form-select">
               {% for r in roles %}
-              {% if r < g.user.roles %}
+              {% if r < current_user.roles %}
               <option value="{{ r }}">{{ roles[r] }}</option>
               {% endif %}
               {% endfor %}
