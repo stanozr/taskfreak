@@ -53,7 +53,7 @@
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-md modal-fullscreen-md-down modal-dialog-scrollable">
-    <form id="user-form" action="{{ url_form('settings.api_users_save') }}" method="POST" class="modal-content" autocomplete="off">
+    <form id="user-form" action="{{ url_for('settings.api_user_save') }}" method="POST" class="modal-content" autocomplete="off">
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title" id="editUserLabel">Edit User</h5>
         <div class="float-end">

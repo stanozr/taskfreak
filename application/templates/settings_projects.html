@@ -1,138 +1,217 @@
 {% extends "layout/settings.html" %}
 
 {% block content %}
-
-    <h2 class="page-title">My projects</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 mb-4">
-        <div class="col">
-          <form class="card card-project">
-            <h5 class="card-header">
-                <input type="hidden" name="pid" value="12" />
-                <input type="text" name="title" class="form-control form-control-plaintext fw-semibold py-1" value="This is my first project" />
-            </h5>
-            <div class="card-body">
-                <h5>Lists</h5>
-                <ul class="project-lists project-dragula">
-                    <li class="project-lists-item">
-                        <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
-                        <input type="text" class="form-control form-control-plaintext" value="A first list item" />
-                        <button type="button" class="btn btn-action" disabled><i class="bi bi-trash"></i></button>
-                    </li>
-                    <li class="project-lists-item">
-                        <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
-                        <input type="text" class="form-control form-control-plaintext" value="A second list item" />
-                        <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
-                    </li>
-                    <li class="project-lists-item">
-                        <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
-                        <input type="text" class="form-control form-control-plaintext" value="A third list item" />
-                        <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
-                    </li>
-                    <li class="project-lists-item">
-                        <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
-                        <input type="text" class="form-control form-control-plaintext" value="A last list item" />
-                        <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
-                    </li>
-                </ul>
-                <div class="d-flex mb-3" style="margin-top:-.75em">
-                    <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
-                    <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
-                </div>
-                <h5>Admins</h5>
-                <ul class="project-admins project-users">
-                    <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
-                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                </ul>
-                <h5>Members</h5>
-                <ul class="project-members project-users">
-                    <li class="btn-user"><a href="#!"><img src="/static/img/user_sio.png" class="rounded-circle" /></a></li>
-                    <li class="btn-user"><a href="#!"><span class="rounded-circle">PB</span></a></li>
-                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                </ul>
-                <h5>Observers</h5>
-                <ul class="project-observers project-users">
-                    <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                </ul>
-                <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i class="bi bi-archive pe-1"></i>Archive project</button></div>
-            </div>
-        </form>
+<h2 class="page-title">
+  {% if current_user.role > 0 %}
+  <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal"
+    data-bs-target="#editModal"><i class="bi bi-plus-lg"></i></button>
+  {% endif %}
+  My projects
+</h2>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 mb-4">
+  {% for item in projects %}
+  <div class="col">
+    <form class="card card-project">
+      <h5 class="card-header">
+        <input type="hidden" name="pid" value="12" />
+        <input type="text" name="title" class="form-control form-control-plaintext fw-semibold py-1"
+          value="{{ item.title }}" />
+      </h5>
+      <div class="card-body">
+        <h5>Lists</h5>
+        <ul class="project-lists project-dragula">
+          <li class="project-lists-item">
+            <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
+            <input type="text" class="form-control form-control-plaintext" value="A first list item" />
+            <button type="button" class="btn btn-action" disabled><i class="bi bi-trash"></i></button>
+          </li>
+          <li class="project-lists-item">
+            <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
+            <input type="text" class="form-control form-control-plaintext" value="A second list item" />
+            <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
+          </li>
+          <li class="project-lists-item">
+            <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
+            <input type="text" class="form-control form-control-plaintext" value="A third list item" />
+            <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
+          </li>
+          <li class="project-lists-item">
+            <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
+            <input type="text" class="form-control form-control-plaintext" value="A last list item" />
+            <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
+          </li>
+        </ul>
+        <div class="d-flex mb-3" style="margin-top:-.75em">
+          <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
+          <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
         </div>
-        <div class="col">
-            <div class="card card-project">
-                <h5 class="card-header py-3">This is another project with a looong title</h5>
-                <div class="card-body">
-                    <h5>Lists</h5>
-                    <ul class="project-lists">
-                        <li class="project-lists-item">
-                            <span class="py-2 flex-grow-1">A quick item</span>
-                        </li>
-                        <li class="project-lists-item">
-                            <span class="py-2 flex-grow-1">Another quick item</span>
-                        </li>
-                        <li class="project-lists-item">
-                            <span class="py-2 flex-grow-1">A very fast item with a long title, so long you don't know what to do with it</span>
-                        </li>
-                    </ul>
-                    <h5>Admins</h5>
-                    <ul class="project-admins project-users">
-                        <li class="btn-user"><a href="#!"><img src="/static/img/user_sio.png" class="rounded-circle" /></a></li>
-                    </ul>
-                    <h5>Members</h5>
-                    <ul class="project-members project-users">
-                        <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
-                        <li class="btn-user"><a href="#!"><span class="rounded-circle">PB</span></a></li>
-                    </ul>
-                    <h5>Observers</h5>
-                    <ul class="project-observers project-users">
-                        <li class="btn-user"><a href="#!"><span class="rounded-circle">MB</span></a></li>
-                        <li class="btn-user"><a href="#!"><span class="rounded-circle">SP</span></a></li>
-                        <li class="btn-user"><a href="#!"><span class="rounded-circle">TT</span></a></li>
-                    </ul>
-                </div>
-              </div>
-        </div>
-
-        <div class="col">
-            <div class="card card-project">
-                <h5 class="card-header py-3">A project with no list</h5>
-                <div class="card-body">
-                    <h5>Lists</h5>
-                    <ul class="project-lists project-dragula">
-                    </ul>
-                    <div class="d-flex mb-3" style="margin-top:-.75em">
-                        <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
-                        <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
-                    </div>
-                    <h5>Admins</h5>
-                    <ul class="project-admins project-users">
-                        <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
-                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                    </ul>
-                    <h5>Members</h5>
-                    <ul class="project-members project-users">
-                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                    </ul>
-                    <h5>Observers</h5>
-                    <ul class="project-observers project-users">
-                        <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-                    </ul>
-                </div>
-              </div>
-        </div>
+        <h5>Admins</h5>
+        <ul class="project-admins project-users">
+          {% for member in item.members %}
+          <li class="btn-user"><a href="#!">{{ member.member.avatar() | safe }}</a></li>
+          {% endfor %}
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+        <h5>Members</h5>
+        <ul class="project-members project-users">
+          <li class="btn-user"><a href="#!"><img src="/static/img/user_sio.png" class="rounded-circle" /></a></li>
+          <li class="btn-user"><a href="#!"><span class="rounded-circle">PB</span></a></li>
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+        <h5>Observers</h5>
+        <ul class="project-observers project-users">
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+        <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i
+              class="bi bi-archive pe-1"></i>Archive project</button></div>
+      </div>
+    </form>
+  </div>
+  {% endfor %}
+  <div class="col">
+    <div class="card card-project">
+      <h5 class="card-header py-3">This is another project with a looong title</h5>
+      <div class="card-body">
+        <h5>Lists</h5>
+        <ul class="project-lists">
+          <li class="project-lists-item">
+            <span class="py-2 flex-grow-1">A quick item</span>
+          </li>
+          <li class="project-lists-item">
+            <span class="py-2 flex-grow-1">Another quick item</span>
+          </li>
+          <li class="project-lists-item">
+            <span class="py-2 flex-grow-1">A very fast item with a long title, so long you don't know what to do with
+              it</span>
+          </li>
+        </ul>
+        <h5>Admins</h5>
+        <ul class="project-admins project-users">
+          <li class="btn-user"><a href="#!"><img src="/static/img/user_sio.png" class="rounded-circle" /></a></li>
+        </ul>
+        <h5>Members</h5>
+        <ul class="project-members project-users">
+          <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
+          <li class="btn-user"><a href="#!"><span class="rounded-circle">PB</span></a></li>
+        </ul>
+        <h5>Observers</h5>
+        <ul class="project-observers project-users">
+          <li class="btn-user"><a href="#!"><span class="rounded-circle">MB</span></a></li>
+          <li class="btn-user"><a href="#!"><span class="rounded-circle">SP</span></a></li>
+          <li class="btn-user"><a href="#!"><span class="rounded-circle">TT</span></a></li>
+        </ul>
+      </div>
     </div>
+  </div>
 
-    <h2 class="text-primary px-2 fs-4">Join another project</h2>
-    <ul class="mb-3">
-        <li><a href="#!">This is Scott's public project</a></li>
-        <li><a href="#!">I don't know what this is but I want to join</a></li>
-        <li><a href="#!">This is a global project, eh?</a></li>
-        <li><a href="#!">This is a private project</a></li>
-    </ul>
+  <div class="col">
+    <div class="card card-project">
+      <h5 class="card-header py-3">A project with no list</h5>
+      <div class="card-body">
+        <h5>Lists</h5>
+        <ul class="project-lists project-dragula">
+        </ul>
+        <div class="d-flex mb-3" style="margin-top:-.75em">
+          <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
+          <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
+        </div>
+        <h5>Admins</h5>
+        <ul class="project-admins project-users">
+          <li class="btn-user"><a href="#!"><img src="/static/img/user_stan.png" class="rounded-circle" /></a></li>
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+        <h5>Members</h5>
+        <ul class="project-members project-users">
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+        <h5>Observers</h5>
+        <ul class="project-observers project-users">
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <h2 class="text-primary px-2 fs-4">My archived projects</h2>
-    <ul class="mb-3">
-        <li><a href="#!">This is an old project</a></li>
-        <li><a href="#!">This is another old project</a></li>
-    </ul>
+<h2 class="text-primary px-2 fs-4">Join another project</h2>
+<ul class="mb-3">
+  <li><a href="#!">This is Scott's public project</a></li>
+  <li><a href="#!">I don't know what this is but I want to join</a></li>
+  <li><a href="#!">This is a global project, eh?</a></li>
+  <li><a href="#!">This is a private project</a></li>
+</ul>
 
+<h2 class="text-primary px-2 fs-4">My archived projects</h2>
+<ul class="mb-3">
+  <li><a href="#!">This is an old project</a></li>
+  <li><a href="#!">This is another old project</a></li>
+</ul>
+{% endblock %}
+
+
+{% block modals %}
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editProjectLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
+    <form id="project-form" action="{{ url_for('settings.api_project_save') }}" method="POST" class="modal-content" autocomplete="off">
+      <div class="modal-header modal-smaller bg-light">
+        <h5 class="modal-title" id="editTaskLabel">Edit Project</h5>
+        <div class="float-end">
+          <input type="hidden" name="id" value="" />
+          <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
+          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <input id="iTitle" type="text" class="form-control" name="title" value="" placeholder="Title" />
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-9">
+            <div class="mb-3">
+              <textarea id="iDescription" name="description" class="form-control" value="" placeholder="Description"
+                rows="13"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-3">
+            <div class="mb-3">
+              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
+              <input id="iBudget" type="text" class="form-control" name="budget" value="" />
+            </div>
+            <div class="mb-3">
+              <label for="iStart" class="form-label mb-1 text-muted">Start</label>
+              <div class="input-group date datepicker">
+                <input id="iStart" name="start" type="text" class="form-control" />
+                <span class="input-group-append">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="bi bi-calendar-date"></i>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="iDeadline" class="form-label mb-1 text-muted">Deadline</label>
+              <div class="input-group date datepicker">
+                <input id="iDeadline" name="deadline" type="text" class="form-control" />
+                <span class="input-group-append">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="bi bi-calendar-date"></i>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="iStatus" class="form-label mb-1 text-muted">Status</label>
+              <select id="iStatus" name="status" class="form-select" aria-label="Default select example">
+                <option value="0">Closed</option>
+                <option value="1" selected>Open (private)</option>
+                <option value="2">Open (public)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
 {% endblock %}

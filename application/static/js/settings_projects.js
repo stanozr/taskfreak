@@ -8,6 +8,32 @@ $('document').ready(function() {
         },
         revertOnSpill: true
     });
+
+    $f = $('#editModal');
+    let frkEditModal = new bootstrap.Modal($f);
+    $f.on('hidden.bs.modal', function() {
+        if ($f.find("input[name='id']").val()) {
+            $f.find("form.modal-content").reset();
+        }
+    });
+    
+    $( "#project-form" ).submit(function( event ) {
+        $t = $(this);
+        $.ajax({
+            method: "POST",
+            url: $t.attr('action'),
+            data: $t.serialize()
+        }).done(function (data) {
+            if (data.error) {
+                tfk_toasted(data.error, 'text-bg-danger');
+            } else {
+                frkEditModal.hide();
+                location.reload();
+            }
+        });
+        event.preventDefault();
+    });
+
     $('.action-archive-project').click(function() {
         $card = $(this).closest('form').find('.card-header');
         pid = $card.find("input[name='pid']").val()

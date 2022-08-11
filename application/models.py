@@ -1,4 +1,5 @@
 import datetime, json, requests, hashlib
+from operator import truediv
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from application import db
@@ -64,7 +65,7 @@ class UserModel(UserMixin, db.Model):
             srn += en[0].upper()
         if self.thumbnail:
             # return '<img src="'+self.thumbnail+'" class="rounded-circle" />'
-            return '<span class="avatar-img rounded-circle" style="background-image:url({})">{}</span>'.format(self.thumbnail, srn)
+            return '<span class="avatar-img rounded-circle" title="{}" style="background-image:url({})">{}</span>'.format(self.name, self.thumbnail, srn)
         else:
             return '<span class="avatar-srn rounded-circle">{}</span>'.format(srn)
 
@@ -87,9 +88,9 @@ class ProjectModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), unique=True)
-    description = db.Column(db.String(64), default='UTC')
-    start = db.Column(db.DateTime)
-    deadline = db.Column(db.DateTime)
+    description = db.Column(db.Text)
+    start = db.Column(db.Date, nullable = True)
+    deadline = db.Column(db.Date, nullable = True)
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
     lastupdate = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
     budget = db.Column(db.Float)
@@ -99,10 +100,13 @@ class ProjectModel(db.Model):
     members = db.relationship('ProjectUserModel', back_populates='project')
 
     def is_valid(self):
-        if self.name:
-            return True
-        else:
-            return False
+        if self.title:
+            if ProjectModel.query.filter_by(title=self.title).first():
+                return {'title': 'Title already exists'}
+            else:
+                return True
+        return {'title': 'Title is compulsory'}
+            
 
     def get_dict(self):
         res = {}
