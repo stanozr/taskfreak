@@ -4,43 +4,45 @@
 
 <h2 class="page-title">
   {% if current_user.role > 2 %}
-  <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
+  <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal"
+    data-bs-target="#editModal"><i class="bi bi-person-plus-fill"></i></button>
   {% endif %}
   Manage Users
 </h2>
 
 {% if data %}
 <table class="table table-freak table-striped table-hover">
-    <thead>
-       <tr>
-          <th>Name</th>
-          <th class="d-none d-lg-table-cell">Email</th>
-          <th class="d-none d-md-table-cell">Last login</th>
-          <th>Role</th>
-       </tr>
-    </thead>
-    
-    <tbody>
-      {% for item in data %}
-        <tr class="row-user align-middle{% if not item.role %} opacity-50{% endif %}" data-id="{{ item.id }}">
-          <th>
-              <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
-              <span class="user-name">{{ item.name }}</span>
-          </th>
-          <td class="d-none d-lg-table-cell">{{ item.email }}</td>
-          <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
-          <td>
-            {% if item.id != current_user.id and current_user.role > 3 and item.role < current_user.role and item.role > 0 %}
-            <button type="button" class="btn btn-link btn-delete float-end" data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
-            {% endif %}
-            {% if item.id != current_user.id and current_user.role > 2 and item.role < current_user.role %}
-            <button type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="d-none d-lg-table-cell">Email</th>
+      <th class="d-none d-md-table-cell">Last login</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for item in data %}
+    <tr class="row-user align-middle{% if not item.role %} opacity-50{% endif %}" data-id="{{ item.id }}">
+      <th>
+        <span class="btn-user float-start me-2">{{ item.avatar() | safe }}</span>
+        <span class="user-name">{{ item.name }}</span>
+      </th>
+      <td class="d-none d-lg-table-cell">{{ item.email }}</td>
+      <td class="d-none d-md-table-cell">{{ item.lastlogin | user_time }}</td>
+      <td>
+        {% if item.id != current_user.id and current_user.role > 3 and item.role < current_user.role and item.role> 0 %}
+          <button type="button" class="btn btn-link btn-delete float-end"
+            data-action="/api/users/delete/{{ item.id }}"><i class="bi bi-trash"></i></button>
+          {% endif %}
+          {% if item.id != current_user.id and current_user.role > 2 and item.role < current_user.role %} <button
+            type="button" class="btn btn-link btn-edit float-end"><i class="bi bi-pencil-fill"></i></button>
             {% endif %}
             {{ roles[item.role] }}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endif %}
 
@@ -48,15 +50,17 @@
 
 {% block modals %}
 
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editUserLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-md modal-fullscreen-md-down modal-dialog-scrollable">
-    <form id="user-form" action="/api/users/save" method="POST" class="modal-content" autocomplete="off">
+    <form id="user-form" action="{{ url_form('settings.api_users_save') }}" method="POST" class="modal-content" autocomplete="off">
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title" id="editUserLabel">Edit User</h5>
         <div class="float-end">
           <input type="hidden" name="id" value="" />
           <button type="submit" class="btn btn-my-save"><i class="bi bi-save"></i></button>
-          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
         </div>
       </div>
       <div class="modal-body">
@@ -69,7 +73,8 @@
         <div class="row mb-3">
           <label for="iEmail" class="col-sm-3 col-form-label">Email</label>
           <div class="col-sm-9">
-            <input type="email" name="email" class="form-control" id="iEmail" placeholder="Email address" autocomplete="off" />
+            <input type="email" name="email" class="form-control" id="iEmail" placeholder="Email address"
+              autocomplete="off" />
           </div>
         </div>
         <div class="row mb-3">
@@ -83,17 +88,18 @@
           <label for="iTz" class="col-sm-3 col-form-label">Timezone</label>
           <div class="col-sm-9">
             <select id="iTz" name="timezone" class="form-select">
-            {% for tzg in timezones %}
+              {% for tzg in timezones %}
               {% if timezones[tzg]|length > 1 %}
               <optgroup label="{{ tzg }}">
                 {% for tz in timezones[tzg] %}
-                <option value="{{ tzg }}/{{ tz }}"{% if tzg+"/"+tz == current_user.timezone %} selected{% endif %}>{{ tz }}</option>
+                <option value="{{ tzg }}/{{ tz }}" {% if tzg+"/"+tz==current_user.timezone %} selected{% endif %}>{{ tz
+                  }}</option>
                 {% endfor %}
               </optgroup>
               {% else %}
               <option value="{{ tzg }}">{{ tzg }}</option>
               {% endif %}
-            {% endfor %}
+              {% endfor %}
             </select>
           </div>
         </div>
@@ -102,17 +108,17 @@
           <div class="col-sm-9">
             <select id="iRole" name="role" class="form-select">
               {% for r in roles %}
-              {% if r < current_user.role %}
-              <option value="{{ r }}">{{ roles[r] }}</option>
-              {% endif %}
-              {% endfor %}
+              {% if r < current_user.role %} <option value="{{ r }}">{{ roles[r] }}</option>
+                {% endif %}
+                {% endfor %}
             </select>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg me-2"></i>Cancel</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close"><i
+            class="bi bi-x-lg me-2"></i>Cancel</button>
       </div>
     </form>
   </div>
