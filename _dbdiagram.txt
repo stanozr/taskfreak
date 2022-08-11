@@ -1,0 +1,74 @@
+// https://dbdiagram.io/d/61257bb96dc2bb6073b9e224
+
+Project taskfreak {
+  database_type: 'PostgreSQL'
+  Note: 'Taskfreak 2 python'
+}
+
+Table user {
+  id int [pk]
+  emai varchar(128)
+  password varchar(128)
+  name varchar(128)
+  thumbnail varchar(255)
+  timezone varchar(64)
+  preferences text
+  creation datetime
+  update datetime
+  lastlogin datetime
+  roles tinyint
+}
+
+Table task {
+  id int [pk]
+  projlist_id int [pk, ref: < projlist.id]
+  title varchar(255)
+	description text
+	priority int
+	start datetime
+	deadline datetime
+	estimate int
+	status tinyint
+}
+
+Table taskuser {
+  task_id int [pk, ref: < task.id]
+  user_id int [pk, ref: < user.id]
+}
+
+Table taskactivity {
+  id in [pk]
+  task_id int [pk, ref: < task.id]
+  user_id int [pk, ref: < user.id]
+  creadate datetime
+  editdate datetime
+  comment text
+  spent int
+  atype tinyint 
+}
+
+Table taskattachement {
+  id in [pk]
+  task_id int [pk, ref: < task.id]
+  user_id int [pk, ref: < user.id]
+  creadate datetime
+  filepath varchar(255)
+}
+
+Table projlist {
+  id int [pk]
+  parent_id int
+  position smallint
+  title varchar(255)
+	description text
+	start datetime
+	deadline datetime
+	budget float
+	status tinyint
+}
+
+Table projuser {
+  user_id int [pk, ref: < user.id]
+  projlist_id int [pk, ref: < projlist.id]
+  role tinyint
+}
