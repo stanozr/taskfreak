@@ -31,7 +31,7 @@ def calendar():
 @tasks.route("/kanban")
 def kanban():
     g.jscript.append(url_for('static', filename='js/dragula.min.js'))
-    g.jscript.append(url_for('static', filename='js/task_kanban.min.js'))
+    g.jscript.append(url_for('static', filename='js/task_kanban.js'))
     return render_template("task_kanban.html",
         title="Pacific Data Hub",
         menu="kanban"
