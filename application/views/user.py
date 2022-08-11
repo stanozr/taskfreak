@@ -21,7 +21,7 @@ def login():
 		email = flask_request.form['email']
 		user = UserModel.query.filter_by(email = email).first()
 		if user is not None and user.check_password(flask_request.form['password']):
-			if (not user.roles):
+			if (not user.role):
 				flash('Your account is disabled', 'error')
 			else:
 				utils.set_last_login(user.id)
@@ -53,7 +53,7 @@ def register():
             return ('Email already Present')
 	
 		# -TODO- register with role = 0 and send confirmation email to move to 1
-        user = UserModel(email=email, name=username, roles=1)
+        user = UserModel(email=email, name=username, role=1)
         user.set_password(password)
         user.check_gravatar(True)
         db.session.add(user)

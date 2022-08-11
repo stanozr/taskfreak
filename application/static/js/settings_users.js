@@ -23,7 +23,7 @@ $('document').ready(function() {
                 $f.find("input[name='name']").val(json.name);
                 $f.find("input[name='email']").val(json.email).removeClass('form-control').addClass('form-control-plaintext').prop('readonly', true);
                 $f.find("select[name='timezone']").val(json.timezone);
-                $f.find("select[name='roles']").val(json.roles);
+                $f.find("select[name='role']").val(json.role);
                 frkEditModal.show();
             })
             .fail(function( jqxhr, textStatus, error ) {

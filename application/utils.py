@@ -20,12 +20,12 @@ class utils:
 
     @staticmethod
     def set_last_login(id):
-        users = sqa.Table(
-            'users', 
+        usertable = sqa.Table(
+            'user', 
             sqa.MetaData(),
             sqa.Column('id', sqa.Integer, primary_key = True), 
             sqa.Column('lastlogin', sqa.DateTime)
         )
         with db.engine.begin() as conn:
-            update = sqa.update(users).where(users.c.id==id).values(lastlogin=datetime.datetime.utcnow())
-            conn.execute(update)
+            updquery = sqa.update(usertable).where(usertable.c.id==id).values(lastlogin=datetime.datetime.utcnow())
+            conn.execute(updquery)

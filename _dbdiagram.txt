@@ -14,9 +14,9 @@ Table user {
   timezone varchar(64)
   preferences text
   creation datetime
-  update datetime
+  lastupdate datetime
   lastlogin datetime
-  roles tinyint
+  role tinyint
 }
 
 Table task {
@@ -64,6 +64,8 @@ Table projlist {
 	start datetime
 	deadline datetime
 	budget float
+  creation datetime
+  lastupdate datetime
 	status tinyint
 }
 

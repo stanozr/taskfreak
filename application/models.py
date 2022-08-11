@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from application import db
 
 class UserModel(UserMixin, db.Model):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(128), unique=True)
@@ -14,10 +14,12 @@ class UserModel(UserMixin, db.Model):
     timezone = db.Column(db.String(64), default='UTC')
     preferences = db.Column(db.Text)
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
-    update = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
+    lastupdate = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
     lastlogin = db.Column(db.DateTime)
-    roles = db.Column(db.Integer) # 0 = disabled, 1 = user, 2 = manager, 3 = admin, 4 = super admin
+    role = db.Column(db.SmallInteger) # 0 = disabled, 1 = user, 2 = manager, 3 = admin, 4 = super admin
 
+    projects = db.relationship("ProjectUserModel", back_populates="member")
+    
     def get_preferences(self):
         prefs = {}
         try:
@@ -80,4 +82,31 @@ class UserModel(UserMixin, db.Model):
                 res[key] = getattr(self, key)
         return res
 
-    
+class ProjectListModel(UserMixin, db.Model):
+    __tablename__ = "projlist"
+
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, index=True)
+    title = db.Column(db.String(255), unique=True)
+    description = db.Column(db.String(64), default='UTC')
+    start = db.Column(db.DateTime)
+    deadline = db.Column(db.DateTime)
+    creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    lastupdate = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
+    budget = db.Column(db.Float)
+    status = db.Column(db.SmallInteger) # 0 = closed, 1 = open (private), 2 = open (public)
+
+    members = db.relationship("ProjectUserModel", back_populates="project")
+
+class ProjectUserModel(db.Model):
+    __tablename__ = 'projuser'
+    user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    project_id = db.Column(db.ForeignKey('projlist.id'), primary_key=True)
+    role = db.Column(db.SmallInteger)
+        # 0: Guest (can view and comment)
+        # 1: Member (can create/edit/move tasks)
+        # 2: Manager (can create lists, delete tasks)
+        # 3: Admin (can manage members)
+
+    member = db.relationship('UserModel', back_populates='projects')
+    project = db.relationship('ProjectListModel', back_populates='members')

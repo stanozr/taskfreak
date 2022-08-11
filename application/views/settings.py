@@ -54,7 +54,7 @@ def preferences():
 @settings.route("/api/preferences/save", methods=['POST'])
 def api_preferences_save():
 	uid = int(request.form['id']) if request.form.get('id') else current_user.id
-	if uid != current_user.id and current_user.roles < 3:
+	if uid != current_user.id and current_user.role < 3:
 		return jsonify({'error': 'You must be admin to edit users'})
 	item = UserModel.query.filter_by(id=uid).first()
 	if not item:
@@ -70,9 +70,9 @@ def api_preferences_save():
 def users():
 	# User management
 	qry = UserModel.query
-	if (current_user.roles < 4):
-		qry = qry.filter(UserModel.roles > 0)
-	items = qry.order_by(desc(UserModel.roles), UserModel.name).all()
+	if (current_user.role < 4):
+		qry = qry.filter(UserModel.role > 0)
+	items = qry.order_by(desc(UserModel.role), UserModel.name).all()
 	g.jscript.append(url_for('static', filename='js/settings_users.js'))
 	return render_template("settings_users.html",
 		title="Pacific Data Hub",
@@ -84,12 +84,12 @@ def users():
 
 @settings.route("/api/users/load/<id>")
 def api_user_load(id):
-	if current_user.roles < 2:
+	if current_user.role < 2:
 		return jsonify({'error': 'Action not allowed'})
 	item = UserModel.query.filter_by(id=id).first()
 	if not item:
 		return jsonify({'error': 'User does not exist'}) 
-	if current_user.roles <= item.roles:
+	if current_user.role <= item.role:
 		return jsonify({'error': 'Action not allowed'})
 	if not item.timezone:
 		item.timezone = 'UTC'
@@ -98,8 +98,8 @@ def api_user_load(id):
 @settings.route("/api/users/save", methods=['POST'])
 def api_user_save():
 	uid = int(request.form['id']) if request.form.get('id') else False
-	uro = int(request.form['roles']) if request.form.get('roles') else 0
-	if (uid != current_user.id and uro > current_user.roles):
+	uro = int(request.form['role']) if request.form.get('role') else 0
+	if (uid != current_user.id and uro > current_user.role):
 		# trying to raise user to a higher level than ourself
 		return jsonify({'error': 'Action not allowed'})
 	# set user
@@ -109,16 +109,16 @@ def api_user_save():
 		if not item:
 			return jsonify({'error': 'User does not exist'})
 		elif uid != current_user.id:
-			if current_user.roles < 3:
+			if current_user.role < 3:
 				return jsonify({'error': 'You must be admin to edit users'})
-			if current_user.roles <= item.roles:
+			if current_user.role <= item.role:
 				return jsonify({'error': 'Can not edit user with a higher role'})
-	elif current_user.roles < 3:
+	elif current_user.role < 3:
 		return jsonify({'error': 'You must be admin to create users'})
 		
 	item.name = request.form.get('name','').strip()
 	item.timezone = request.form.get('timezone','UTC')
-	if not uid or (uid != current_user.id and current_user.roles > 3):
+	if not uid or (uid != current_user.id and current_user.role > 3):
 		# set email only for new users
 		# only super admin can change email (for now)
 		item.email = request.form.get('email','').strip()
@@ -127,7 +127,7 @@ def api_user_save():
 		item.thumbnail = request.form.get('thumbnail', '')
 	else:
 		# admin is updating another user
-		item.roles = uro
+		item.role = uro
 	# check if password is getting updated
 	pwd = request.form.get('password','').strip()
 	if (pwd):
@@ -152,14 +152,14 @@ def api_user_delete(id):
 	# id = int(request.form['id']) if request.form.get('id') else False
 	if not id:
 		return jsonify({'error': 'User not specified'})
-	if current_user.roles < 3:
+	if current_user.role < 3:
 		return jsonify({'error': 'Insufficient permissions #2'})
 	item = UserModel.query.get(id)
 	if item:
 		# delete if no task, no comment, nothing
 		# db.session.delete(item)
 		# else disable it
-		item.roles = 0
+		item.role = 0
 		db.session.commit()
 		flash('User account has been disabled', 'success')
 		return jsonify({'success': 'User disabled'})
