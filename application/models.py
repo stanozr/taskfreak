@@ -82,11 +82,10 @@ class UserModel(UserMixin, db.Model):
                 res[key] = getattr(self, key)
         return res
 
-class ProjectListModel(UserMixin, db.Model):
-    __tablename__ = "projlist"
+class ProjectModel(db.Model):
+    __tablename__ = "project"
 
     id = db.Column(db.Integer, primary_key=True)
-    parent_id = db.Column(db.Integer, index=True)
     title = db.Column(db.String(255), unique=True)
     description = db.Column(db.String(64), default='UTC')
     start = db.Column(db.DateTime)
@@ -96,12 +95,52 @@ class ProjectListModel(UserMixin, db.Model):
     budget = db.Column(db.Float)
     status = db.Column(db.SmallInteger) # 0 = closed, 1 = open (private), 2 = open (public)
 
-    members = db.relationship("ProjectUserModel", back_populates="project")
+    lists = db.relationship('ListModel', back_populates='parent', cascade='all, delete-orphan')
+    members = db.relationship('ProjectUserModel', back_populates='project')
+
+    def is_valid(self):
+        if self.name:
+            return True
+        else:
+            return False
+
+    def get_dict(self):
+        res = {}
+        columns = self.__table__.columns.keys()
+        for key in columns:
+            res[key] = getattr(self, key)
+        return res
+
+class ListModel(db.Model):
+    __tablename__ = "list"
+
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    title = db.Column(db.String(255), unique=True)
+    position = db.Column(db.SmallInteger)
+    creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    lastupdate = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
+    status = db.Column(db.SmallInteger) # 0 = closed, 1 = open (all), 2 = open (admin only)
+
+    parent = db.relationship('ProjectModel', back_populates='lists')
+
+    def is_valid(self):
+        if self.name:
+            return True
+        else:
+            return False
+
+    def get_dict(self):
+        res = {}
+        columns = self.__table__.columns.keys()
+        for key in columns:
+            res[key] = getattr(self, key)
+        return res
 
 class ProjectUserModel(db.Model):
     __tablename__ = 'projuser'
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
-    project_id = db.Column(db.ForeignKey('projlist.id'), primary_key=True)
+    project_id = db.Column(db.ForeignKey('project.id'), primary_key=True)
     role = db.Column(db.SmallInteger)
         # 0: Guest (can view and comment)
         # 1: Member (can create/edit/move tasks)
@@ -109,4 +148,4 @@ class ProjectUserModel(db.Model):
         # 3: Admin (can manage members)
 
     member = db.relationship('UserModel', back_populates='projects')
-    project = db.relationship('ProjectListModel', back_populates='members')
+    project = db.relationship('ProjectModel', back_populates='members')

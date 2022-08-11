@@ -16,12 +16,13 @@ Table user {
   creation datetime
   lastupdate datetime
   lastlogin datetime
-  role tinyint
+  roles tinyint
 }
 
 Table task {
   id int [pk]
-  projlist_id int [pk, ref: < projlist.id]
+  project_id int [pk, ref: < project.id]
+  list_id int [pk, ref: < list.id]
   title varchar(255)
 	description text
 	priority int
@@ -55,15 +56,23 @@ Table taskattachement {
   filepath varchar(255)
 }
 
-Table projlist {
+Table project {
   id int [pk]
-  parent_id int
-  position smallint
   title varchar(255)
 	description text
 	start datetime
 	deadline datetime
 	budget float
+	creation datetime
+  lastupdate datetime
+	status tinyint
+}
+
+Table list {
+  id int [pk]
+  parent_id int [pk, ref: < project.id] 
+  position smallint
+  title varchar(128)
   creation datetime
   lastupdate datetime
 	status tinyint
@@ -71,6 +80,6 @@ Table projlist {
 
 Table projuser {
   user_id int [pk, ref: < user.id]
-  projlist_id int [pk, ref: < projlist.id]
+  project_id int [pk, ref: < project.id]
   role tinyint
 }
