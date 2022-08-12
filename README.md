@@ -14,7 +14,10 @@
 * [x] Edit preferences
 
 💼 __Week 2__
-* [x] Add projects
+* [x] Create projects
+* [x] List projects
+* [x] List projects' lists
+* [x] List projects' members
 * [ ] Show project details
 * [ ] Edit project
 * [ ] Manage project's lists
