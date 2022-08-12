@@ -20,6 +20,9 @@ app.register_blueprint(user)
 from .views.tasks import tasks
 app.register_blueprint(tasks)
 
+from .views.projects import projects
+app.register_blueprint(projects)
+
 from .views.settings import settings
 app.register_blueprint(settings)
 

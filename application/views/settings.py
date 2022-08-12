@@ -1,4 +1,3 @@
-import datetime, pytz
 from sqlalchemy import desc
 
 from flask import Blueprint, render_template, jsonify, request, url_for, flash, g
@@ -13,72 +12,7 @@ settings = Blueprint('settings', __name__)
 @settings.before_request
 @login_required
 def login_required_for_all_request():    
-    pass  
-
-@settings.route("/settings/projects")
-def projects():
-	# List of projects, invitations, join and leave projects
-	projects = ProjectModel.query \
-		.filter(ProjectModel.status > 0) \
-		.order_by(ProjectModel.title).all() # order by ProjectUserModel.role
-	# prepare view
-	g.jscript.append(url_for('static', filename='js/dragula.min.js'))
-	g.jscript.append(url_for('static', filename='js/settings_projects.js'))
-	return render_template("settings_projects.html",
-		title="Pacific Data Hub",
-		projects=projects,
-		menu="settings_projects"
-	)
-
-@settings.route("/api/project/load/<id>")
-def api_project_load(id):
-	if current_user.role < 1:
-		return jsonify({'error': 'Action not allowed'})
-	item = ProjectModel.query.filter_by(id=id).first()
-	if not item:
-		return jsonify({'error': 'Project does not exist'}) 
-	return jsonify(item.get_dict())
-
-@settings.route("/api/project/save", methods=['POST'])
-def api_project_save():
-	pid = int(request.form['id']) if request.form.get('id') else False
-	# set user
-	item = ProjectModel()
-	if pid:
-		item = ProjectModel.query.filter_by(id=pid).first()
-		if not item:
-			return jsonify({'error': 'Project does not exist'})
-	
-	item.title = request.form.get('title','').strip()
-	item.description = request.form.get('description','')
-	item.start = request.form.get('start') or None
-	item.deadline = request.form.get('deadline') or None
-	item.budget = request.form.get('budget') or None # TODO check float
-	item.status = request.form.get('status', 0)
-	is_valid = item.is_valid()
-	if is_valid != True:
-		return jsonify({'error': list(is_valid.values())})
-	if not pid:
-		asso = ProjectUserModel()
-		asso.member = current_user
-		asso.project = item
-		asso.role = 3
-		db.session.add(asso)
-	db.session.commit()
-	# if not pid and item.id:
-	# 	# add user as admin of new project
-	# 	asso = ProjectUserModel()
-	# 	asso.user_id = current_user.id
-	# 	asso.project_id = item.id
-	# 	asso.role = 3
-	# 	db.session.add(asso)
-	# 	db.session.commit()
-	msg = "Project {}".format('Updated' if pid else 'Created')
-	flash(msg, 'success')
-	return jsonify({
-		'success': msg,
-		'pid': item.id
-	})
+    pass
 
 @settings.route("/settings/account")
 def account():

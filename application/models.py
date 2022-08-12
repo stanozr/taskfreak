@@ -96,8 +96,8 @@ class ProjectModel(db.Model):
     budget = db.Column(db.Float)
     status = db.Column(db.SmallInteger) # 0 = closed, 1 = open (private), 2 = open (public)
 
-    lists = db.relationship('ListModel', back_populates='parent', cascade='all, delete-orphan')
-    members = db.relationship('ProjectUserModel', back_populates='project')
+    lists = db.relationship('ListModel', order_by='ListModel.position', back_populates='parent', cascade='all, delete-orphan')
+    members = db.relationship('ProjectUserModel', order_by='desc(ProjectUserModel.role)', back_populates='project')
 
     def is_valid(self):
         if self.title:
@@ -146,10 +146,9 @@ class ProjectUserModel(db.Model):
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     project_id = db.Column(db.ForeignKey('project.id'), primary_key=True)
     role = db.Column(db.SmallInteger)
-        # 0: Guest (can view and comment)
-        # 1: Member (can create/edit/move tasks)
-        # 2: Manager (can create lists, delete tasks)
-        # 3: Admin (can manage members)
+        # 0: Observer (can view and comment)
+        # 1: Member (can create/edit/move tasks and lists)
+        # 2: Admin (can manage members)
 
     member = db.relationship('UserModel', back_populates='projects')
     project = db.relationship('ProjectModel', back_populates='members')
