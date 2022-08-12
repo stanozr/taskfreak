@@ -45,7 +45,7 @@ def list():
 		projects.append(obj)
 	# prepare view
 	g.jscript.append(url_for('static', filename='js/dragula.min.js'))
-	g.jscript.append(url_for('static', filename='js/settings_projects.js'))
+	g.jscript.append(url_for('static', filename='js/projects.js'))
 	return render_template("projects.html",
 		title="Pacific Data Hub",
 		projects=projects,
@@ -53,13 +53,14 @@ def list():
 	)
 
 @projects.route("/api/project/load/<id>")
-def api_project_load(id):
+@projects.route("/api/project/load/<id>/<mode>")
+def api_project_load(id, mode="data"):
 	if current_user.role < 1:
 		return jsonify({'error': 'Action not allowed'})
 	item = ProjectModel.query.filter_by(id=id).first()
 	if not item:
 		return jsonify({'error': 'Project does not exist'}) 
-	return jsonify(item.get_dict())
+	return jsonify(item.get_dict(mode))
 
 @projects.route("/api/project/save", methods=['POST'])
 def api_project_save():

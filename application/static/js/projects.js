@@ -34,13 +34,42 @@ $('document').ready(function() {
         event.preventDefault();
     });
 
-    $('.action-archive-project').click(function() {
+    $('.btn-project-info').click(function(event) {
+        event.preventDefault();
+        var $m = $('#viewModal');
+        var $f = $(this).closest('form');
+        var pid = $f.find("input[name='id']").val();
+        $.getJSON( "/api/project/load/"+pid+"/html" )
+            .done(function( json ) {
+                if ($f.hasClass('project-admin')) {
+                    $m.find('.btn-edit').show();
+                } else {
+                    $m.find('.btn-edit').hide();
+                }
+                $m.find('.btn-edit').data('id', json.id);
+                $m.find('.project-title').text(json.title);
+                $m.find('.project-description').html(json.description);
+                $m.find('.project-budget').text(json.budget);
+                $m.find('.project-start').text(json.start);
+                $m.find('.project-deadline').text(json.deadline);
+                $m.find('.project-status').text(json.status);
+                new bootstrap.Modal($m).show();
+            })
+            .fail(function( jqxhr, textStatus, error ) {
+                var err = textStatus + ", " + error;
+                console.log( "Request Failed: " + err );
+            });
+    });
+
+    $('.action-archive-project').click(function(event) {
+        event.preventDefault();
         $card = $(this).closest('form').find('.card-header');
         pid = $card.find("input[name='pid']").val()
         ptt = $card.find("input[name='title']").val()
         tfk_confirm('Do you want to archive project <b>'+ptt+'</b> ?');
     });
-    $('.action-delete-project').click(function() {
+    $('.action-delete-project').click(function(event) {
+        event.preventDefault();
         $card = $(this).closest('form').find('.card-header');
         console.log($card);
         pid = $card.find("input[name='pid']").val()

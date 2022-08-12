@@ -108,11 +108,20 @@ class ProjectModel(db.Model):
         return {'title': 'Title is compulsory'}
             
 
-    def get_dict(self):
+    def get_dict(self, mode="data"):
         res = {}
         columns = self.__table__.columns.keys()
         for key in columns:
-            res[key] = getattr(self, key)
+            val = getattr(self, key);
+            if val:
+                if key == 'description' and mode == 'html':
+                    # TODO markdown
+                    val = '<br />\n'.join(val.split('\n')) 
+                elif key == 'start' or key == 'deadline':
+                    val = val.strftime('%d/%m/%Y')
+            elif mode == 'html':
+                val = '-'
+            res[key] = val
         return res
 
 class ListModel(db.Model):

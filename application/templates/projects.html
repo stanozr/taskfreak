@@ -11,12 +11,12 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 mb-4">
   {% for project in projects %}
   <div class="col">
-    <form class="card card-project">
-      <h5 class="card-header">
-        <input type="hidden" name="pid" value="{{ project.id }}" />
-        <input type="text" name="title" class="form-control form-control-plaintext fw-semibold py-1"
-          value="{{ project.title }}" />
-      </h5>
+    <form action="#!" method="post" class="card card-project{% if project.isadmin %} project-admin{% endif %}">
+      <input type="hidden" name="id" value="{{ project.id }}" />
+      <div class="card-header position-relative">
+        <a href="#!" class="btn btn-link btn-action btn-project-info py-1 pe-0 float-end stretched-link"><i class="bi bi-info-circle-fill"></i></a>
+        <h5 class="pt-1 ">{{ project.title }}</h5>
+      </div>
       <div class="card-body">
         <h5>Lists</h5>
         <ul class="project-lists{% if project.isadmin %} project-dragula{% endif %}">
@@ -36,7 +36,7 @@
         {% if project.isadmin %}
         <div class="d-flex mb-3" style="margin-top:-.75em">
           <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
-          <button type="button" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
+          <button type="submit" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
         </div>
         {% endif %}
         {% for ridx, rlabel in [('r2','admins'),('r1','members'),('r0','observers')] %}
@@ -77,6 +77,48 @@
 
 
 {% block modals %}
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewProjectLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header modal-smaller bg-light">
+        <h5 class="modal-title project-title" id="viewTaskLabel">Project information</h5>
+        <div class="float-end text-nowrap">
+          <button class="btn btn-link btn-edit" data-bs-target="#editModal"
+            data-bs-toggle="modal" data-id="0"><i class="bi bi-pencil-square bi-2x text-muted"></i></button>
+          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12 col-lg-9">
+            <div class="mb-3 project-description"></div>
+          </div>
+          <div class="col-12 col-lg-3">
+            <div class="mb-3">
+              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
+              <div class="fw-semibold project-budget"></div>
+            </div>
+            <div class="mb-3">
+              <label for="iStart" class="form-label mb-1 text-muted">Start</label>
+              <div class="fw-semibold project-start"></div>
+            </div>
+            <div class="mb-3">
+              <label for="iDeadline" class="form-label mb-1 text-muted">Deadline</label>
+              <div class="fw-semibold project-deadline"></div>
+            </div>
+            <div class="mb-3">
+              <label for="iStatus" class="form-label mb-1 text-muted">Status</label>
+              <div class="fw-semibold project-status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editProjectLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
@@ -139,6 +181,7 @@
           </div>
         </div>
       </div>
+    </form>
   </div>
 </div>
 {% endblock %}

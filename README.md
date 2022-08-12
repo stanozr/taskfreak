@@ -18,7 +18,7 @@
 * [x] List projects
 * [x] List projects' lists
 * [x] List projects' members
-* [ ] Show project details
+* [x] Show project details
 * [ ] Edit project
 * [ ] Manage project's lists
 * [ ] Move project's lists
