@@ -202,6 +202,9 @@
 .bi-2x {
   font-size: 1.25em;
 }
+.bg-header {
+  background-color: #475977;
+}
 .table-freak thead tr {
   background-color: #475977;
 }

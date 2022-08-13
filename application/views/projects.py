@@ -30,7 +30,7 @@ def project_list():
             'deadline': proj.getDate('deadline'),
             'budget': proj.budget,
             'status': proj.status,
-            'class': 'bg-primary',
+            'class': 'bg-header',
             'isadmin': False,
             'r2': [],
             'r1': [],
