@@ -74,6 +74,11 @@ def toast_class(ts):
 		return 'text-bg-secondary'
 
 @app.template_filter()
+def format_number(val):
+	val = int(val)
+	return f"{val:,d}"
+
+@app.template_filter()
 def timestamp_to_date(ts):
     dt = datetime.datetime.fromtimestamp(ts)
     return dt.strftime('%d/%m/%Y %H:%M')

@@ -25,6 +25,12 @@ class Config(object):
         'kanban': 'Kanban'
     }
 
+    PROJECT_STATUS = {
+        0: 'Closed',
+        1: 'Open (private)',
+        2: 'Open (public)'
+    }
+
     USER_ROLES = {
         1: "User",
         2: "Manager",

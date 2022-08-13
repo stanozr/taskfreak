@@ -29,7 +29,7 @@
           {{ current_user.avatar() | safe }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-          <li><a class="dropdown-item" href="{{ url_for('projects.list') }}"><i class="bi bi-briefcase-fill me-2"></i>Projects &amp; Lists</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('projects.project_list') }}"><i class="bi bi-briefcase-fill me-2"></i>Projects &amp; Lists</a></li>
           <li><a class="dropdown-item" href="{{ url_for('settings.preferences') }}"><i class="bi bi-house-heart-fill me-2"></i>Preferences</a></li>
           <li><a class="dropdown-item" href="{{ url_for('settings.account') }}"><i class="bi bi-person-lines-fill me-2"></i>Account</a></li>
           {% if current_user.role > 2 %}

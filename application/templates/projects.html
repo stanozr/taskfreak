@@ -13,11 +13,23 @@
   <div class="col">
     <form action="#!" method="post" class="card card-project{% if project.isadmin %} project-admin{% endif %}">
       <input type="hidden" name="id" value="{{ project.id }}" />
-      <div class="card-header position-relative">
-        <a href="#!" class="btn btn-link btn-action btn-project-info py-1 pe-0 float-end stretched-link"><i class="bi bi-info-circle-fill"></i></a>
-        <h5 class="pt-1 ">{{ project.title }}</h5>
+      <div class="card-header {{ project.class }}">
+        {% if project.isadmin %}
+        <a href="#!" class="btn btn-action btn-project-edit pt-2 pe-0 float-end" data-id="{{ project.id }}"><i class="bi bi-pencil-fill"></i></a>
+        {% endif %}
+        <h5 class="card-title pt-1"><a href="#!" class="btn-project-info pt-1">{{ project.title }}</a></h5>
       </div>
-      <div class="card-body">
+      <div class="card-body pb-2">
+        {% if project.start or project.deadline or project.budget %}
+        <div class="project-more text-muted pb-3">
+          {{ project.start or '<i class="bi bi-three-dots text-muted"></i>' | safe }}
+          <i class="bi bi-caret-right-fill opacity-75"></i>
+          {{ project.deadline or '<i class="bi bi-three-dots text-muted"></i>' | safe }}
+          {% if project.budget %}
+          <div class="float-end"><i class="bi bi-piggy-bank pe-1"></i>{{ project.budget | format_number }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
         <h5>Lists</h5>
         <ul class="project-lists{% if project.isadmin %} project-dragula{% endif %}">
           {% for list in project.lists %}
@@ -39,20 +51,20 @@
           <button type="submit" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
         </div>
         {% endif %}
+        <h5 class="py-1 my-2 border-bottom">Members</h5>
+        <ul class="project-users">
         {% for ridx, rlabel in [('r2','admins'),('r1','members'),('r0','observers')] %}
-        <h5>{{ rlabel | title }}</h5>
-        <ul class="project-{{ rlabel }} project-users">
           {% for member in project.get(ridx) %}
-          <li class="btn-user"><a href="#!" data-userid="{{ member.id }}">{{ member.avatar() | safe }}</a></li>
+          <li class="btn-user btn-user-{{ rlabel }}"><a href="#!" data-userid="{{ member.id }}">{{ member.avatar() | safe }}</a></li>
           {% endfor %}
-          {% if project.isadmin %}
-          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
-          {% endif %}
-        </ul>
         {% endfor %}
         {% if project.isadmin %}
+          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+        {% endif %}
+        </ul>
+        {% if project.isadmin %}
         <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i
-              class="bi bi-archive pe-1"></i>Archive project</button></div>
+          class="bi bi-archive pe-1"></i>Archive project</button></div>
         {% endif %}
       </div>
     </form>
@@ -84,32 +96,31 @@
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title project-title" id="viewTaskLabel">Project information</h5>
         <div class="float-end text-nowrap">
-          <button class="btn btn-link btn-edit" data-bs-target="#editModal"
-            data-bs-toggle="modal" data-id="0"><i class="bi bi-pencil-square bi-2x text-muted"></i></button>
-          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
-            aria-label="Close">&times;</button>
+          <button class="btn btn-link btn-edit" data-id="0"><i class="bi bi-pencil-fill text-muted"></i></button>
+          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"  aria-label="Close">&times;</button>
         </div>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-12 col-lg-9">
+            <label class="form-label mb-1 text-muted">Description</label>
             <div class="mb-3 project-description"></div>
           </div>
           <div class="col-12 col-lg-3">
             <div class="mb-3">
-              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
+              <label class="form-label mb-1 text-muted">Budget</label>
               <div class="fw-semibold project-budget"></div>
             </div>
             <div class="mb-3">
-              <label for="iStart" class="form-label mb-1 text-muted">Start</label>
+              <label class="form-label mb-1 text-muted">Start</label>
               <div class="fw-semibold project-start"></div>
             </div>
             <div class="mb-3">
-              <label for="iDeadline" class="form-label mb-1 text-muted">Deadline</label>
+              <label class="form-label mb-1 text-muted">Deadline</label>
               <div class="fw-semibold project-deadline"></div>
             </div>
             <div class="mb-3">
-              <label for="iStatus" class="form-label mb-1 text-muted">Status</label>
+              <label class="form-label mb-1 text-muted">Status</label>
               <div class="fw-semibold project-status"></div>
             </div>
           </div>
@@ -122,11 +133,11 @@
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editProjectLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
-    <form id="project-form" action="{{ url_for('projects.api_project_save') }}" method="POST" class="modal-content" autocomplete="off">
+    <form id="project-form" action="{{ url_for('projects.api_project_save') }}" method="post" class="modal-content" autocomplete="off">
+      <input id="iId" type="hidden" name="id" value="0" />
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title" id="editTaskLabel">Edit Project</h5>
         <div class="float-end">
-          <input type="hidden" name="id" value="" />
           <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
           <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
             aria-label="Close">&times;</button>

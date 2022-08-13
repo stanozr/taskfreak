@@ -2,7 +2,7 @@ import datetime, json, requests, hashlib
 from operator import truediv
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from application import db
+from application import app, db
 
 class UserModel(UserMixin, db.Model):
     __tablename__ = "user"
@@ -99,9 +99,26 @@ class ProjectModel(db.Model):
     lists = db.relationship('ListModel', order_by='ListModel.position', back_populates='parent', cascade='all, delete-orphan')
     members = db.relationship('ProjectUserModel', order_by='desc(ProjectUserModel.role)', back_populates='project')
 
+    def getDate(self, key):
+        value = self.__getattribute__(key)
+        if value:
+            return value.strftime('%d/%m/%Y')
+        else:
+            return None
+
+    def setDate(self, key, value):
+        if value:
+            try:
+                self.__setattr__(key, datetime.datetime.strptime(value, '%d/%m/%Y'));
+            except:
+                pass
+        else:
+            self.__setattr__(key, None)
+
     def is_valid(self):
         if self.title:
-            if ProjectModel.query.filter_by(title=self.title).first():
+            item = ProjectModel.query.filter_by(title=self.title).first()
+            if item and item.id != self.id:
                 return {'title': 'Title already exists'}
             else:
                 return True
@@ -114,10 +131,13 @@ class ProjectModel(db.Model):
         for key in columns:
             val = getattr(self, key);
             if val:
-                if key == 'description' and mode == 'html':
-                    # TODO markdown
-                    val = '<br />\n'.join(val.split('\n')) 
-                elif key == 'start' or key == 'deadline':
+                if mode == 'html':
+                    if key == 'description':
+                        # TODO markdown
+                        val = '<br />\n'.join(val.split('\n')) 
+                    elif key == 'status':
+                        val = app.config['PROJECT_STATUS'][val]
+                if key == 'start' or key == 'deadline':
                     val = val.strftime('%d/%m/%Y')
             elif mode == 'html':
                 val = '-'

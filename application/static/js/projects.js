@@ -9,11 +9,10 @@ $('document').ready(function() {
         revertOnSpill: true
     });
 
-    $f = $('#editModal');
-    let frkEditModal = new bootstrap.Modal($f);
-    $f.on('hidden.bs.modal', function() {
+    $('#editModal').on('hidden.bs.modal', function() {
+        $f = $(this);
         if ($f.find("input[name='id']").val()) {
-            $f.find("form.modal-content").reset();
+            $f.find("form.modal-content")[0].reset();
         }
     });
     
@@ -27,7 +26,7 @@ $('document').ready(function() {
             if (data.error) {
                 tfk_toasted(data.error, 'text-bg-danger');
             } else {
-                frkEditModal.hide();
+                bootstrap.Modal.getOrCreateInstance('#editModal').hide();
                 location.reload();
             }
         });
@@ -53,7 +52,28 @@ $('document').ready(function() {
                 $m.find('.project-start').text(json.start);
                 $m.find('.project-deadline').text(json.deadline);
                 $m.find('.project-status').text(json.status);
-                new bootstrap.Modal($m).show();
+                bootstrap.Modal.getOrCreateInstance($m).show();
+            })
+            .fail(function( jqxhr, textStatus, error ) {
+                var err = textStatus + ", " + error;
+                console.log( "Request Failed: " + err );
+            });
+    });
+
+    $('.btn-edit, .btn-project-edit').click(function() {
+        var pid = $(this).data('id');
+        $.getJSON( "/api/project/load/"+pid+"/edit" )
+            .done(function( json ) {
+                var $m = $('#editModal');
+                $m.find('#iId').val(json.id);
+                $m.find('#iTitle').val(json.title);
+                $m.find('#iDescription').val(json.description);
+                $m.find('#iBudget').val(json.budget);
+                $m.find('#iStart').parent().datepicker('update', json.start);
+                $m.find('#iDeadline').parent().datepicker('update',json.deadline);
+                $m.find('#iStatus').val(json.status);
+                bootstrap.Modal.getOrCreateInstance('#viewModal').hide();
+                bootstrap.Modal.getOrCreateInstance('#editModal').show();
             })
             .fail(function( jqxhr, textStatus, error ) {
                 var err = textStatus + ", " + error;
@@ -63,17 +83,16 @@ $('document').ready(function() {
 
     $('.action-archive-project').click(function(event) {
         event.preventDefault();
-        $card = $(this).closest('form').find('.card-header');
+        $card = $(this).closest('form');
         pid = $card.find("input[name='pid']").val()
-        ptt = $card.find("input[name='title']").val()
-        tfk_confirm('Do you want to archive project <b>'+ptt+'</b> ?');
+        ptt = $card.find(".card-title").text()
+        tfk_confirm('Do you want to archive the following project?<br /> <b>'+ptt+'</b>');
     });
     $('.action-delete-project').click(function(event) {
         event.preventDefault();
-        $card = $(this).closest('form').find('.card-header');
-        console.log($card);
+        $card = $(this).closest('form');
         pid = $card.find("input[name='pid']").val()
-        ptt = $card.find("input[name='title']").val()
+        ptt = $card.find(".card-title").text()
         var what = prompt("please enter 'DELETE' to confirm deletion of\n\n   '"+ptt+"'\n\nAttention:\n - All tasks will be deleted\n - Action is permanent.");
         if (what == 'DELETE') {
             alert('Deleting project #'+pid);

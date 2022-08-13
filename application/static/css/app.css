@@ -591,7 +591,18 @@ section.page-kanban {
   display: block;
 }
 .card-project h5 {
-  font-size: 1em;
+  font-size: 1.15em;
+}
+.card-project .card-header h5 a {
+  display: block;
+  color: rgba(255,255,255,.9);
+  text-decoration: none;
+}
+.card-project .card-header h5 a:hover {
+  color: rgba(255,255,255,1)
+}
+.card-project .card-header .btn-action {
+  color: #fff;
 }
 ul.project-lists {
   position: relative;
@@ -634,16 +645,23 @@ ul.project-users li {
   margin-right: .25em;
   list-style: none;
 }
-ul.project-users li a img {
-  height: 2.5em;
-}
 ul.project-users li a span {
-  height: 2.5em;
-  width: 2.5em;
-  line-height: 2.35;
+  height: 2.75em;
+  width: 2.75em;
+  line-height: 2.15;
 }
+ul.project-users li.btn-user-admins span {
+  border: 3px solid #dc3545;
+}
+ul.project-users li.btn-user-members span {
+  border: 3px solid #0d6efd;
+}
+ul.project-users li.btn-user-observers span {
+  border: 3px solid #198754;
+}
+
 ul.project-users li .btn-action i.bi {
-  font-size: 2.25em;
+  font-size: 2.65em;
   line-height: 1;
 }
 

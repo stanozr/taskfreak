@@ -75,7 +75,9 @@ $('document').ready(function(){
     event.preventDefault();
   });
 
-  $('.datepicker').datepicker();
+  $('.datepicker').datepicker({
+    format: 'dd/mm/yyyy',
+  });
 
 });
 

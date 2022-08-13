@@ -19,14 +19,16 @@
 * [x] List projects' lists
 * [x] List projects' members
 * [x] Show project details
-* [ ] Edit project
+* [x] Edit project
+
+💼 __Week 3__
 * [ ] Manage project's lists
 * [ ] Move project's lists
 * [ ] Manage project's users
 * [ ] Archive project
 * [ ] Join projects
 
-✅ __Week 3__
+✅ __Week 4__
 * [ ] Create task
 * [ ] List tasks (list view)
 * [ ] Filter tasks by project and list
@@ -39,13 +41,13 @@
 * [ ] Comment task
 * [ ] Add time spent
 
-📆 __Week 4__
+📆 __Week 5__
 * [ ] Calendar view
 * [ ] Kanban view
 * [ ] Attachments 📎
 * [ ] Upload user thumbnail (80x80, square image)
 
-💌 __Week 5__
+💌 __Week 6__
 * [ ] Email system
 * [ ] Remember password
 * [ ] Send notifications to new users
@@ -53,7 +55,7 @@
 * [ ] Send instant notifications (when watching?)
 * [ ] Send daily notifications
 
-🏆 __Wheek 6__
+🏆 __Wheek 7__
 * [ ] Docker image
 * [ ] Launch MVP
 
