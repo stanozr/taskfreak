@@ -101,3 +101,63 @@ def api_project_save():
         'success': msg,
         'pid': item.id
     })
+
+@projects.route("/api/project/lists/save", methods=['POST'])
+def api_project_lists_save():
+    if not request.form.get('pid'):
+        return jsonify({
+            'error': 'Project ID is missing'
+        })
+    pid = int(request.form['pid'])
+    # -TODO- Load project and check admin rights
+    proj = ProjectModel.query.get(pid)
+
+    # Create list item
+    if (request.form.get('newitem')):
+        item = ListModel(
+            project_id = pid,
+            title=request.form['newitem'],
+            position = proj.get_next_list_position(),
+            status = 1
+        )
+        db.session.add(item)
+        db.session.commit()
+        return jsonify({
+            'success': "New list created",
+            'pid': pid,
+            'lid': item.id,
+            'position': item.position
+        })
+    else:
+        # save list items
+        items = request.form.to_dict()
+        pos = 0
+        for idx in items:
+            if 'item_' in idx:
+                lid = int(idx[5:])
+                item = ListModel.query.get(lid)
+                if items[idx]:
+                    # TODO delete lists with empty names?
+                    item.title = items[idx]
+                item.project_id = pid
+                item.position = pos
+                pos = pos+1
+        db.session.commit()
+        msg = 'List item saved!'
+        return jsonify({
+            'success': msg,
+            'noreload': True,
+            'pid': pid
+        })
+
+@projects.route("/api/project/lists/del/<int:id>", methods=['GET','POST'])
+def api_project_lists_del(id):
+    # 1. load list
+    print(f'Loading #{id}')
+    # 2. Load project and check admin rights
+    # 3. load tasks and check list is empty
+    # 4. delete list
+    # 5. frontend feedback
+    return jsonify({
+        'success': 'List deleted!'
+    })

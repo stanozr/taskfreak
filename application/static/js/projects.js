@@ -7,37 +7,28 @@ $('document').ready(function() {
             return handle.classList.contains('gu-handle');
         },
         revertOnSpill: true
-    });
-
-    $('#editModal').on('hidden.bs.modal', function() {
-        $f = $(this);
-        if ($f.find("input[name='id']").val()) {
-            $f.find("form.modal-content")[0].reset();
-        }
-    });
-    
-    $( "#project-form" ).submit(function( event ) {
-        $t = $(this);
+    }).on('drop', function(el) {
+        $l = $(el);
+        $f = $l.closest('form');
+        pid = $f.find("input[name='pid']").val()
         $.ajax({
             method: "POST",
-            url: $t.attr('action'),
-            data: $t.serialize()
+            url: $f.attr('action'),
+            data: $f.serialize()
         }).done(function (data) {
             if (data.error) {
                 tfk_toasted(data.error, 'text-bg-danger');
             } else {
-                bootstrap.Modal.getOrCreateInstance('#editModal').hide();
-                location.reload();
+                tfk_toasted(data.success, 'text-bg-success');
             }
         });
-        event.preventDefault();
     });
 
     $('.btn-project-info').click(function(event) {
         event.preventDefault();
         var $m = $('#viewModal');
-        var $f = $(this).closest('form');
-        var pid = $f.find("input[name='id']").val();
+        var $f = $(this).closest('.card-project');
+        var pid = $f.data('id');
         $.getJSON( "/api/project/load/"+pid+"/html" )
             .done(function( json ) {
                 if ($f.hasClass('project-admin')) {
@@ -81,6 +72,20 @@ $('document').ready(function() {
             });
     });
 
+    $('.btn-list-delete').click(function() {
+        $t = $(this);
+        lid = $t.data('lid');
+        $.getJSON( "/api/project/lists/del/"+lid)
+            .done(function( data ) {
+                if (data.error) {
+                    tfk_toasted(data.error, 'text-bg-danger');
+                } else {
+                    $t.closest('li').remove();
+                    tfk_toasted(data.success, 'text-bg-success');
+                }
+            });
+    });
+
     $('.action-archive-project').click(function(event) {
         event.preventDefault();
         $card = $(this).closest('form');
@@ -88,6 +93,7 @@ $('document').ready(function() {
         ptt = $card.find(".card-title").text()
         tfk_confirm('Do you want to archive the following project?<br /> <b>'+ptt+'</b>');
     });
+
     $('.action-delete-project').click(function(event) {
         event.preventDefault();
         $card = $(this).closest('form');
@@ -99,6 +105,32 @@ $('document').ready(function() {
         } else {
             alert("Cancelled !")
         }
+    });
+
+    $('#editModal').on('hidden.bs.modal', function() {
+        $f = $(this);
+        if ($f.find("input[name='id']").val()) {
+            $f.find("form.modal-content")[0].reset();
+        }
+    });
+    
+    $('#project-form, form.card-project').submit(function( event ) {
+        $t = $(this);
+        $.ajax({
+            method: "POST",
+            url: $t.attr('action'),
+            data: $t.serialize()
+        }).done(function (data) {
+            if (data.error) {
+                tfk_toasted(data.error, 'text-bg-danger');
+            } else if (data.noreload) {
+                tfk_toasted(data.success, 'text-bg-success');
+            } else {
+                bootstrap.Modal.getOrCreateInstance('#editModal').hide();
+                location.reload();
+            }
+        });
+        event.preventDefault();
     });
 });
 

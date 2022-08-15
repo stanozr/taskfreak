@@ -11,10 +11,10 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 mb-4">
   {% for project in projects %}
   <div class="col">
-    <form action="#!" method="post" class="card card-project{% if project.isadmin %} project-admin{% endif %}">
-      <input type="hidden" name="id" value="{{ project.id }}" />
+    <{% if project.isadmin %}form action="{{ url_for('projects.api_project_lists_save') }}" method="post"{% else %}div{% endif %} data-id="{{ project.id }}" class="card card-project{% if project.isadmin %} project-admin{% endif %}">
       <div class="card-header {{ project.class }}">
         {% if project.isadmin %}
+        <input type="hidden" name="pid" value="{{ project.id }}" />
         <a href="#!" class="btn btn-action btn-project-edit pt-2 pe-0 float-end" data-id="{{ project.id }}"><i class="bi bi-pencil-fill"></i></a>
         {% endif %}
         <h5 class="card-title pt-1"><a href="#!" class="btn-project-info pt-1">{{ project.title }}</a></h5>
@@ -36,8 +36,8 @@
           <li class="project-lists-item">
             {% if project.isadmin %}
             <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
-            <input type="text" class="form-control form-control-plaintext" value="{{ list.title }}" />
-            <button type="button" class="btn btn-action"><i class="bi bi-trash"></i></button>
+            <input name="item_{{ list.id }}" type="text" class="form-control form-control-plaintext" value="{{ list.title }}" />
+            <button type="button" data-lid="{{ list.id }}" class="btn btn-action btn-list-delete"><i class="bi bi-trash"></i></button>
             <!-- TODO disable button if list has tasks -->
             {% else %}
             <span class="py-2 flex-grow-1">{{ list.title }}</span>
@@ -47,7 +47,7 @@
         </ul>
         {% if project.isadmin %}
         <div class="d-flex mb-3" style="margin-top:-.75em">
-          <input type="text" class="form-control border-0" value="" placeholder="Create new list" />
+          <input name="newitem" type="text" class="form-control border-0" value="" placeholder="Create new list" />
           <button type="submit" class="btn btn-action"><i class="bi bi-plus-circle"></i></button>
         </div>
         {% endif %}
@@ -67,7 +67,7 @@
           class="bi bi-archive pe-1"></i>Archive project</button></div>
         {% endif %}
       </div>
-    </form>
+    </{% if project.isadmin %}form{% else %}div{% endif %}>
   </div>
   {% endfor %}
 </div>

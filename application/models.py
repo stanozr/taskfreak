@@ -115,6 +115,11 @@ class ProjectModel(db.Model):
         else:
             self.__setattr__(key, None)
 
+    def get_next_list_position(self):
+        # SELECT MAX(position)+1 FROM public.list WHERE project_id=ID
+        pos = db.session.query(db.func.max(ListModel.position)).filter_by(project_id=self.id).first()[0] or -1
+        return pos + 1
+
     def is_valid(self):
         if self.title:
             item = ProjectModel.query.filter_by(title=self.title).first()
@@ -148,7 +153,7 @@ class ListModel(db.Model):
     __tablename__ = "list"
 
     id = db.Column(db.Integer, primary_key=True)
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"), primary_key=False)
     title = db.Column(db.String(255), unique=True)
     position = db.Column(db.SmallInteger)
     creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
