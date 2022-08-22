@@ -75,15 +75,18 @@ $('document').ready(function() {
     $('.btn-list-delete').click(function() {
         $t = $(this);
         lid = $t.data('lid');
-        $.getJSON( "/api/project/lists/del/"+lid)
-            .done(function( data ) {
-                if (data.error) {
-                    tfk_toasted(data.error, 'text-bg-danger');
-                } else {
-                    $t.closest('li').remove();
-                    tfk_toasted(data.success, 'text-bg-success');
-                }
-            });
+        ln = $t.siblings('input').val();
+        // -TODO- check if list is empty
+        tfk_confirm("Delete list <i>"+ln+"</i>?", "/api/project/lists/del/"+lid)
+        // $.getJSON( "/api/project/lists/del/"+lid)
+        //     .done(function( data ) {
+        //         if (data.error) {
+        //             tfk_toasted(data.error, 'text-bg-danger');
+        //         } else {
+        //             $t.closest('li').remove();
+        //             tfk_toasted(data.success, 'text-bg-success');
+        //         }
+        //     });
     });
 
     $('.action-archive-project').click(function(event) {

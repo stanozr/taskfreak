@@ -22,8 +22,9 @@
 * [x] Edit project
 
 💼 __Week 3__
-* [ ] Manage project's lists
-* [ ] Move project's lists
+* [x] Create project's lists
+* [x] Move project's lists
+* [ ] Delete project lists
 * [ ] Manage project's users
 * [ ] Archive project
 * [ ] Join projects

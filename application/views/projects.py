@@ -48,12 +48,15 @@ def project_list():
             if asm.role == 2 and asm.member.id == current_user.id:
                 obj['isadmin'] = True
         projects.append(obj)
+    # list users
+    users = UserModel.query.filter(UserModel.role > 0).order_by(UserModel.name).all()
     # prepare view
     g.jscript.append(url_for('static', filename='js/dragula.min.js'))
     g.jscript.append(url_for('static', filename='js/projects.js'))
     return render_template("projects.html",
         title="Pacific Data Hub",
         projects=projects,
+        users=users,
         menu="projects_list"
     )
 
@@ -109,9 +112,14 @@ def api_project_lists_save():
             'error': 'Project ID is missing'
         })
     pid = int(request.form['pid'])
-    # -TODO- Load project and check admin rights
+    # Check permissions
+    asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=current_user.id).first()
+    if not asso or asso.role < 1:
+        return jsonify({
+            'error': 'Insufficient permissions'
+        })
+    # Load projct
     proj = ProjectModel.query.get(pid)
-
     # Create list item
     if (request.form.get('newitem')):
         item = ListModel(
@@ -154,10 +162,21 @@ def api_project_lists_save():
 def api_project_lists_del(id):
     # 1. load list
     print(f'Loading #{id}')
-    # 2. Load project and check admin rights
+    item = ListModel.query.get(id)
+    # 2. Check admin rights
+    asso = ProjectUserModel.query.filter_by(project_id=item.project_id, user_id=current_user.id).first()
+    if not asso or asso.role < 2:
+        return jsonify({
+            'error': 'Insufficient permissions'
+        })
     # 3. load tasks and check list is empty
+    # -TODO-
     # 4. delete list
+    # db.session.delete(item)
+	# db.session.commit()
     # 5. frontend feedback
+    if request.form.get('frontend', False):
+        flash('List deleted!')
     return jsonify({
         'success': 'List deleted!'
     })

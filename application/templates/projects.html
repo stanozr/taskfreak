@@ -59,7 +59,7 @@
           {% endfor %}
         {% endfor %}
         {% if project.isadmin %}
-          <li><button type="button" class="btn btn-action p-0"><i class="bi bi-plus-circle-dotted"></i></button></li>
+          <li><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="bi bi-plus-circle-dotted"></i></button></li>
         {% endif %}
         </ul>
         {% if project.isadmin %}
@@ -195,4 +195,23 @@
     </form>
   </div>
 </div>
+
+<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-fullscreen-sm-down mt-sm-5 pt-sm-2">
+    <form class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select user to add to project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for usr in users %}
+          <li><a href="#!">{{ usr.avatar() | safe }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
