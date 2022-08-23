@@ -89,6 +89,15 @@ $('document').ready(function() {
         //     });
     });
 
+    $('button[data-member-ids]').click(function(event) {
+        $t = $(this);
+        $("#usersModal input[name='pid']").val($t.closest('form').data('id'));
+        mids = $t.data('member-ids');
+        $ug = $('#usersModal .users-grid');
+        $ug.find('.btn-user').removeClass('btn-active').show();
+        mids.forEach(mid =>  $ug.find('#usrsel-'+mid).hide());
+    });
+
     $('.action-archive-project').click(function(event) {
         event.preventDefault();
         $card = $(this).closest('form');
@@ -100,13 +109,22 @@ $('document').ready(function() {
     $('.action-delete-project').click(function(event) {
         event.preventDefault();
         $card = $(this).closest('form');
-        pid = $card.find("input[name='pid']").val()
+        pid = $card.find("input[name='pid']").val();
         ptt = $card.find(".card-title").text()
         var what = prompt("please enter 'DELETE' to confirm deletion of\n\n   '"+ptt+"'\n\nAttention:\n - All tasks will be deleted\n - Action is permanent.");
         if (what == 'DELETE') {
             alert('Deleting project #'+pid);
         } else {
             alert("Cancelled !")
+        }
+    });
+
+    $(".users-grid input[type='checkbox']").change(function() {
+        $t = $(this);
+        if ($t.prop( "checked" )) {
+            $t.closest('.btn-user').addClass('btn-active');
+        } else {
+            $t.closest('.btn-user').removeClass('btn-active');
         }
     });
 
@@ -117,7 +135,7 @@ $('document').ready(function() {
         }
     });
     
-    $('#project-form, form.card-project').submit(function( event ) {
+    $('#project-form, form.card-project, #usersModal form').submit(function( event ) {
         $t = $(this);
         $.ajax({
             method: "POST",
@@ -129,7 +147,9 @@ $('document').ready(function() {
             } else if (data.noreload) {
                 tfk_toasted(data.success, 'text-bg-success');
             } else {
+                // -TODO- better target modals (and review form/node selector as well)
                 bootstrap.Modal.getOrCreateInstance('#editModal').hide();
+                bootstrap.Modal.getOrCreateInstance('#usersModal').hide();
                 location.reload();
             }
         });

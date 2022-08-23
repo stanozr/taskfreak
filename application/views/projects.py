@@ -17,10 +17,13 @@ def login_required_for_all_request():
 @projects.route("/projects")
 def project_list():
     # List of projects, invitations, join and leave projects
-    plist = ProjectModel.query \
-        .join(ProjectUserModel) \
-         .filter(ProjectModel.status > 0, ProjectUserModel.user_id == current_user.id) \
-         .order_by(ProjectModel.title).all()
+    pqry = ProjectModel.query
+    if current_user.role < 4:
+        pqry.join(ProjectUserModel) \
+            .filter(ProjectModel.status > 0, ProjectUserModel.user_id == current_user.id)
+    else:
+        pqry.filter(ProjectModel.status > 0)
+    plist = pqry.order_by(ProjectModel.title).all()
     projects = []
     for proj in plist:
         obj = {
@@ -35,6 +38,7 @@ def project_list():
             'r2': [],
             'r1': [],
             'r0': [],
+            'mids': [],
             'lists': []
         }
         if proj.status == 2:
@@ -44,6 +48,7 @@ def project_list():
         for asl in proj.lists:
             obj['lists'].append(asl)
         for asm in proj.members:
+            obj['mids'].append(asm.member.id)
             obj[f'r{asm.role}'].append(asm.member)
             if asm.role == 2 and asm.member.id == current_user.id:
                 obj['isadmin'] = True
@@ -107,17 +112,10 @@ def api_project_save():
 
 @projects.route("/api/project/lists/save", methods=['POST'])
 def api_project_lists_save():
-    if not request.form.get('pid'):
-        return jsonify({
-            'error': 'Project ID is missing'
-        })
-    pid = int(request.form['pid'])
-    # Check permissions
-    asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=current_user.id).first()
-    if not asso or asso.role < 1:
-        return jsonify({
-            'error': 'Insufficient permissions'
-        })
+    pid = request.form.get('pid')
+    err = utils.wrong_project_permission(pid, current_user.id, 1)
+    if err:
+        return jsonify(err)
     # Load projct
     proj = ProjectModel.query.get(pid)
     # Create list item
@@ -161,22 +159,108 @@ def api_project_lists_save():
 @projects.route("/api/project/lists/del/<int:id>", methods=['GET','POST'])
 def api_project_lists_del(id):
     # 1. load list
-    print(f'Loading #{id}')
     item = ListModel.query.get(id)
     # 2. Check admin rights
-    asso = ProjectUserModel.query.filter_by(project_id=item.project_id, user_id=current_user.id).first()
-    if not asso or asso.role < 2:
-        return jsonify({
-            'error': 'Insufficient permissions'
-        })
+    err = utils.wrong_project_permission(item.project_id, current_user.id, 2)
+    if err:
+        return jsonify(err)
     # 3. load tasks and check list is empty
     # -TODO-
     # 4. delete list
-    # db.session.delete(item)
-	# db.session.commit()
+    db.session.delete(item)
+    db.session.commit()
     # 5. frontend feedback
     if request.form.get('frontend', False):
         flash('List deleted!')
     return jsonify({
         'success': 'List deleted!'
     })
+
+@projects.route("/api/project/members/save", methods=['POST'])
+def api_project_members_save():
+    pid = request.form.get('pid')
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    # load current members
+    assos = ProjectUserModel.query.filter_by(project_id=pid).all()
+    members = []
+    for itm in assos:
+        members.append(itm.user_id)
+    # add new members
+    tot = 0
+    for mid in request.form.get('usersel'):
+        if mid not in members:
+            asso = ProjectUserModel()
+            asso.user_id = mid
+            asso.project_id = pid
+            asso.role = 0 # guest
+            db.session.add(asso)
+            tot = tot+1
+    if tot:
+        db.session.commit()
+    # report
+    msg = f"{tot} members added to project"
+    flash(msg, 'success')
+    return jsonify({
+        'success': msg,
+        'pid': pid
+    })
+
+@projects.route("/api/project/members/promote/<int:pid>/<int:uid>", methods=['GET','POST'])
+def api_project_members_promote(pid, uid):
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=uid).first()
+    if asso.role < 2:
+        asso.role = asso.role + 1
+        db.session.commit()
+        msg = "User successfully promoted"
+        flash(msg, 'success')
+        return jsonify({
+            'success': msg,
+            'pid': pid
+        })
+    else:
+        return jsonify({
+            'error': 'Member is already an admin'
+        })
+
+@projects.route("/api/project/members/demote/<int:pid>/<int:uid>", methods=['GET','POST'])
+def api_project_members_demote(pid, uid):
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=uid).first()
+    if asso.role > 0:
+        asso.role = asso.role - 1
+        db.session.commit()
+        msg = "Member successfully demoted"
+        flash(msg, 'success')
+        return jsonify({
+            'success': msg,
+            'pid': pid
+        })
+    else:
+        return jsonify({
+            'error': 'Member is already a guest'
+        })
+
+@projects.route("/api/project/members/remove/<int:pid>/<int:uid>", methods=['GET','POST'])
+def api_project_members_remove(pid, uid):
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=uid).first()
+    db.session.delete(asso)
+    db.session.commit()
+    # report
+    msg = "User successfully removed from project members"
+    flash(msg, 'success')
+    return jsonify({
+        'success': msg,
+        'pid': pid
+    })
+    
+    

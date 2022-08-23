@@ -75,6 +75,28 @@ $('document').ready(function(){
     event.preventDefault();
   });
 
+  $("a[data-tfk-ajax]").click(function(event) {
+    $t = $(this);
+    event.preventDefault();
+    $.ajax({
+      method: $t.data('tfk-ajax'),
+      url: $t.attr('href')
+    }).done(function (data) {
+      if (data.error) {
+          tfk_toasted(data.error, 'text-bg-danger');
+      } else {
+        confirmModal.hide();
+        location.reload();
+      }
+    });
+  });
+
+  $("a[data-tfk-confirm]").click(function(event) {
+    $t = $(this);
+    event.preventDefault();
+    tfk_confirm($t.data('tfk-confirm'), $t.attr('href'));
+  });
+
   $('.datepicker').datepicker({
     format: 'dd/mm/yyyy',
   });

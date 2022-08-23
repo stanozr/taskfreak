@@ -52,16 +52,31 @@
         </div>
         {% endif %}
         <h5 class="py-1 my-2 border-bottom">Members</h5>
-        <ul class="project-users">
-        {% for ridx, rlabel in [('r2','admins'),('r1','members'),('r0','observers')] %}
+        <div class="project-users">
+        {% for ridx, rlabel in [('r2','admin'),('r1','member'),('r0','observer')] %}
           {% for member in project.get(ridx) %}
-          <li class="btn-user btn-user-{{ rlabel }}"><a href="#!" data-userid="{{ member.id }}">{{ member.avatar() | safe }}</a></li>
+          <div data-userid="{{ member.id }}" class="btn-user btn-user-{{ rlabel }} dropdown order-2 order-md-5">
+            {% set rn = ridx[1] | int %}
+            <a href="#!" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">{{ member.avatar(rlabel | title) | safe }}</a>
+            <div class="dropdown-menu" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-4px, 40.8px, 0px);">
+                <a href="javascript:void(0);" class="dropdown-item"><i class="bi bi-person-square me-2"></i>View profile</a>
+                {% if project.isadmin and member.id != current_user.id %}
+                {% if rn < 2 %}
+                <a href="{{ url_for('projects.api_project_members_promote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-up-square text-success me-2"></i>Promote member</a>
+                {% endif %}
+                {% if rn > 0 %}
+                <a href="{{ url_for('projects.api_project_members_demote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-down-square text-warning me-2"></i>Demote member</a>
+                {% endif %}
+                <a href="{{ url_for('projects.api_project_members_remove', pid=project.id, uid=member.id) }}" data-tfk-confirm="Really remove {{ member.name }}?" class="dropdown-item"><i class="bi bi-trash text-danger me-2"></i>Remove</a>
+                {% endif %}
+            </div>
+          </div>
           {% endfor %}
         {% endfor %}
         {% if project.isadmin %}
-          <li><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal"><i class="bi bi-plus-circle-dotted"></i></button></li>
+          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
         {% endif %}
-        </ul>
+          </div>
         {% if project.isadmin %}
         <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i
           class="bi bi-archive pe-1"></i>Archive project</button></div>
@@ -197,18 +212,26 @@
 </div>
 
 <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-fullscreen-sm-down mt-sm-5 pt-sm-2">
-    <form class="modal-content">
+  <div class="modal-dialog modal-md modal-fullscreen-md-down mt-md-5 pt-md-2">
+    <form action="{{ url_for('projects.api_project_members_save') }}" method="post" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Select user to add to project</h5>
+        <h5 class="modal-title">Add new members</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ul>
+        <input type="hidden" name="pid" value="" />
+        <div class="row users-grid">
           {% for usr in users %}
-          <li><a href="#!">{{ usr.avatar() | safe }}</a></li>
+          <div class="col btn-user" id="usrsel-{{ usr.id }}">
+            <input type="checkbox" class="d-none" id="chk-sel-{{ usr.id }}" name="usersel" value="{{ usr.id }}" />
+            <label for="chk-sel-{{ usr.id }}">{{ usr.avatar() | safe }}<small>{{ usr.name }}</small></label>
+          </div>
           {% endfor %}
-        </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Add selected users</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </form>
   </div>

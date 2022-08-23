@@ -58,16 +58,19 @@ class UserModel(UserMixin, db.Model):
         else:
             return False
 
-    def avatar(self):
+    def avatar(self, xtra=False):
         srn = ''
         arn = self.name.split(' ')[0:2]
         for en in arn:
             srn += en[0].upper()
+        lbl = self.name
+        if xtra:
+            lbl = f"{lbl} ({xtra})"
         if self.thumbnail:
             # return '<img src="'+self.thumbnail+'" class="rounded-circle" />'
-            return '<span class="avatar-img rounded-circle" title="{}" style="background-image:url({})">{}</span>'.format(self.name, self.thumbnail, srn)
+            return '<span class="avatar-img rounded-circle" title="{}" style="background-image:url({})">{}</span>'.format(lbl, self.thumbnail, srn)
         else:
-            return '<span class="avatar-srn rounded-circle">{}</span>'.format(srn)
+            return '<span class="avatar-srn rounded-circle" title="{}">{}</span>'.format(lbl, srn)
 
     def is_valid(self):
         if self.email and '@' in self.email and self.name and self.password:

@@ -1,6 +1,7 @@
 import datetime, pytz
 import sqlalchemy as sqa
 from application import db
+from application.models import *
 
 class utils:
 
@@ -29,3 +30,16 @@ class utils:
         with db.engine.begin() as conn:
             updquery = sqa.update(usertable).where(usertable.c.id==id).values(lastlogin=datetime.datetime.utcnow())
             conn.execute(updquery)
+
+    @staticmethod
+    def wrong_project_permission(pid, uid, level):
+        if not pid:
+            return {'error': 'Project ID is missing'}
+        if not uid:
+            return {'error': 'User ID is missing'}
+        # Check permissions
+        asso = ProjectUserModel.query.filter_by(project_id=pid, user_id=uid).first()
+        if not asso or asso.role < level:
+            return { 'error': 'Insufficient permissions' }
+        # all good
+        return False

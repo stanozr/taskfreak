@@ -49,7 +49,8 @@
   height: 1.95em;
   border: 0.05em solid #555;
 }
-.btn-user.dropdown-toggle::after {
+.btn-user.dropdown-toggle::after,
+.dropdown-toggle.arrow-none::after {
   display: none;
 }
 .btn-status i, .btn-users i {
@@ -640,32 +641,51 @@ li.project-lists-item > * {
 li.project-lists-item input {
   flex: 1;
 }
-ul.project-users {
+.project-users {
   padding-left: 0;
 }
-ul.project-users li {
+.project-users > div {
   display: inline-block;
   margin-right: .25em;
   list-style: none;
 }
-ul.project-users li a span {
+.project-users > div span {
   height: 2.75em;
   width: 2.75em;
   line-height: 2.15;
 }
-ul.project-users li.btn-user-admins span {
+.project-users > div.btn-user-admin span {
   border: 3px solid #dc3545;
 }
-ul.project-users li.btn-user-members span {
+.project-users > div.btn-user-member span {
   border: 3px solid #0d6efd;
 }
-ul.project-users li.btn-user-observers span {
+.project-users > div.btn-user-observer span {
   border: 3px solid #198754;
 }
-
-ul.project-users li .btn-action i.bi {
+.project-users > div .btn-action i.bi {
   font-size: 2.65em;
   line-height: 1;
+}
+
+div.users-grid .btn-user {
+  text-align: center;
+  opacity: .5;
+}
+div.users-grid .btn-user.btn-active {
+  opacity: 1;
+}
+div.users-grid .btn-user label {
+  cursor: pointer;
+}
+div.users-grid .btn-user span {
+  height: 2.25em;
+  width: 2.25em;
+  line-height: 2.25;
+  font-size: 1.5em;
+}
+div.users-grid .btn-user small {
+  display: block;
 }
 
 /* Dragula */
