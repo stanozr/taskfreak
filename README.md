@@ -24,14 +24,15 @@
 💼 __Week 3__
 * [x] Create project's lists
 * [x] Move project's lists
-* [ ] Delete project lists
-* [ ] Manage project's users
+* [x] Delete project lists
+* [x] Manage project's users
 * [ ] Archive project
 * [ ] Join projects
 
 ✅ __Week 4__
 * [ ] Create task
 * [ ] List tasks (list view)
+* [ ] Do not delete non-empty project lists
 * [ ] Filter tasks by project and list
 * [ ] Filter tasks by status
 * [ ] Filter tasks by user(s)

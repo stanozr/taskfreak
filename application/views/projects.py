@@ -143,7 +143,7 @@ def api_project_lists_save():
                 lid = int(idx[5:])
                 item = ListModel.query.get(lid)
                 if items[idx]:
-                    # TODO delete lists with empty names?
+                    # -TODO- delete lists with empty names?
                     item.title = items[idx]
                 item.project_id = pid
                 item.position = pos

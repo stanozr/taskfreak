@@ -38,7 +38,7 @@
             <i class="bi bi-grip-vertical gu-handle py-2 pe-1"></i>
             <input name="item_{{ list.id }}" type="text" class="form-control form-control-plaintext" value="{{ list.title }}" />
             <button type="button" data-lid="{{ list.id }}" class="btn btn-action btn-list-delete"><i class="bi bi-trash"></i></button>
-            <!-- TODO disable button if list has tasks -->
+            <!-- -TODO- disable button if list has tasks -->
             {% else %}
             <span class="py-2 flex-grow-1">{{ list.title }}</span>
             {% endif %}
@@ -55,21 +55,22 @@
         <div class="project-users">
         {% for ridx, rlabel in [('r2','admin'),('r1','member'),('r0','observer')] %}
           {% for member in project.get(ridx) %}
-          <div data-userid="{{ member.id }}" class="btn-user btn-user-{{ rlabel }} dropdown order-2 order-md-5">
+          <div data-userid="{{ member.id }}" class="btn-user btn-user-{{ rlabel }} dropdown-center order-2 order-md-5">
             {% set rn = ridx[1] | int %}
             <a href="#!" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">{{ member.avatar(rlabel | title) | safe }}</a>
-            <div class="dropdown-menu" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-4px, 40.8px, 0px);">
-                <a href="javascript:void(0);" class="dropdown-item"><i class="bi bi-person-square me-2"></i>View profile</a>
-                {% if project.isadmin and member.id != current_user.id %}
-                {% if rn < 2 %}
-                <a href="{{ url_for('projects.api_project_members_promote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-up-square text-success me-2"></i>Promote member</a>
-                {% endif %}
-                {% if rn > 0 %}
-                <a href="{{ url_for('projects.api_project_members_demote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-down-square text-warning me-2"></i>Demote member</a>
-                {% endif %}
-                <a href="{{ url_for('projects.api_project_members_remove', pid=project.id, uid=member.id) }}" data-tfk-confirm="Really remove {{ member.name }}?" class="dropdown-item"><i class="bi bi-trash text-danger me-2"></i>Remove</a>
-                {% endif %}
-            </div>
+            <ul class="dropdown-menu">
+              <li><h6 class="dropdown-header">{{ member.name }} ({{ rlabel | title}})</h6></li>
+              <li><a href="javascript:void(0);" class="dropdown-item"><i class="bi bi-person-square me-2"></i>View profile</a></li>
+              {% if project.isadmin and member.id != current_user.id %}
+              {% if rn < 2 %}
+              <li><a href="{{ url_for('projects.api_project_members_promote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-up-square text-success me-2"></i>Promote member</a></li>
+              {% endif %}
+              {% if rn > 0 %}
+              <li><a href="{{ url_for('projects.api_project_members_demote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-down-square text-warning me-2"></i>Demote member</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('projects.api_project_members_remove', pid=project.id, uid=member.id) }}" data-tfk-confirm="Really remove {{ member.name }}?" class="dropdown-item"><i class="bi bi-trash text-danger me-2"></i>Remove</a></li>
+              {% endif %}
+            </ulv>
           </div>
           {% endfor %}
         {% endfor %}
