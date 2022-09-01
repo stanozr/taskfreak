@@ -141,7 +141,7 @@ class ProjectModel(db.Model):
             if val:
                 if mode == 'html':
                     if key == 'description':
-                        # TODO markdown
+                        # -TODO- markdown
                         val = '<br />\n'.join(val.split('\n')) 
                     elif key == 'status':
                         val = app.config['PROJECT_STATUS'][val]

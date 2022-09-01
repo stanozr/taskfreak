@@ -103,7 +103,7 @@ $('document').ready(function() {
         $card = $(this).closest('form');
         pid = $card.find("input[name='pid']").val()
         ptt = $card.find(".card-title").text()
-        tfk_confirm('Do you want to archive the following project?<br /> <b>'+ptt+'</b>');
+        tfk_confirm('Do you want to archive the following project?<br /> <b>'+ptt+'</b>', '/api/project/archive/'+pid);
     });
 
     $('.action-delete-project').click(function(event) {

@@ -79,7 +79,7 @@
         {% endif %}
           </div>
         {% if project.isadmin %}
-        <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger"><i
+        <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger" data-tfk-confirm="Do you want to archive the following project?<br /><b>{{ project.title }}</b>" data-tfk-action="{{ url_for('projects.api_project_archive', pid=project.id) }}"><i
           class="bi bi-archive pe-1"></i>Archive project</button></div>
         {% endif %}
       </div>

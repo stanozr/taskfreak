@@ -97,6 +97,12 @@ $('document').ready(function(){
     tfk_confirm($t.data('tfk-confirm'), $t.attr('href'));
   });
 
+  $("button[data-tfk-confirm]").click(function(event) {
+    $t = $(this);
+    event.preventDefault();
+    tfk_confirm($t.data('tfk-confirm'), $t.data('tfk-action'));
+  })
+
   $('.datepicker').datepicker({
     format: 'dd/mm/yyyy',
   });

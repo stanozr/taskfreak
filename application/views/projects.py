@@ -19,10 +19,10 @@ def project_list():
     # List of projects, invitations, join and leave projects
     pqry = ProjectModel.query
     if current_user.role < 4:
-        pqry.join(ProjectUserModel) \
+        pqry = pqry.join(ProjectUserModel) \
             .filter(ProjectModel.status > 0, ProjectUserModel.user_id == current_user.id)
     else:
-        pqry.filter(ProjectModel.status > 0)
+        pqry = pqry.filter(ProjectModel.status > 0)
     plist = pqry.order_by(ProjectModel.title).all()
     projects = []
     for proj in plist:
@@ -86,23 +86,30 @@ def api_project_save():
         item = ProjectModel.query.filter_by(id=pid).first()
         if not item:
             return jsonify({'error': 'Project does not exist'})
-    
+        err = utils.wrong_project_permission(pid, current_user.id, 2)
+        if err:
+            return jsonify(err)
+    # set properties
     item.title = request.form.get('title','').strip()
     item.description = request.form.get('description','')
     item.setDate('start',request.form.get('start') or None)
     item.setDate('deadline', request.form.get('deadline') or None)
     item.budget = request.form.get('budget') or None # TODO check float
     item.status = request.form.get('status', 0)
+    # check
     is_valid = item.is_valid()
     if is_valid != True:
         return jsonify({'error': list(is_valid.values())})
+    # add default user to new projects
     if not pid:
         asso = ProjectUserModel()
         asso.member = current_user
         asso.project = item
         asso.role = 2 # admin
         db.session.add(asso)
+    # save in DB
     db.session.commit()
+    # report to user
     msg = "Project {}".format('Updated' if pid else 'Created')
     flash(msg, 'success')
     return jsonify({
@@ -263,4 +270,23 @@ def api_project_members_remove(pid, uid):
         'pid': pid
     })
     
-    
+@projects.route("/api/project/archive/<int:pid>", methods=['GET','POST'])
+def api_project_archive(pid):
+    # Load project and check permissions
+    item = ProjectModel.query.filter_by(id=pid).first()
+    if not item:
+        return jsonify({'error': 'Project does not exist'})
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    # update status (0 = closed)
+    item.status = 0
+    # save in DB
+    db.session.commit()
+    # report
+    msg = "Project has been archived"
+    flash(msg, 'success')
+    return jsonify({
+        'success': msg,
+        'pid': pid
+    })
