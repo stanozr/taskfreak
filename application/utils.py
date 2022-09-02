@@ -43,3 +43,41 @@ class utils:
             return { 'error': 'Insufficient permissions' }
         # all good
         return False
+
+    @staticmethod
+    def parse_project(proj, userid):
+        obj = {
+            'id': proj.id,
+            'title': proj.title,
+            'start': proj.getDate('start'),
+            'deadline': proj.getDate('deadline'),
+            'budget': proj.budget,
+            'status': proj.status,
+            'class': 'bg-header',
+            'isadmin': False,
+            'r2': [],
+            'r1': [],
+            'r0': [],
+            'mids': [],
+            'lists': []
+        }
+        if proj.status == 2:
+            obj['class'] = 'bg-success'
+        elif proj.status == 0:
+            obj['class'] = 'bg-secondary'
+        for asl in proj.lists:
+            obj['lists'].append(asl)
+        for asm in proj.members:
+            obj['mids'].append(asm.member.id)
+            obj[f'r{asm.role}'].append(asm.member)
+            if asm.role == 2 and asm.member.id == userid:
+                obj['isadmin'] = True
+        return obj
+
+    @staticmethod
+    def parse_projects(plist, userid):
+        projects = []
+        for proj in plist:
+            obj = utils.parse_project(proj, userid)
+            projects.append(obj)
+        return projects

@@ -138,7 +138,7 @@ class ProjectModel(db.Model):
         columns = self.__table__.columns.keys()
         for key in columns:
             val = getattr(self, key);
-            if val:
+            if val or key == 'status':
                 if mode == 'html':
                     if key == 'description':
                         # -TODO- markdown

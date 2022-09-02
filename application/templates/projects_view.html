@@ -1,0 +1,85 @@
+{% extends "layout/settings.html" %}
+
+{% block content %}
+<h2 class="page-title">
+    <a href="{{ url_for('projects.project_list') }}" class="text-decoration-none text-secondary">Projects</a>
+    &rsaquo; {{ project.title }}
+</h2>
+
+{% if not status %}
+<div class="alert alert-warning py-2" role="alert">
+    Project is archived.
+    {% if data.isadmin %}
+    <button class="btn btn-link float-end py-0"data-tfk-confirm="Do you want to reactivate this project?" data-tfk-action="{{ url_for('projects.api_project_open', pid=project.id) }}">Re-open?</button>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="row bg-white px-lg-1 py-lg-3 mx-lg-1 rounded">
+    <div class="col-12 col-sm-6 col-md-8">
+        <div class="text-uppercase text-muted small">Description</div>
+        <p>{{ project.description | safe }}</p>
+        <div class="text-uppercase text-muted small mt-4">Members</div>
+        <div class="project-users mt-2">
+        {% for ridx, rlabel in [('r2','admin'),('r1','member'),('r0','observer')] %}
+          {% for member in data.get(ridx) %}
+          <div data-userid="{{ member.id }}" class="btn-user btn-user-{{ rlabel }} dropdown-center order-2 order-md-5">
+            {% set rn = ridx[1] | int %}
+            <a href="#!" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">{{ member.avatar(rlabel | title) | safe }}</a>
+            <ul class="dropdown-menu">
+              <li><h6 class="dropdown-header">{{ member.name }} ({{ rlabel | title}})</h6></li>
+              <li><a href="javascript:void(0);" class="dropdown-item"><i class="bi bi-person-square me-2"></i>View profile</a></li>
+              {% if data.isadmin and member.id != current_user.id %}
+              {% if rn < 2 %}
+              <li><a href="{{ url_for('projects.api_project_members_promote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-up-square text-success me-2"></i>Promote member</a></li>
+              {% endif %}
+              {% if rn > 0 %}
+              <li><a href="{{ url_for('projects.api_project_members_demote', pid=project.id, uid=member.id) }}" data-tfk-ajax="post" class="dropdown-item"><i class="bi bi-caret-down-square text-warning me-2"></i>Demote member</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('projects.api_project_members_remove', pid=project.id, uid=member.id) }}" data-tfk-confirm="Really remove {{ member.name }}?" class="dropdown-item"><i class="bi bi-trash text-danger me-2"></i>Remove</a></li>
+              {% endif %}
+            </ulv>
+          </div>
+          {% endfor %}
+        {% endfor %}
+        {% if data.isadmin %}
+          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
+        {% endif %}
+        </div>
+        <hr class="d-sm-none" />
+    </div>
+    <div class="col-6 col-sm-3 col-md-2 border-sm-start">
+        <div class="mb-2 pb-2 border-bottom">
+            <div class="text-uppercase text-muted small">Start</div>
+            <div class="fw-semibold">{{ project.start or '-' }}</div>
+        </div>
+        <div class="mb-2 pb-2 border-bottom">
+            <div class="text-uppercase text-muted small">Time Est.</div>
+            <div class="fw-semibold">-</div>
+        </div>
+        <div class="mb-2">
+            <div class="text-uppercase text-muted small">Budget</div>
+            <div class="fw-semibold">{{ project.budget }}</div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-3 col-md-2 border-start">
+        <div class="mb-2 pb-2 border-bottom">
+            <div class="text-uppercase text-muted small">Deadline</div>
+            <div class="fw-semibold">{{ project.deadline or '-' }}</div>
+        </div>
+        <div class="mb-2 pb-2 border-bottom">
+            <div class="text-uppercase text-muted small">Time Spent</div>
+            <div class="fw-semibold">-</div>
+        </div>
+        <div class="mb-2">
+            <div class="text-uppercase text-muted small">Status</div>
+            <div class="fw-semibold">{{ project.status }}</div>
+        </div>
+    </div>
+</div>
+<hr class="d-lg-none" />
+<div class="project-task-list bg-white px-lg-1 py-lg-3 mt-lg-4 mx-lg-1 rounded">
+    Task list...
+</div>
+</div>
+{% endblock %}

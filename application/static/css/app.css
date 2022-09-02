@@ -237,6 +237,11 @@
 hr {
   border-top-color: #ccc;
 }
+@media (min-width: 576px) {
+  .border-sm-start {
+    border-left: 1px solid #dee2e6;
+  }
+}
 /* RESPONSIVE STUFF */
 
 @media (min-width: 992px) {

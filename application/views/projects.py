@@ -1,6 +1,6 @@
 from sqlalchemy import desc
 
-from flask import Blueprint, render_template, jsonify, request, url_for, flash, g
+from flask import Blueprint, render_template, jsonify, redirect, request, url_for, flash, g
 from flask_login import login_required, current_user
 
 from application import app
@@ -23,36 +23,15 @@ def project_list():
             .filter(ProjectModel.status > 0, ProjectUserModel.user_id == current_user.id)
     else:
         pqry = pqry.filter(ProjectModel.status > 0)
-    plist = pqry.order_by(ProjectModel.title).all()
-    projects = []
-    for proj in plist:
-        obj = {
-            'id': proj.id,
-            'title': proj.title,
-            'start': proj.getDate('start'),
-            'deadline': proj.getDate('deadline'),
-            'budget': proj.budget,
-            'status': proj.status,
-            'class': 'bg-header',
-            'isadmin': False,
-            'r2': [],
-            'r1': [],
-            'r0': [],
-            'mids': [],
-            'lists': []
-        }
-        if proj.status == 2:
-            obj['class'] = 'bg-success'
-        elif proj.status == 0:
-            obj['class'] = 'bg-secondary'
-        for asl in proj.lists:
-            obj['lists'].append(asl)
-        for asm in proj.members:
-            obj['mids'].append(asm.member.id)
-            obj[f'r{asm.role}'].append(asm.member)
-            if asm.role == 2 and asm.member.id == current_user.id:
-                obj['isadmin'] = True
-        projects.append(obj)
+    projects = utils.parse_projects(pqry.order_by(ProjectModel.title).all(), current_user.id)
+    # list archived projects
+    pqry = ProjectModel.query
+    if current_user.role < 4:
+        pqry = pqry.join(ProjectUserModel) \
+            .filter(ProjectModel.status == 0, ProjectUserModel.user_id == current_user.id)
+    else:
+        pqry = pqry.filter(ProjectModel.status == 0)
+    archlist = utils.parse_projects(pqry.order_by(ProjectModel.title).all(), current_user.id)
     # list users
     users = UserModel.query.filter(UserModel.role > 0).order_by(UserModel.name).all()
     # prepare view
@@ -61,10 +40,29 @@ def project_list():
     return render_template("projects.html",
         title="Pacific Data Hub",
         projects=projects,
+        archived=archlist,
         users=users,
         menu="projects_list"
     )
 
+@projects.route("/projects/<int:id>")
+def project_view(id):
+    project = ProjectModel.query.filter_by(id=id).first()
+    if not project:
+        flash('Project not found', 'error')
+        return redirect(url_for('projects.project_list'))
+    asso = ProjectUserModel.query.filter_by(project_id=id, user_id=current_user.id).first()
+    if not asso:
+        flash('Access denied', 'error')
+        return redirect(url_for('projects.project_list'))
+    return render_template("projects_view.html",
+        title="Pacific Data Hub",
+        data = utils.parse_project(project, current_user.id),
+        project = project.get_dict('html'),
+        status = project.status,
+        urole = asso.role,
+        menu="projects_list"
+    )
 
 @projects.route("/api/project/load/<id>")
 @projects.route("/api/project/load/<id>/<mode>")
@@ -285,6 +283,27 @@ def api_project_archive(pid):
     db.session.commit()
     # report
     msg = "Project has been archived"
+    flash(msg, 'success')
+    return jsonify({
+        'success': msg,
+        'pid': pid
+    })
+
+@projects.route("/api/project/open/<int:pid>", methods=['GET','POST'])
+def api_project_open(pid):
+    # Load project and check permissions
+    item = ProjectModel.query.filter_by(id=pid).first()
+    if not item:
+        return jsonify({'error': 'Project does not exist'})
+    err = utils.wrong_project_permission(pid, current_user.id, 2)
+    if err:
+        return jsonify(err)
+    # update status (1 = open, private)
+    item.status = 1
+    # save in DB
+    db.session.commit()
+    # report
+    msg = "Project has been re-opened (as private)"
     flash(msg, 'success')
     return jsonify({
         'success': msg,

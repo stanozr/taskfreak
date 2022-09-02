@@ -6,7 +6,7 @@
   <button type="button" class="btn btn-outline-primary btn-sm float-end" data-bs-toggle="modal"
     data-bs-target="#editModal"><i class="bi bi-plus-lg"></i></button>
   {% endif %}
-  My projects
+  Projects
 </h2>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4 mb-4">
   {% for project in projects %}
@@ -77,7 +77,7 @@
         {% if project.isadmin %}
           <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
         {% endif %}
-          </div>
+        </div>
         {% if project.isadmin %}
         <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger" data-tfk-confirm="Do you want to archive the following project?<br /><b>{{ project.title }}</b>" data-tfk-action="{{ url_for('projects.api_project_archive', pid=project.id) }}"><i
           class="bi bi-archive pe-1"></i>Archive project</button></div>
@@ -87,20 +87,13 @@
   </div>
   {% endfor %}
 </div>
-
-<h2 class="text-primary px-2 fs-4">Join another project</h2>
-<ul class="mb-3">
-  <li><a href="#!">This is Scott's public project</a></li>
-  <li><a href="#!">I don't know what this is but I want to join</a></li>
-  <li><a href="#!">This is a global project, eh?</a></li>
-  <li><a href="#!">This is a private project</a></li>
-</ul>
-
-<h2 class="text-primary px-2 fs-4">My archived projects</h2>
-<ul class="mb-3">
-  <li><a href="#!">This is an old project</a></li>
-  <li><a href="#!">This is another old project</a></li>
-</ul>
+<h5 class="text-primary px-2 fw-normal mt-5 mb-2 py-2 border-bottom">My archived projects</h5>
+{% for item in archived %}
+<div class="px-2 my-1 d-flex">
+  <div class="pe-2"><i class="bi bi-archive"></i></div>
+  <div><a href="{{ url_for('projects.project_view', id=item.id) }}" class="text-decoration-none link-dark">{{ item.title }}</a></div>
+</div>
+  {% endfor %}
 {% endblock %}
 
 
@@ -124,16 +117,16 @@
           </div>
           <div class="col-12 col-lg-3">
             <div class="mb-3">
-              <label class="form-label mb-1 text-muted">Budget</label>
-              <div class="fw-semibold project-budget"></div>
-            </div>
-            <div class="mb-3">
               <label class="form-label mb-1 text-muted">Start</label>
               <div class="fw-semibold project-start"></div>
             </div>
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Deadline</label>
               <div class="fw-semibold project-deadline"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label mb-1 text-muted">Budget</label>
+              <div class="fw-semibold project-budget"></div>
             </div>
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Status</label>
@@ -172,10 +165,6 @@
           </div>
           <div class="col-12 col-lg-3">
             <div class="mb-3">
-              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
-              <input id="iBudget" type="text" class="form-control" name="budget" value="" />
-            </div>
-            <div class="mb-3">
               <label for="iStart" class="form-label mb-1 text-muted">Start</label>
               <div class="input-group date datepicker">
                 <input id="iStart" name="start" type="text" class="form-control" />
@@ -196,6 +185,10 @@
                   </span>
                 </span>
               </div>
+            </div>
+            <div class="mb-3">
+              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
+              <input id="iBudget" type="text" class="form-control" name="budget" value="" />
             </div>
             <div class="mb-3">
               <label for="iStatus" class="form-label mb-1 text-muted">Status</label>
