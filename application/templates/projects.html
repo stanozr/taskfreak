@@ -1,4 +1,4 @@
-{% extends "layout/settings.html" %}
+{% extends "layout/projects.html" %}
 
 {% block content %}
 <h2 class="page-title">
@@ -17,7 +17,7 @@
         <input type="hidden" name="pid" value="{{ project.id }}" />
         <a href="#!" class="btn btn-action btn-project-edit pt-2 pe-0 float-end" data-id="{{ project.id }}"><i class="bi bi-pencil-fill"></i></a>
         {% endif %}
-        <h5 class="card-title pt-1"><a href="#!" class="btn-project-info pt-1">{{ project.title }}</a></h5>
+        <h5 class="card-title pt-1"><a href="{{ url_for('projects.project_view', id=project.id ) }}" class="btn-project-info pt-1">{{ project.title }}</a></h5>
       </div>
       <div class="card-body pb-2">
         {% if project.start or project.deadline or project.budget %}
@@ -75,13 +75,9 @@
           {% endfor %}
         {% endfor %}
         {% if project.isadmin %}
-          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
+          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}" data-project-id="{{ project.id }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
         {% endif %}
         </div>
-        {% if project.isadmin %}
-        <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger" data-tfk-confirm="Do you want to archive the following project?<br /><b>{{ project.title }}</b>" data-tfk-action="{{ url_for('projects.api_project_archive', pid=project.id) }}"><i
-          class="bi bi-archive pe-1"></i>Archive project</button></div>
-        {% endif %}
       </div>
     </{% if project.isadmin %}form{% else %}div{% endif %}>
   </div>
@@ -94,141 +90,5 @@
   <div><a href="{{ url_for('projects.project_view', id=item.id) }}" class="text-decoration-none link-dark">{{ item.title }}</a></div>
 </div>
   {% endfor %}
-{% endblock %}
-
-
-{% block modals %}
-<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewProjectLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header modal-smaller bg-light">
-        <h5 class="modal-title project-title" id="viewTaskLabel">Project information</h5>
-        <div class="float-end text-nowrap">
-          <button class="btn btn-link btn-edit" data-id="0"><i class="bi bi-pencil-fill text-muted"></i></button>
-          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"  aria-label="Close">&times;</button>
-        </div>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-12 col-lg-9">
-            <label class="form-label mb-1 text-muted">Description</label>
-            <div class="mb-3 project-description"></div>
-          </div>
-          <div class="col-12 col-lg-3">
-            <div class="mb-3">
-              <label class="form-label mb-1 text-muted">Start</label>
-              <div class="fw-semibold project-start"></div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label mb-1 text-muted">Deadline</label>
-              <div class="fw-semibold project-deadline"></div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label mb-1 text-muted">Budget</label>
-              <div class="fw-semibold project-budget"></div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label mb-1 text-muted">Status</label>
-              <div class="fw-semibold project-status"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editProjectLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
-    <form id="project-form" action="{{ url_for('projects.api_project_save') }}" method="post" class="modal-content" autocomplete="off">
-      <input id="iId" type="hidden" name="id" value="0" />
-      <div class="modal-header modal-smaller bg-light">
-        <h5 class="modal-title" id="editTaskLabel">Edit Project</h5>
-        <div class="float-end">
-          <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save</button>
-          <button type="button" class="btn btn-my-close ps-1" data-bs-dismiss="modal"
-            aria-label="Close">&times;</button>
-        </div>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <input id="iTitle" type="text" class="form-control" name="title" value="" placeholder="Title" />
-        </div>
-        <div class="row">
-          <div class="col-12 col-lg-9">
-            <div class="mb-3">
-              <textarea id="iDescription" name="description" class="form-control" value="" placeholder="Description"
-                rows="13"></textarea>
-            </div>
-          </div>
-          <div class="col-12 col-lg-3">
-            <div class="mb-3">
-              <label for="iStart" class="form-label mb-1 text-muted">Start</label>
-              <div class="input-group date datepicker">
-                <input id="iStart" name="start" type="text" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-light d-block">
-                    <i class="bi bi-calendar-date"></i>
-                  </span>
-                </span>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="iDeadline" class="form-label mb-1 text-muted">Deadline</label>
-              <div class="input-group date datepicker">
-                <input id="iDeadline" name="deadline" type="text" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-light d-block">
-                    <i class="bi bi-calendar-date"></i>
-                  </span>
-                </span>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="iBudget" class="form-label mb-1 text-muted">Budget</label>
-              <input id="iBudget" type="text" class="form-control" name="budget" value="" />
-            </div>
-            <div class="mb-3">
-              <label for="iStatus" class="form-label mb-1 text-muted">Status</label>
-              <select id="iStatus" name="status" class="form-select" aria-label="Default select example">
-                <option value="0">Closed</option>
-                <option value="1" selected>Open (private)</option>
-                <option value="2">Open (public)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-fullscreen-md-down mt-md-5 pt-md-2">
-    <form action="{{ url_for('projects.api_project_members_save') }}" method="post" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add new members</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" name="pid" value="" />
-        <div class="row users-grid">
-          {% for usr in users %}
-          <div class="col btn-user" id="usrsel-{{ usr.id }}">
-            <input type="checkbox" class="d-none" id="chk-sel-{{ usr.id }}" name="usersel" value="{{ usr.id }}" />
-            <label for="chk-sel-{{ usr.id }}">{{ usr.avatar() | safe }}<small>{{ usr.name }}</small></label>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Add selected users</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
 
 {% endblock %}

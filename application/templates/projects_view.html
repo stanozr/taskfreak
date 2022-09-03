@@ -1,7 +1,10 @@
-{% extends "layout/settings.html" %}
+{% extends "layout/projects.html" %}
 
 {% block content %}
 <h2 class="page-title">
+    {% if data.isadmin %}
+    <a href="#!" class="btn btn-action btn-project-edit pt-2 pe-0 float-end" data-id="{{ project.id }}"><i class="bi bi-pencil-fill"></i></a>
+    {% endif %}
     <a href="{{ url_for('projects.project_list') }}" class="text-decoration-none text-secondary">Projects</a>
     &rsaquo; {{ project.title }}
 </h2>
@@ -43,9 +46,13 @@
           {% endfor %}
         {% endfor %}
         {% if data.isadmin %}
-          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ project.mids }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
+          <div><button type="button" class="btn btn-action p-0" data-bs-toggle="modal" data-bs-target="#usersModal" data-member-ids="{{ data.mids }}"  data-project-id="{{ data.id }}"><i class="bi bi-plus-circle-dotted"></i></button></div>
         {% endif %}
         </div>
+        {% if data.isadmin %}
+        <div class="text-end"><button type="button" class="action-archive-project btn btn-link btn-sm text-danger" data-tfk-confirm="Do you want to archive this project?" data-tfk-action="{{ url_for('projects.api_project_archive', pid=project.id) }}"><i
+          class="bi bi-archive pe-1"></i>Archive project</button></div>
+        {% endif %}
         <hr class="d-sm-none" />
     </div>
     <div class="col-6 col-sm-3 col-md-2 border-sm-start">

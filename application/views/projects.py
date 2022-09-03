@@ -55,12 +55,16 @@ def project_view(id):
     if not asso:
         flash('Access denied', 'error')
         return redirect(url_for('projects.project_list'))
+    # list users
+    users = UserModel.query.filter(UserModel.role > 0).order_by(UserModel.name).all()
+    # prepare view
+    g.jscript.append(url_for('static', filename='js/projects.js'))
     return render_template("projects_view.html",
         title="Pacific Data Hub",
         data = utils.parse_project(project, current_user.id),
         project = project.get_dict('html'),
         status = project.status,
-        urole = asso.role,
+        users=users,
         menu="projects_list"
     )
 
