@@ -27,7 +27,7 @@
 * [x] Delete project lists
 * [x] Manage project's users
 * [x] Archive/Close project
-* [ ] List closed projects
+* [x] List closed projects
 * [ ] Join projects
 
 ✅ __Week 4__

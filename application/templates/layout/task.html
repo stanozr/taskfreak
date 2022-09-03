@@ -53,21 +53,16 @@
     Projects
   </h4>
   <ul>
-    <li><a href="#"><i class="bi bi-check2-all me-2"></i>All projects</a></li>
-    <li><a href="#">Project 1 is a long title but it works</a></li>
-    <li><a href="#">Project 2</a></li>
+    <li><a href="{{ url_for('tasks.list') }}" class="{% if not opened_project %}opened{% endif %}"><i class="bi bi-check2-all me-2"></i>All projects</a></li>
+    {% for project in projects %}
     <li>
-      <a href="#" class="opened">Project 3</a>
-      <ul>
-        <li><a href="#">List 3.1</a></li>
-        <li><a href="#" class="active">List 3.2 is a long title but it still works</a></li>
-        <li><a href="#">List 3.3</a></li>
-        <li><a href="#">List 3.4</a></li>
-      </ul>
+      <a href="{{ url_for('tasks.list', pid=project.id) }}" class="{% if project.id == opened_project %}opened{% endif %}">{{ project.title }}</a>
+      {#
+        if project.id is the one and view in not kanban
+        -> list lists
+      #}
     </li>
-    <li><a href="#">Project 4</a></li>
-    <li><a href="#">Project 5</a></li>
-    <li><a href="#">Project 6</a></li>
+    {% endfor %}
   </ul>
 </nav>
 

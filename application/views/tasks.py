@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, url_for, g
 from flask_login import current_user, login_required
+from application.models import *
+from application.utils import utils
 
 import datetime
 
@@ -11,10 +13,16 @@ def login_required_for_all_request():
     pass  
 
 @tasks.route("/list")
-def list():
+@tasks.route("/list/<int:pid>")
+@tasks.route("/list/<int:pid>/<int:lid>")
+def list(pid=None, lid=None):
+    # projects
     g.jscript.append(url_for('static', filename='js/task_list.js'))
     return render_template("task_list.html",
         title="Pacific Data Hub",
+        projects = utils.load_projects(current_user),
+        opened_project=pid,
+        opened_list=lid,
         menu="list"
     )
 
@@ -25,6 +33,7 @@ def calendar():
     g.jscript.append(url_for('static', filename='js/task_calendar.js'))
     return render_template("task_calendar.html",
         title="Pacific Data Hub",
+        projects = utils.load_projects(current_user),
         menu="calendar"
     )
 
@@ -34,5 +43,6 @@ def kanban():
     g.jscript.append(url_for('static', filename='js/task_kanban.js'))
     return render_template("task_kanban.html",
         title="Pacific Data Hub",
+        projects = utils.load_projects(current_user),
         menu="kanban"
     )

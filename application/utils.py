@@ -32,6 +32,16 @@ class utils:
             conn.execute(updquery)
 
     @staticmethod
+    def load_projects(user, archived=False):
+        pqry = ProjectModel.query
+        if user.role < 4:
+            pqry = pqry.join(ProjectUserModel) \
+                .filter(ProjectModel.status > 0, ProjectUserModel.user_id == user.id)
+        else:
+            pqry = pqry.filter(ProjectModel.status > 0)
+        return utils.parse_projects(pqry.order_by(ProjectModel.title).all(), user.id)
+
+    @staticmethod
     def wrong_project_permission(pid, uid, level):
         if not pid:
             return {'error': 'Project ID is missing'}

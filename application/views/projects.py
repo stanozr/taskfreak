@@ -17,13 +17,7 @@ def login_required_for_all_request():
 @projects.route("/projects")
 def project_list():
     # List of projects, invitations, join and leave projects
-    pqry = ProjectModel.query
-    if current_user.role < 4:
-        pqry = pqry.join(ProjectUserModel) \
-            .filter(ProjectModel.status > 0, ProjectUserModel.user_id == current_user.id)
-    else:
-        pqry = pqry.filter(ProjectModel.status > 0)
-    projects = utils.parse_projects(pqry.order_by(ProjectModel.title).all(), current_user.id)
+    projects = utils.load_projects(current_user)
     # list archived projects
     pqry = ProjectModel.query
     if current_user.role < 4:
