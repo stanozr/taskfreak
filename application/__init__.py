@@ -118,4 +118,4 @@ def index():
 		return redirect(url_for('user.login'))
 	else:
 		dview = current_user.get_preference('default_view', 'list')
-		return redirect(url_for('tasks.'+dview))
+		return redirect(url_for('tasks.da'+dview))
