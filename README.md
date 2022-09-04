@@ -33,6 +33,7 @@
 ✅ __Week 4__
 * [ ] Create task
 * [ ] List tasks (list view)
+* [ ] List tasks (project view)
 * [ ] Do not delete non-empty project lists
 * [ ] Filter tasks by project and list
 * [ ] Filter tasks by status

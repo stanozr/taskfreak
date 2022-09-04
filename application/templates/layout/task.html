@@ -44,19 +44,19 @@
 <nav class="sidebar">
   <h4>Views</h4>
   <ul>
-    <li><a href="{{ url_for('tasks.list') }}" class="{% if menu=='list' %}active{% endif %}"><i class="bi bi-list-task me-2"></i>List</a></li>
-    <li><a href="{{ url_for('tasks.calendar') }}" class="{% if menu=='calendar' %}active{% endif %}"><i class="bi bi-calendar-week me-2"></i>Calendar</a></li>
-    <li><a href="{{ url_for('tasks.kanban') }}" class="{% if menu=='kanban' %}active{% endif %}"><i class="bi bi-kanban me-2"></i>Kanban</a></li>
+    <li><a href="{{ url_for('tasks.dalist') }}" class="{% if menu=='list' %}active{% endif %}"><i class="bi bi-list-task me-2"></i>List</a></li>
+    <li><a href="{{ url_for('tasks.dacalendar') }}" class="{% if menu=='calendar' %}active{% endif %}"><i class="bi bi-calendar-week me-2"></i>Calendar</a></li>
+    <li><a href="{{ url_for('tasks.dakanban') }}" class="{% if menu=='kanban' %}active{% endif %}"><i class="bi bi-kanban me-2"></i>Kanban</a></li>
   </ul>
   <h4>
     <a href="{{ url_for('projects.project_list') }}" class="float-end"><i class="bi bi-pencil-fill"></i></a>
     Projects
   </h4>
   <ul>
-    <li><a href="{{ url_for('tasks.list') }}" class="{% if not opened_project %}opened{% endif %}"><i class="bi bi-check2-all me-2"></i>All projects</a></li>
+    <li><a href="{{ url_for('tasks.dalist') }}" class="{% if not opened_project %}opened{% endif %}"><i class="bi bi-check2-all me-2"></i>All projects</a></li>
     {% for project in projects %}
     <li>
-      <a href="{{ url_for('tasks.list', pid=project.id) }}" class="{% if project.id == opened_project %}opened{% endif %}">{{ project.title }}</a>
+      <a href="{{ url_for('tasks.dalist', pid=project.id) }}" class="{% if project.id == opened_project %}opened{% endif %}">{{ project.title }}</a>
       {#
         if project.id is the one and view in not kanban
         -> list lists
@@ -243,11 +243,12 @@
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editTaskLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable">
-    <form class="modal-content">
+    <form action="{{ url_for('tasks.api_save') }}" class="modal-content">
       <div class="modal-header modal-smaller bg-light">
         <h5 class="modal-title" id="editTaskLabel">Edit Task</h5>
         <div class="float-end">
-          <button type="button" class="btn btn-primary">Save</button>
+          <input type="hidden" name="id" value="" />
+          <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" class="btn btn-my-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
         </div>
       </div>
@@ -259,24 +260,20 @@
           <div class="col-12 col-lg-9">
             <div class="row">
               <div class="col-12 col-lg-6 mb-3">
-                <select class="form-select" aria-label="Default select example">
-                  <option value="0" selected>- Select Project -</option>
-                  <option value="1">Project #1</option>
-                  <option value="2">Project #2</option>
-                  <option value="3">Project #3</option>
+                <select name="project_id" class="form-select" aria-label="Default select example">
+                  {% for prj in projects %}
+                  <option value="{{ prj.id }}">{{ prj.title }}</option>
+                  {% endfor %}
                 </select>
               </div>
               <div class="col-12 col-lg-6 mb-3">
-                <select class="form-select" aria-label="Default select example">
-                  <option value="0" selected>- Select List -</option>
-                  <option value="1">List #1</option>
-                  <option value="2">List #2</option>
-                  <option value="3">List #3</option>
+                <select name="list_id" class="form-select" aria-label="Default select example">
+                  <option value="0" selected>-</option>
                 </select>
               </div>
             </div>
             <div class="mb-3">
-              <textarea class="form-control" id="task-desc-field" value="" placeholder="Description"
+              <textarea name="description" class="form-control" id="task-desc-field" value="" placeholder="Description"
                 rows="10"></textarea>
             </div>
           </div>
@@ -291,32 +288,8 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li>
                     <div class="dropdown-item">
-                      <input id="sel-user-1" type="checkbox" class="form-check-input" />
+                      <input name="users" id="sel-user-1" type="checkbox" class="form-check-input" />
                       <label for="sel-user-1" class="form-check-label">Leo</label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">
-                      <input id="sel-user-2" type="checkbox" class="form-check-input" />
-                      <label for="sel-user-2" class="form-check-label">Phil</label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">
-                      <input id="sel-user-3" type="checkbox" class="form-check-input" />
-                      <label for="sel-user-3" class="form-check-label">Sio</label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">
-                      <input id="sel-user-4" type="checkbox" class="form-check-input" />
-                      <label for="sel-user-4" class="form-check-label">Stan</label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">
-                      <input id="sel-user-5" type="checkbox" class="form-check-input" />
-                      <label for="sel-user-5" class="form-check-label">Thomas</label>
                     </div>
                   </li>
                 </ul>
@@ -324,7 +297,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Priority</label>
-              <select class="form-select" aria-label="Default select example">
+              <select name="priority" class="form-select" aria-label="Default select example">
                 <option value="3">Urgent</option>
                 <option value="2">High</option>
                 <option value="1">Medium</option>
@@ -334,7 +307,7 @@
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Start</label>
               <div class="input-group date datepicker">
-                <input type="text" class="form-control" id="date" />
+                <input name="start" type="text" class="form-control" />
                 <span class="input-group-append">
                   <span class="input-group-text bg-light d-block">
                     <i class="bi bi-calendar-date"></i>
@@ -345,7 +318,7 @@
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Deadline</label>
               <div class="input-group date datepicker">
-                <input type="text" class="form-control" id="date" />
+                <input name="deadline" type="text" class="form-control" />
                 <span class="input-group-append">
                   <span class="input-group-text bg-light d-block">
                     <i class="bi bi-calendar-date"></i>
@@ -355,11 +328,11 @@
             </div>
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Estimated time</label>
-              <input type="text" name="estimate" class="form-control" placeholder="3d, 2h, 1:30, 30m" />
+              <input name="estimate" type="text" class="form-control" placeholder="3d, 2h, 1:30, 30m" />
             </div>
             <div class="mb-3">
               <label class="form-label mb-1 text-muted">Status</label>
-              <select class="form-select" aria-label="Default select example">
+              <select name="status" class="form-select" aria-label="Default select example">
                 <option value="0" selected>Parked</option>
                 <option value="1">Assessment</option>
                 <option value="2">In Progress</option>

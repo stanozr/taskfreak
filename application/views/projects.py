@@ -56,7 +56,7 @@ def project_view(id):
     return render_template("projects_view.html",
         title="Pacific Data Hub",
         data = utils.parse_project(project, current_user.id),
-        project = project.get_dict('html'),
+        project = project.get_html(),
         status = project.status,
         users=users,
         menu="projects_list"
@@ -69,14 +69,17 @@ def api_project_load(id, mode="data"):
         return jsonify({'error': 'Action not allowed'})
     item = ProjectModel.query.filter_by(id=id).first()
     if not item:
-        return jsonify({'error': 'Project does not exist'}) 
-    return jsonify(item.get_dict(mode))
+        return jsonify({'error': 'Project does not exist'})
+    if mode == 'data':
+        return jsonify(item.get_dict())
+    else:
+        return jsonify(item.get_html())
 
 
 @projects.route("/api/project/save", methods=['POST'])
 def api_project_save():
     pid = int(request.form['id']) if request.form.get('id') else False
-    # set user
+    # init project
     item = ProjectModel()
     if pid:
         item = ProjectModel.query.filter_by(id=pid).first()

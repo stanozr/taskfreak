@@ -20,6 +20,8 @@ class UserModel(UserMixin, db.Model):
     role = db.Column(db.SmallInteger) # 0 = disabled, 1 = user, 2 = manager, 3 = admin, 4 = super admin
 
     projects = db.relationship("ProjectUserModel", back_populates="member")
+    tasks = db.relationship("TaskUserModel", back_populates="user")
+    activities = db.relationship("TaskActivityModel", back_populates="user")
     
     def get_preferences(self):
         prefs = {}
@@ -101,6 +103,7 @@ class ProjectModel(db.Model):
 
     lists = db.relationship('ListModel', order_by='ListModel.position', back_populates='parent', cascade='all, delete-orphan')
     members = db.relationship('ProjectUserModel', order_by='desc(ProjectUserModel.role)', back_populates='project')
+    tasks = db.relationship('TaskModel', order_by='TaskModel.deadline', back_populates='project')
 
     def getDate(self, key):
         value = self.__getattribute__(key)
@@ -133,21 +136,32 @@ class ProjectModel(db.Model):
         return {'title': 'Title is compulsory'}
             
 
-    def get_dict(self, mode="data"):
+    def get_dict(self):
         res = {}
         columns = self.__table__.columns.keys()
         for key in columns:
             val = getattr(self, key);
-            if val or key == 'status':
-                if mode == 'html':
-                    if key == 'description':
-                        # -TODO- markdown
-                        val = '<br />\n'.join(val.split('\n')) 
-                    elif key == 'status':
-                        val = app.config['PROJECT_STATUS'][val]
-                if key == 'start' or key == 'deadline':
+            if val and (key == 'start' or key == 'deadline'):
+                val = val.strftime('%d/%m/%Y')
+            res[key] = val
+        return res
+
+    def get_html(self):
+        res = {}
+        columns = self.__table__.columns.keys()
+        for key in columns:
+            val = getattr(self, key);
+            if key == 'status':
+                val = app.config['PROJECT_STATUS'][val]
+            elif val:
+                if key == 'description':
+                    # -TODO- markdown
+                    val = '<br />\n'.join(val.split('\n')) 
+                elif key == 'start' or key == 'deadline':
                     val = val.strftime('%d/%m/%Y')
-            elif mode == 'html':
+                elif key == 'budget':
+                    val = "{:,.0f}".format(val)
+            else:
                 val = '-'
             res[key] = val
         return res
@@ -164,6 +178,7 @@ class ListModel(db.Model):
     status = db.Column(db.SmallInteger) # 0 = closed, 1 = open (all), 2 = open (admin only)
 
     parent = db.relationship('ProjectModel', back_populates='lists')
+    tasks = db.relationship('TaskModel', order_by='TaskModel.deadline', back_populates='list')
 
     def is_valid(self):
         if self.name:
@@ -189,3 +204,101 @@ class ProjectUserModel(db.Model):
 
     member = db.relationship('UserModel', back_populates='projects')
     project = db.relationship('ProjectModel', back_populates='members')
+
+class TaskModel(db.Model):
+    __tablename__ = "task"
+
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"), primary_key=False)
+    list_id = db.Column(db.Integer, db.ForeignKey("list.id"), primary_key=False)
+    title = db.Column(db.String(255), unique=True)
+    description = db.Column(db.Text)
+    priority = db.Column(db.SmallInteger) # 0 = low, 1 = medium, 2 = high, 3 = urgent
+    start = db.Column(db.Date, nullable = True)
+    deadline = db.Column(db.Date, nullable = True)
+    estimate = db.Column(db.Integer) # number of hours
+    position = db.Column(db.SmallInteger)
+    status = db.Column(db.SmallInteger) # 0 = parked, 1 = Assessment, 2 = In progress, 3 = Review, 4 = Completed
+
+    project = db.relationship('ProjectModel', back_populates='tasks')
+    list = db.relationship('ListModel', back_populates='tasks')
+    users = db.relationship('TaskUserModel', order_by='UserModel.name', back_populates='task')
+
+    def getDate(self, key):
+        value = self.__getattribute__(key)
+        if value:
+            return value.strftime('%d/%m/%Y')
+        else:
+            return None
+
+    def setDate(self, key, value):
+        if value:
+            try:
+                self.__setattr__(key, datetime.datetime.strptime(value, '%d/%m/%Y'));
+            except:
+                pass
+        else:
+            self.__setattr__(key, None)
+
+    def is_valid(self):
+        errors = {}
+        if not self.title:
+            errors['title'] = 'Title is compulsory'
+        if not self.project_id:
+            errors['project'] = 'Please select a project'
+        return errors or True
+        
+    def get_dict(self):
+        res = {}
+        columns = self.__table__.columns.keys()
+        for key in columns:
+            val = getattr(self, key);
+            if val and (key == 'start' or key == 'deadline'):
+                val = val.strftime('%d/%m/%Y')
+            res[key] = val
+        return res
+
+    def get_html(self):
+        res = {}
+        columns = self.__table__.columns.keys()
+        for key in columns:
+            val = getattr(self, key);
+            if key == 'status':
+                val = app.config['TASK_STATUS'][val]
+            elif val:
+                if key == 'description':
+                    # -TODO- markdown
+                    val = '<br />\n'.join(val.split('\n')) 
+                elif key == 'priority':
+                    val = app.config['TASK_PRIORITY'][val]
+                elif key == 'start' or key == 'deadline':
+                    val = val.strftime('%d/%m/%Y')
+            else:
+                val = '-'
+            res[key] = val
+        return res
+
+class TaskUserModel(db.Model):
+    __tablename__ = "taskuser"
+    
+    user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    task_id = db.Column(db.ForeignKey('task.id'), primary_key=True)
+    
+    user = db.relationship('UserModel', back_populates='tasks')
+    task = db.relationship('TaskModel', back_populates='users')
+
+
+class TaskActivityModel(db.Model):
+    __tablename__ = "taskactivity"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), primary_key=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=False)
+    comment = db.Column(db.Text())
+    spent = db.Column(db.SmallInteger, default=0) # number of hours
+    actype = db.Column(db.SmallInteger, default=0) # 0=comment/time track, 1=change history
+    creation = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    lastupdate = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable = False)
+
+    task = db.relationship('TaskModel')
+    user = db.relationship('UserModel', back_populates='activities')

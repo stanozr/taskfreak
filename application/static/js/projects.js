@@ -46,7 +46,7 @@ $('document').ready(function() {
 
     $('.btn-project-edit').click(function() {
         var pid = $(this).data('id');
-        $.getJSON( "/api/project/load/"+pid+"/edit" )
+        $.getJSON( "/api/project/load/"+pid )
             .done(function( json ) {
                 var $m = $('#editModal');
                 $m.find('#iId').val(json.id);
