@@ -7,6 +7,7 @@ __pycache__/
 /_data
 
 # virtual env
+/venv/
 /bin/
 /include/
 /lib
