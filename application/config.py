@@ -14,7 +14,7 @@ class Config(object):
 
     APP_URL = os.environ.get('APP_URL') or 'http://127.0.0.1:5001'
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql://stan:Stqn56@localhost:5432/taskfreak'
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     ASSETS_CDN = os.environ.get('ASSETS_CDN') or False
